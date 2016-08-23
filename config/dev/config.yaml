@@ -1,0 +1,6 @@
+admins:
+  - ["Lucas Severo", "lucas.alves@uplug.com.br"]
+site_url: site.com.br
+external_hostname: site.dev
+env: dev
+static_ip: true

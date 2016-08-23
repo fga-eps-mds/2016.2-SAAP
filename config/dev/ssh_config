@@ -1,0 +1,13 @@
+Host *
+#TODO temporary
+  User lucas
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+# change to remote aws ip
+Host digital_ocean
+  Hostname 104.131.45.203
+  Port 22

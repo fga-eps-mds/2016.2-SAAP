@@ -1,0 +1,3 @@
+digital_ocean:
+  run_list:
+    - recipe[basics]

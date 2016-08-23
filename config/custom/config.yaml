@@ -1,0 +1,8 @@
+admins:
+  - ["Lucas Severo", "lucas.alves@uplug.com.br"]
+site_url: site.om.br
+external_hostname: site.dev
+env: custom
+static_ip : false
+ips:
+    digital_ocean: 192.168.0.8

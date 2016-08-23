@@ -1,0 +1,15 @@
+Host *
+  User root
+  # User root
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+
+Host digital_ocean
+  Hostname 192.168.0.8 
+  Port 22
+  IdentityFile /home/lucas/.ssh/id_rsa 
+  # IdentityFile ~/.ssh/id_rsa
