@@ -1,5 +1,5 @@
 Host *
-  User vagrant
+  User ubuntu
   # User root
   UserKnownHostsFile /dev/null
   StrictHostKeyChecking no
@@ -8,8 +8,8 @@ Host *
   LogLevel FATAL
 
 
-Host digital_ocean
-  Hostname 10.10.10.2 
+Host digitalocean
+  Hostname 10.0.0.2 
   Port 22
-  IdentityFile .vagrant/machines/aws/virtualbox/private_key
+  IdentityFile .vagrant/machines/digitalocean/virtualbox/private_key
   # IdentityFile ~/.ssh/id_rsa

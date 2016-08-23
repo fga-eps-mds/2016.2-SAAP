@@ -21,9 +21,9 @@ Vagrant.configure(2) do |config|
     ips = nil
   end
 
-  config.vm.define 'digital_ocean' do |digital_ocean|
-    digital_ocean.vm.provider "virtualbox" do |vm, override|
-      override.vm.network 'private_network', ip: ips['digital_ocean'] if ips
+  config.vm.define 'digitalocean' do |digitalocean|
+    digitalocean.vm.provider "virtualbox" do |vm, override|
+      override.vm.network 'private_network', ip: ips['digitalocean'] if ips
       vm.memory = 2048
       vm.cpus = 2
     end
