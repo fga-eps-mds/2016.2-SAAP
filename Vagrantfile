@@ -4,7 +4,7 @@
 require 'yaml'
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/xenial64"
   config.ssh.insert_key = false
   config.vm.provider "virtualbox" do |vm, override| 
 #    override.vm.network 'private_network', ip: "10.10.10.2"
