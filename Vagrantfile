@@ -27,7 +27,6 @@ Vagrant.configure(2) do |config|
       vm.memory = 2048
       vm.cpus = 2
     end
-		digital_ocean.vm.provision "shell", inline: "sudo yum -y install rsync"
   end
 
 
