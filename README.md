@@ -20,3 +20,5 @@ Em GPP e MDS iremos migrar o SAAP de python/zope plone para python/django para f
     http://arquivos.interlegis.leg.br/interlegis/STC/saap/versao2.0/docs/Relatorio2-1-DocumentoProjeto.pdf
 
     http://www.interlegis.leg.br/acervo-historico-do-portal/copy_of_infra-estrutura/artigos-tecnicos/20030623123912
+    
+    http://arquivos.interlegis.leg.br/interlegis/STC/saap/versao2.0/docs/Relatorio1-2-Documentacao.pdf
