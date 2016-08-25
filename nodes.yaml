@@ -1,3 +1,4 @@
 digitalocean:
   run_list:
     - recipe[basics]
+    - recipe[saap]
