@@ -21,6 +21,9 @@ Vagrant.configure(2) do |config|
     ips = nil
   end
 
+  config.vm.synced_folder ".", "/vagrant", type: "rsync",
+    rsync__auto: true
+
   config.vm.define 'digitalocean' do |digitalocean|
     digitalocean.vm.provider "virtualbox" do |vm, override|
       override.vm.network 'private_network', ip: ips['digitalocean'] if ips
