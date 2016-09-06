@@ -4,3 +4,4 @@ ipython==4.0.0
 flake8==2.4.1
 virtualenv==13.1.2
 pylint==1.4.4
+psycopg2
