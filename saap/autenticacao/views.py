@@ -10,6 +10,7 @@ from django.utils.translation import ugettext
 from autenticacao.models import Usuario_saap
 from django.contrib import messages
 
+# Create your views here.
 
 
 class LoginView(View):
