@@ -12,4 +12,8 @@ class Usuario_saap(User):
 
     @classmethod
     def buscaNome(cls, nome):
-        return Usuario_saap.objects.filter(first_name__startswith(nome)))
+        return Usuario_saap.objects.filter(first_name__startswith(nome))
+
+    @classmethod
+    def deletaUsuario(cls, idArg):
+        Usuario_saap.objects.get(id=idArg).delete()
