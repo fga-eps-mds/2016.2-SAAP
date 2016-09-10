@@ -38,10 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'autenticacao',
-    'default'
-
-
->>>>>>> Adicionando enconding
+    'default',
 ]
 
 MIDDLEWARE = [
