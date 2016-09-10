@@ -3008,9 +3008,13 @@ figure {
  */
 /* line 211, ../sass/components/_normalize.scss */
 hr {
-  -moz-box-sizing: content-box;
+/*  -moz-box-sizing: content-box;
   box-sizing: content-box;
-  height: 0;
+  height: 0;*/
+  color: #000000;
+  background-color: #000000;
+  height: 7px;
+  width: 1500px;
 }
 
 /**
@@ -8717,7 +8721,7 @@ nav .input-field label.active {
   /* line 137, ../sass/components/_navbar.scss */
   nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
     height: 100px;
-    line-height: 64px;
+    line-height: 15px;
   }
 
   /* line 141, ../sass/components/_navbar.scss */
