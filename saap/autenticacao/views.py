@@ -1,3 +1,4 @@
+# coding=utf-8
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.views.generic import View
@@ -21,7 +22,7 @@ class LoginView(View):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        
+
         if user is not None:
             if user.is_active:
                 login(request, user)
@@ -32,13 +33,13 @@ class LoginView(View):
         else:
             messages.success(request, 'Nome de usuário e/ou senha inválido(s)!')
             return redirect('/usuarioInvalido')
-
+            
         return render(request, 'login.html')
 
 
 class RegistroView(View):
     http_method_names = [u'get', u'post']
-    
+
     def valido(self, arg):
         if arg is not "":
             return True
@@ -51,7 +52,7 @@ class RegistroView(View):
         else:
             response = render(request, 'cadastro.html')
         return response
-    
+
     def post(self, request):
 
         first_name = ""
@@ -88,7 +89,7 @@ class RegistroView(View):
         else:
             response = redirect('/erroCadastro')
 
-        if Usuario_saap.get_usuario_por_username(username).count() == 0: 
+        if Usuario_saap.get_usuario_por_username(username).count() == 0:
             user = Usuario_saap()
             user.first_name = first_name
             user.last_name = last_name
