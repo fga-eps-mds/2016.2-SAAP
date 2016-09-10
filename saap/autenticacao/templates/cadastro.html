@@ -1,160 +1,115 @@
-<!DOCTYPE html>
-<html>
-{% load i18n %}
-    <head>
-        <!--Import materialize.css-->
-        {% load staticfiles %}
-        <link type="text/css" rel="stylesheet" href="{% static 'stylesheets/materialize.css' %}"  media="screen,projection"/>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-        <!--Let browser know website is optimized for mobile-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-        <title>SAAP | {% block title %}{% endblock %}</title>
-        {% block header %}{% endblock header %}
-    </head>
-    <body>
-
-    <nav>
-    <div class="nav-wrapper white">
-            <img class="responsive-image brand-logo" src="{% static 'images/brasao-da-republica-white.jpg' %}" height="64" width="64">
-      <ul class="right">
-            <h5 class="green-text text-darken-2 col s11">Sistema de Apoio à Atividade Parlamentar</h5>
-      </ul>
+{%  extends "base.html" %}
+{% block main_content %}
+<nav style="height:49px" >
+  <div class="nav-wrapper"  >
+    <div class="col s12">
+      <br>
+      <a href="#!"> <span style="padding-left: 20px">
+      <font size="5px" face = "ARIAL">
+      <b>Home</b>
+      </font>
+      </span></a>
+      <span style="padding-left: 100px">
+      <font size="4px" face = "ARIAL">
+      Cadastro do Cidadão
+      </font>
+      </span>
     </div>
-  </nav>
-
-<!---<center>{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}</center>--->
-
-        <div class="container">
-            <div class="row">
-                <div class="col s12 offset-m2 m8 offset-l3 l6">
-                    <form action="{% url 'cadastro' %}" method="POST">{% csrf_token %}
-                        
-                        <input type="hidden" name="next_url" value="{{next_url}}">
-                        <div class="login-card hoverable center-align">
-                            <div class="card-content">
-                                <span class="card-title  text-light-blue">Titulo</span>
-                                
-				<div class="input-field">
-                                    <i class="material-icons prefix">account_circle</i>
-                                    <input  id="first_name" name="first_name" type="text" class="validate" required>
-                                    <label for="first_name">Nome</label>
-                                </div>
-
-				<div class="input-field">
-                                    <i class="material-icons prefix">account_circle</i>
-                                    <input  id="last_name" name="last_name" type="text" class="validate" required>
-                                    <label for="last_name">Sobrenome</label>
-                                </div>	
-
-				<div class="input-field">
-                                    <i class="material-icons prefix">account_circle</i>
-                                    <input  id="username" name="username" type="text" class="validate" required>
-                                    <label for="username">Nome de Usuário</label>
-                                </div>
-
-				<div class="input-field">
-                                    <i class="material-icons prefix">email</i>
-                                    <input  id="email" name="email" type="text" class="validate" required>
-                                    <label for="email">Email</label>
-                                </div>
-
-				<div class="input-field">
-                                    <i class="material-icons prefix">email</i>
-                                    <input  id="confirmacao_email" name="confirmacao_email" type="text" class="validate" required>
-                                    <label for="confirmacao_email">Confirmar email</label>
-                                </div>
-
-				<div class="input-field">
-                                    <i class="material-icons prefix">lock</i>
-                                    <input  id="password" name="password" type="password" class="validate" required>
-                                    <label for="password">Senha</label>
-                                    
-                                </div>
-				
-				<div class="input-field">
-                                    <i class="material-icons prefix">lock</i>
-                                    <input  id="confirmacao_password" name="confirmacao_password" type="password" class="validate" required>
-                                    <label for="confirmacao_password">Confirmar senha</label>
-                                </div>
-
-				<div class="input-field">
-                                    <i class="material-icons prefix">account_circle</i>
-                                    <input  id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate" required>
-                                    <label for="data_de_nascimento">Data de nascimento</label>
-                                </div>
-
-				<div class="input-field">
-                                    <i class="material-icons prefix">account_circle</i>
-                                    <input  id="sexo" name="sexo" type="text" class="validate" required>
-                                    <label for="sexo">Sexo</label>
-                                </div>
-
-				<div class="input-field">
-                                    <i class="material-icons prefix">account_circle</i>
-                                    <input  id="municipio" name="municipio" type="text" class="validate" required>
-                                    <label for="municipio">Município/UF</label>
-				    <p class="center text-green"><small><a href="Esqueceu">Esqueceu sua senha?</a></small></p>
-                                    <button class="btn waves-effect waves-light green" type="submit" formaction="">Cadastrar</button>	
-                                </div>
-                            </div>
-                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!--<div class="row">
-            <form class="col s12">
-            <div class="row">
-            <div class="input-field col s6">
-            <input placeholder="Placeholder" id="first_name" type="text" class="validate">
-            <label for="first_name">First Name</label>
-            </div>
-            <div class="input-field col s6">
-            <input id="last_name" type="text" class="validate">
-            <label for="last_name">Last Name</label>
-            </div>
-            </div>
-            <div class="row">
-            <div class="input-field col s12">
-            <input disabled value="I am not editable" id="disabled" type="text" class="validate">
-            <label for="disabled">Disabled</label>
-            </div>
-            </div>
-            <div class="row">
-            <div class="input-field col s12">
-            <input id="password" type="password" class="validate">
-            <label for="password">Password</label>
-            </div>
-            </div>
-            <div class="row">
-            <div class="input-field col s12">
-            <input id="email" type="email" class="validate">
-            <label for="email">Email</label>
-            </div>
-            </div>
-            </form>
-            </div>-->
-
-            <!--Import jQuery before materialize.js-->
-            <script type="text/javascript" src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
-            <script type="text/javascript" src="{% static 'js/sideNav.js' %}"></script>
-            <script type="text/javascript" src="{% static 'js/bin/materialize.min.js' %}"></script>
-
-            <script>
-$(document).ready(function() {
-    $('select').material_select();
-});
-            </script>
-
-
-    </body>
-</html>
+  </div>
+</nav>
+<br>
+<form action="{% url 'cadastro' %}" method='POST'>
+  {% csrf_token %}
+  <table>
+    <td width="5%"></td>
+    <td width="95%">
+      <table>
+        <tr>
+          <td width="50%">
+            <div style="width: 400px;">
+              <label for='first_name'><font color="black">Nome (*)</font></label>
+              <input type='text' name='first_name' id='first_name' required>
+              <label for='last_name'><font color="black">Sobrenome (*)</font></label>
+              <input type='text' name='last_name' id='last_name' required>
+              <label for='username'><font color="black">Nome de Usuário (*)</font></label>
+              <input type='text' name='username' id='username' required>
+              <label for='email'><font color="black">E-mail (*)</font></label>
+              <input type='text' name='email' id='email' required>
+              <label for='confirmacao_email'><font color="black">Confirmar e-mail (*)</font></label>
+              <input type='text' name='confirmacao_email' id='confirmacao_email' required>
+              <label for='password'><font color="black">Senha (*)</font></label>
+              <input type='password' name='password' id='password' required>
+              <label for='confirmacao_password'><font color="black">Confirmar senha (*)</font></label>
+              <input type='password' name='confirmacao_password' id='confirmacao_password' required>
+          </td>
+          </div>
+          <td width="50%">
+            <div style="width: 400px;">
+              <label for='data_de_nascimento'><font color="black">Data de Nascimento (*)</font></label>
+              <input type='date' name='data_de_nascimento' id='data_de_nascimento' required>
+              <label for='sexo'><font color="black">Sexo (*)</font></label><br><br>
+              <input name="sexo" type="radio" id="Masculino" value="Masculino" required/>
+              <label for="Masculino">Masculino</label>
+              <input name="sexo" type="radio" id="Feminino" value="Feminino"/>
+              <label for="Feminino">Feminino</label><br><br>
+              <label for='municipio'><font color="black">Município/UF (*)</font></label>
+              <table>
+                <tr>
+                  <td>
+                    <div style="width: 300px;">
+                      <input type='text' name='municipio' id='municipio' required> 
+                    </div>
+                  </td>
+                  <td>
+                    <div style="width: 50px;">
+                      <select name="uf" id="uf" required>
+                        <option value="">UF</option>
+                        <option value="AC">AC</option>
+                        <option value="AL">AL</option>
+                        <option value="AM">AM</option>
+                        <option value="AP">AP</option>
+                        <option value="BA">BA</option>
+                        <option value="CE">CE</option>
+                        <option value="DF">DF</option>
+                        <option value="ES">ES</option>
+                        <option value="GO">GO</option>
+                        <option value="MA">MA</option>
+                        <option value="MG">MG</option>
+                        <option value="MS">MS</option>
+                        <option value="MT">MT</option>
+                        <option value="PA">PA</option>
+                        <option value="PB">PB</option>
+                        <option value="PE">PE</option>
+                        <option value="PI">PI</option>
+                        <option value="PR">PR</option>
+                        <option value="RJ">RJ</option>
+                        <option value="RN">RN</option>
+                        <option value="RS">RS</option>
+                        <option value="RO">RO</option>
+                        <option value="RR">RR</option>
+                        <option value="SC">SC</option>
+                        <option value="SE">SE</option>
+                        <option value="SP">SP</option>
+                        <option value="TO">TO</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              <br><br><br><br><br><br><br><br><br>
+          </td>
+          </div>
+        <tr>
+          <td>
+            <span style="padding-left: 415px">
+            <button type='button'>Cancelar</button>
+            <button type='submit'>Confirmar</button>
+            </span>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </table>
+  <br><br><br><br><br><br>
+</form>
+{% endblock main_content %}

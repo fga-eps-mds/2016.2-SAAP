@@ -9,8 +9,9 @@ from django.core.exceptions import *
 class Usuario_saap(User):
 
     data_de_nascimento = models.DateField()
-    sexo = models.CharField(max_length=250)
+    sexo = models.CharField(max_length=10)
     municipio = models.CharField(max_length=250)
+    uf = models.CharField(max_length=2)
 
     @classmethod
     def busca_nome(cls, nome):
