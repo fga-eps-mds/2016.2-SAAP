@@ -1,5 +1,5 @@
 # Create your views here.
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, render_to_response, redirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -14,7 +14,7 @@ class LoginView(View):
         if request.user.is_authenticated():
             response = redirect('/')
         else:
-            response = render_to_response('login.html', context=RequestContext(request))
+            response = render(request, 'login.html')
         return response
 
     def post(self, request):
@@ -25,11 +25,10 @@ class LoginView(View):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                # Message
                 return redirect('/')
-            #else:
-                # Message
-        #else:
-            # Message
+            else:
+                messages.error(request, 'Conta desativada!')
+        else:
+            messages.success(request, 'Nome de usuário e/ou senha inválido(s)!')
         
-        return render_to_response('login.html', context=RequestContext(request))
+        return render(request, 'login.html')

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+{% load i18n %}
     <head>
         <!--Import materialize.css-->
         {% load staticfiles %}
@@ -23,11 +24,19 @@
     </div>
   </nav>
 
+<!---<center>{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}</center>--->
+
         <div class="container">
             <div class="row">
                 <div class="col s12 offset-m2 m8 offset-l3 l6">
-                    <form action="{% url 'login' %}" method="POST">
-                        {% csrf_token %}
+                    <form action="{% url 'login' %}" method="POST">{% csrf_token %}
+                        
                         <input type="hidden" name="next_url" value="{{next_url}}">
                         <div class="login-card hoverable center-align">
                             <div class="card-content">
