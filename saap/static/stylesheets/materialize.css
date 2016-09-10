@@ -8599,9 +8599,9 @@ nav .button-collapse i {
 /* line 42, ../sass/components/_navbar.scss */
 nav .brand-logo, nav .busineme-topbar {
   position: absolute;
-  color: #fff;
+  color: #000000;
   display: inline-block;
-  font-size: 2.1rem;
+  font-size: 20px;
   padding: 0;
   white-space: nowrap;
 }
@@ -8716,13 +8716,13 @@ nav .input-field label.active {
 @media only screen and (min-width: 601px) {
   /* line 137, ../sass/components/_navbar.scss */
   nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
-    height: 64px;
+    height: 100px;
     line-height: 64px;
   }
 
   /* line 141, ../sass/components/_navbar.scss */
   .navbar-fixed {
-    height: 64px;
+    height: 100px;
   }
 }
 @font-face {
@@ -9115,7 +9115,7 @@ small {
 /* line 112, ../sass/components/_cards.scss */
 .card .card-content p, .login-card .card-content p, .busline-card .card-content p, .search-card .card-content p {
   margin: 0;
-  color: inherit;
+  color: #fff;
 }
 /* line 116, ../sass/components/_cards.scss */
 .card .card-content .card-title, .login-card .card-content .card-title, .busline-card .card-content .card-title, .search-card .card-content .card-title, .card .card-content .busineme-post-header, .login-card .card-content .busineme-post-header, .busline-card .card-content .busineme-post-header, .search-card .card-content .busineme-post-header {
@@ -9128,7 +9128,7 @@ small {
 }
 /* line 125, ../sass/components/_cards.scss */
 .card .card-action a, .login-card .card-action a, .busline-card .card-action a, .search-card .card-action a {
-  color: #ffab40;
+  color: #fff;
   margin-right: 20px;
   -webkit-transition: color 0.3s ease;
   -moz-transition: color 0.3s ease;
@@ -9139,7 +9139,7 @@ small {
 }
 /* line 131, ../sass/components/_cards.scss */
 .card .card-action a:hover, .login-card .card-action a:hover, .busline-card .card-action a:hover, .search-card .card-action a:hover {
-  color: #ffd8a6;
+  color: #fff;
 }
 /* line 135, ../sass/components/_cards.scss */
 .card .card-reveal, .login-card .card-reveal, .busline-card .card-reveal, .search-card .card-reveal {
@@ -9200,7 +9200,7 @@ small {
   max-width: 100%;
   height: 48px;
   line-height: 48px;
-  background-color: #323232;
+  background-color: #fff;
   padding: 0 25px;
   font-size: 1.1rem;
   font-weight: 300;
@@ -9270,7 +9270,7 @@ small {
 }
 /* line 21, ../sass/components/_tabs.scss */
 .tabs .tab a {
-  color: #80d5df;
+  color: #fff;
   display: block;
   width: 100%;
   height: 100%;
@@ -11153,11 +11153,11 @@ select {
 }
 /* line 33, ../sass/components/_sideNav.scss */
 .side-nav li:hover, .side-nav li.active {
-  background-color: #ddd;
+  background-color: #fff;
 }
 /* line 35, ../sass/components/_sideNav.scss */
 .side-nav a {
-  color: #444;
+  color: #fff;
   display: block;
   font-size: 1rem;
   height: 64px;
@@ -11178,7 +11178,7 @@ select {
 .side-nav.fixed a {
   display: block;
   padding: 0 15px;
-  color: #444;
+  color: #fff;
 }
 
 /* line 67, ../sass/components/_sideNav.scss */
@@ -11206,7 +11206,7 @@ select {
 /* line 91, ../sass/components/_sideNav.scss */
 .side-nav .collapsible-body li.active,
 .side-nav.fixed .collapsible-body li.active {
-  background-color: #80d5df;
+  background-color: #fff;
 }
 /* line 94, ../sass/components/_sideNav.scss */
 .side-nav .collapsible-body li.active a,
@@ -11296,25 +11296,25 @@ select {
 /* line 68, ../sass/components/_preloader.scss */
 .spinner-blue,
 .spinner-blue-only {
-  border-color: #4285f4;
+  border-color: #fff;
 }
 
 /* line 73, ../sass/components/_preloader.scss */
 .spinner-red,
 .spinner-red-only {
-  border-color: #db4437;
+  border-color: #fff;
 }
 
 /* line 78, ../sass/components/_preloader.scss */
 .spinner-yellow,
 .spinner-yellow-only {
-  border-color: #f4b400;
+  border-color: #fff;
 }
 
 /* line 83, ../sass/components/_preloader.scss */
 .spinner-green,
 .spinner-green-only {
-  border-color: #0f9d58;
+  border-color: #fff;
 }
 
 /**
@@ -11749,7 +11749,7 @@ select {
 }
 /* line 26, ../sass/components/_slider.scss */
 .slider .slides {
-  background-color: #9e9e9e;
+  background-color: #fff;
   margin: 0;
   height: 400px;
 }
@@ -11782,7 +11782,7 @@ select {
 }
 /* line 56, ../sass/components/_slider.scss */
 .slider .slides li .caption p {
-  color: #e0e0e0;
+  color: #fff;
 }
 /* line 59, ../sass/components/_slider.scss */
 .slider .slides li.active {
@@ -11805,7 +11805,7 @@ select {
   height: 16px;
   width: 16px;
   margin: 0 12px;
-  background-color: #e0e0e0;
+  background-color: #fff;
   -webkit-transition: background-color 0.3s;
   -moz-transition: background-color 0.3s;
   -o-transition: background-color 0.3s;
