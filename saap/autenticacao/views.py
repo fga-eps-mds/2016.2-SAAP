@@ -39,6 +39,12 @@ class LoginView(View):
 class RegistroView(View):
     http_method_names = [u'get', u'post']
     
+    def valido(self, arg):
+        if arg is not "":
+            return True
+        else:
+            return False
+
     def get(self, request):
         if request.user.is_authenticated():
             response = redirect('/')
@@ -48,12 +54,27 @@ class RegistroView(View):
     
     def post(self, request):
 
-        if (request.POST['first_name'] and request.POST['last_name'] and 
-            request.POST['username'] and request.POST['email'] and 
-            request.POST['confirmacao_email'] and request.POST['password'] and
-            request.POST['confirmacao_password'] and 
-            request.POST['data_de_nascimento'] and request.POST['sexo'] and 
-            request.POST['municipio']) is not None:
+        first_name = ""
+        last_name = ""
+        username = ""
+        email = ""
+        confirmacao_email = ""
+        password = ""
+        confirmacao_password = ""
+        sexo =  ""
+        municipio = ""
+        data_de_nascimento = "1900-01-01"
+
+        if self.valido(request.POST['first_name']) and \
+            self.valido(request.POST['last_name']) and \
+            self.valido(request.POST['username']) and \
+            self.valido(request.POST['email']) and \
+            self.valido(request.POST['confirmacao_email']) and \
+            self.valido(request.POST['password']) and \
+            self.valido(request.POST['confirmacao_password']) and \
+            self.valido(request.POST['sexo']) and \
+            self.valido(request.POST['municipio']) and \
+            data_de_nascimento is not None:
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
             username = request.POST['username']
@@ -64,17 +85,22 @@ class RegistroView(View):
             data_de_nascimento = request.POST['data_de_nascimento']
             sexo = request.POST['sexo']
             municipio = request.POST['municipio']
+        else:
+            response = redirect('/erroCadastro')
 
-        user = Usuario_saap()
-        user.first_name = first_name
-        user.last_name = last_name
-        user.username = username
-        user.email = email
-        user.set_password(password)
-        user.data_de_nascimento = data_de_nascimento
-        user.sexo = sexo
-        user.municipio = municipio
-        user.save()
-        login(request, user)
-        response = redirect('/registrado')
+        if Usuario_saap.get_usuario_por_username(username).count() == 0: 
+            user = Usuario_saap()
+            user.first_name = first_name
+            user.last_name = last_name
+            user.username = username
+            user.email = email
+            user.set_password(password)
+            user.data_de_nascimento = data_de_nascimento
+            user.sexo = sexo
+            user.municipio = municipio
+            user.save()
+            login(request, user)
+            response = redirect('/registrado')
+        else:
+            response = redirect('/erroRegistro')
         return response
