@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+{% load i18n %}
+    <head>
+        <!--Import materialize.css-->
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static 'stylesheets/materialize.css' %}"  media="screen,projection"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <title>SAAP | {% block title %}{% endblock %}</title>
+        {% block header %}{% endblock header %}
+    </head>
+    <body>
+
+    <nav>
+    <div class="nav-wrapper white">
+            <img class="responsive-image brand-logo" src="{% static 'images/brasao-da-republica-white.jpg' %}" height="64" width="64">
+      <ul class="right">
+            <h5 class="green-text text-darken-2 col s11">Sistema de Apoio à Atividade Parlamentar</h5>
+      </ul>
+    </div>
+  </nav>
+
+<!---<center>{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}</center>--->
+
+        <div class="container">
+            <div class="row">
+                <div class="col s12 offset-m2 m8 offset-l3 l6">
+                    <form action="{% url 'cadastro' %}" method="POST">{% csrf_token %}
+                        
+                        <input type="hidden" name="next_url" value="{{next_url}}">
+                        <div class="login-card hoverable center-align">
+                            <div class="card-content">
+                                <span class="card-title  text-light-blue">Titulo</span>
+                                
+				<div class="input-field">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input  id="first_name" name="first_name" type="text" class="validate" required>
+                                    <label for="first_name">Nome</label>
+                                </div>
+
+				<div class="input-field">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input  id="last_name" name="last_name" type="text" class="validate" required>
+                                    <label for="last_name">Sobrenome</label>
+                                </div>	
+
+				<div class="input-field">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input  id="username" name="username" type="text" class="validate" required>
+                                    <label for="username">Nome de Usuário</label>
+                                </div>
+
+				<div class="input-field">
+                                    <i class="material-icons prefix">email</i>
+                                    <input  id="email" name="email" type="text" class="validate" required>
+                                    <label for="email">Email</label>
+                                </div>
+
+				<div class="input-field">
+                                    <i class="material-icons prefix">email</i>
+                                    <input  id="confirmacao_email" name="confirmacao_email" type="text" class="validate" required>
+                                    <label for="confirmacao_email">Confirmar email</label>
+                                </div>
+
+				<div class="input-field">
+                                    <i class="material-icons prefix">lock</i>
+                                    <input  id="password" name="password" type="password" class="validate" required>
+                                    <label for="password">Senha</label>
+                                    
+                                </div>
+				
+				<div class="input-field">
+                                    <i class="material-icons prefix">lock</i>
+                                    <input  id="confirmacao_password" name="confirmacao_password" type="password" class="validate" required>
+                                    <label for="confirmacao_password">Confirmar senha</label>
+                                </div>
+
+				<div class="input-field">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input  id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate" required>
+                                    <label for="data_de_nascimento">Data de nascimento</label>
+                                </div>
+
+				<div class="input-field">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input  id="sexo" name="sexo" type="text" class="validate" required>
+                                    <label for="sexo">Sexo</label>
+                                </div>
+
+				<div class="input-field">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input  id="municipio" name="municipio" type="text" class="validate" required>
+                                    <label for="municipio">Município/UF</label>
+				    <p class="center text-green"><small><a href="Esqueceu">Esqueceu sua senha?</a></small></p>
+                                    <button class="btn waves-effect waves-light green" type="submit" formaction="">Cadastrar</button>	
+                                </div>
+                            </div>
+                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="row">
+            <form class="col s12">
+            <div class="row">
+            <div class="input-field col s6">
+            <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+            <label for="first_name">First Name</label>
+            </div>
+            <div class="input-field col s6">
+            <input id="last_name" type="text" class="validate">
+            <label for="last_name">Last Name</label>
+            </div>
+            </div>
+            <div class="row">
+            <div class="input-field col s12">
+            <input disabled value="I am not editable" id="disabled" type="text" class="validate">
+            <label for="disabled">Disabled</label>
+            </div>
+            </div>
+            <div class="row">
+            <div class="input-field col s12">
+            <input id="password" type="password" class="validate">
+            <label for="password">Password</label>
+            </div>
+            </div>
+            <div class="row">
+            <div class="input-field col s12">
+            <input id="email" type="email" class="validate">
+            <label for="email">Email</label>
+            </div>
+            </div>
+            </form>
+            </div>-->
+
+            <!--Import jQuery before materialize.js-->
+            <script type="text/javascript" src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/sideNav.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/bin/materialize.min.js' %}"></script>
+
+            <script>
+$(document).ready(function() {
+    $('select').material_select();
+});
+            </script>
+
+
+    </body>
+</html>
