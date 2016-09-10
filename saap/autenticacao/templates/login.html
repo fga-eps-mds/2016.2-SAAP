@@ -14,29 +14,13 @@
         {% block header %}{% endblock header %}
     </head>
     <body>
-
-    <nav>
-    <div class="nav-wrapper white">
-            <img class="responsive-image brand-logo" src="{% static 'images/brasao-da-republica-white.jpg' %}" height="64" width="64">
-      <ul class="right">
-            <h5 class="green-text text-darken-2 col s11">Sistema de Apoio à Atividade Parlamentar</h5>
-      </ul>
-    </div>
-  </nav>
-
-<!---<center>{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}</center>--->
-
+      {% extends "cabecalho.html" %}
+      {% block header %} {% endblock header %}
         <div class="container">
             <div class="row">
                 <div class="col s12 offset-m2 m8 offset-l3 l6">
                     <form action="{% url 'login' %}" method="POST">{% csrf_token %}
-                        
+
                         <input type="hidden" name="next_url" value="{{next_url}}">
                         <div class="login-card hoverable center-align">
                             <div class="card-content">
