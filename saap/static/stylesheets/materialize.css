@@ -3014,7 +3014,7 @@ hr {
   color: #000000;
   background-color: #000000;
   height: 7px;
-  width: 1500px;
+  width: 1311.5px;
 }
 
 /**
@@ -8561,26 +8561,28 @@ span.badge.new:after {
 
 /* line 1, ../sass/components/_navbar.scss */
 nav {
-  color: #fff;
-  background-color: #80d5df;
+  color: #000000;
+  background-color: #fff;
   width: 100%;
   height: 56px;
   line-height: 56px;
 }
 /* line 9, ../sass/components/_navbar.scss */
 nav a {
-  color: #fff;
+  color: #000000;
 }
 /* line 11, ../sass/components/_navbar.scss */
 nav .nav-wrapper {
   position: relative;
   height: 100%;
 }
+
 /* line 15, ../sass/components/_navbar.scss */
 nav .nav-wrapper i {
   display: block;
   font-size: 2rem;
 }
+
 @media only screen and (min-width: 993px) {
   /* line 22, ../sass/components/_navbar.scss */
   nav a.button-collapse {
