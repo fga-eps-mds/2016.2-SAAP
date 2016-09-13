@@ -6,6 +6,10 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.template import RequestContext
 from autenticacao.models import Usuario_saap
+from django.utils.translation import ugettext
+from django.contrib.auth.forms import (
+    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,
+)
 
 
 class LoginView(View):
@@ -33,7 +37,7 @@ class LoginView(View):
         else:
             messages.success(request, 'Nome de usuário e/ou senha inválido(s)!')
             return redirect('/usuarioInvalido')
-            
+
         return render(request, 'login.html')
 
 
