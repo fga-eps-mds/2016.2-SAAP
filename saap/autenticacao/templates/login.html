@@ -1,6 +1,6 @@
 {%  extends "base.html" %}
 {% block main_content %}
-  <nav style="height:40px" >
+  <nav style="height:49px" >
     <div class="nav-wrapper"  >
       <div class="col s12">
         <br>
@@ -80,5 +80,39 @@
         </div>
       </div>
     </div>-->
+<br>
+  <table width="100px">
+    <td>
+      <div class="row">
+        <div class="col offset-m2 m8 l6">
+          <form action='/accounts/auth/' method='POST'> {% csrf_token %}
+            <br><br>
+              <label for='username'><font color="black">Nome de Usuário</font></label>
+                <input type='text' name='Username' id='username'>
+                  <label for='password'><font color="black">Senha</font></label>
+                    <input type='password' name='Password' id='password'>
+                        <input type='submit' value='Acessar'>
+                  </form>
+              </div>
+            </td>
+            <td>
+              <div class="row">
+                <div class="col m8 ">
+                  <div style="border: solid black; ">
+                    <div style="padding-left: 5px;">
+                      <div class="black-text">
+                        <div align="center">
+                          <br>Aviso <br> Não esqueça de clicar em sair <br>
+                           ou fechar seu navegador quando você acabar.
+                         </div>
+                       </div>
+                       <br><br>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+            </td>
+          </table>
+          <br><br><br><br><br><br>
 
 {% endblock main_content %}
