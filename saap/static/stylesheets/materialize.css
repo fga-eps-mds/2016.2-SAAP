@@ -2954,7 +2954,7 @@ small {
 }
 
 /**
- * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ * Prevent `sub` and `sup` affecting `line-height` in all bsers.
  */
 /* line 161, ../sass/components/_normalize.scss */
 sub,
@@ -3004,17 +3004,18 @@ figure {
 }
 
 /**
- * Address differences between Firefox and other browsers.
+ * Address differences between Firefox and other bsers.
  */
 /* line 211, ../sass/components/_normalize.scss */
 hr {
 /*  -moz-box-sizing: content-box;
   box-sizing: content-box;
   height: 0;*/
+
   color: #000000;
   background-color: #000000;
-  height: 7px;
-  width: 1311.5px;
+  height: 5px;
+  /*width: 1311.5px;*/
 }
 
 /**
@@ -3587,8 +3588,8 @@ footer.page-footer .footer-copyright, footer.busineme-footer .footer-copyright {
   overflow: hidden;
   height: 50px;
   line-height: 50px;
-  color: rgba(255, 255, 255, 0.8);
-  background-color: rgba(51, 51, 51, 0.08);
+  color: "black";
+  background-color: #fff;
 }
 
 /* line 322, ../sass/components/_global.scss */
@@ -8231,99 +8232,99 @@ span.badge.new:after {
   padding: 0 0.75rem;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s1 {
+. .col.s1 {
   width: 8.33333%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s2 {
+. .col.s2 {
   width: 16.66667%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s3 {
+. .col.s3 {
   width: 25%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s4 {
+. .col.s4 {
   width: 33.33333%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s5 {
+. .col.s5 {
   width: 41.66667%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s6 {
+. .col.s6 {
   width: 50%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s7 {
+. .col.s7 {
   width: 58.33333%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s8 {
+. .col.s8 {
   width: 66.66667%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s9 {
+. .col.s9 {
   width: 75%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s10 {
+. .col.s10 {
   width: 83.33333%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s11 {
+. .col.s11 {
   width: 91.66667%;
   margin-left: 0;
 }
 /* line 57, ../sass/components/_grid.scss */
-.row .col.s12 {
+. .col.s12 {
   width: 100%;
   margin-left: 0;
 }
 /* line 66, ../sass/components/_grid.scss */
-.row .col.offset-s1 {
+. .col.offset-s1 {
   margin-left: 8.33333%;
 }
 /* line 66, ../sass/components/_grid.scss */
-.row .col.offset-s2 {
+. .col.offset-s2 {
   margin-left: 16.66667%;
 }
 /* line 66, ../sass/components/_grid.scss */
-.row .col.offset-s3 {
+. .col.offset-s3 {
   margin-left: 25%;
 }
 /* line 66, ../sass/components/_grid.scss */
-.row .col.offset-s4 {
+. .col.offset-s4 {
   margin-left: 33.33333%;
 }
 /* line 66, ../sass/components/_grid.scss */
-.row .col.offset-s5 {
+. .col.offset-s5 {
   margin-left: 41.66667%;
 }
 /* line 66, ../sass/components/_grid.scss */
-.row .col.offset-s6 {
+. .col.offset-s6 {
   margin-left: 50%;
 }
 /* line 66, ../sass/components/_grid.scss */
-.row .col.offset-s7 {
+. .col.offset-s7 {
   margin-left: 58.33333%;
 }
 /* line 66, ../sass/components/_grid.scss */
-.row .col.offset-s8 {
+. .col.offset-s8 {
   margin-left: 66.66667%;
 }
 /* line 66, ../sass/components/_grid.scss */
-.row .col.offset-s9 {
+. .col.offset-s9 {
   margin-left: 75%;
 }
 /* line 66, ../sass/components/_grid.scss */
@@ -8340,28 +8341,28 @@ span.badge.new:after {
 }
 @media only screen and (min-width: 601px) {
   /* line 77, ../sass/components/_grid.scss */
-  .row .col.m1 {
+  ..m1 {
     width: 8.33333%;
     margin-left: 0;
   }
   /* line 77, ../sass/components/_grid.scss */
-  .row .col.m2 {
+  ..m2 {
     width: 16.66667%;
     margin-left: 0;
   }
   /* line 77, ../sass/components/_grid.scss */
-  .row .col.m3 {
+  ..m3 {
     width: 25%;
     margin-left: 0;
   }
   /* line 77, ../sass/components/_grid.scss */
-  .row .col.m4 {
+  ..m4 {
     width: 33.33333%;
     margin-left: 0;
   }
   /* line 77, ../sass/components/_grid.scss */
   .row .col.m5 {
-    width: 41.66667%;
+    width: 30.66667%;
     margin-left: 0;
   }
   /* line 77, ../sass/components/_grid.scss */
@@ -8417,7 +8418,7 @@ span.badge.new:after {
   }
   /* line 86, ../sass/components/_grid.scss */
   .row .col.offset-m5 {
-    margin-left: 41.66667%;
+    margin-left: 30.66667%;
   }
   /* line 86, ../sass/components/_grid.scss */
   .row .col.offset-m6 {
@@ -9011,6 +9012,7 @@ small {
 
 /* line 3, ../sass/components/_cards.scss */
 .card-panel {
+
   transition: box-shadow .25s;
   padding: 20px;
   margin: 0.5rem 0 1rem 0;
@@ -9713,7 +9715,7 @@ a.waves-effect .waves-ripple {
   cursor: pointer;
 }
 /* line 33, ../sass/components/_modal.scss */
-.modal .modal-footer {
+.modal .modal-{
   border-radius: 0 0 2px 2px;
   background-color: #fafafa;
   padding: 4px 6px;
