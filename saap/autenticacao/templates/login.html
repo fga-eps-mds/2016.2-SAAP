@@ -5,10 +5,14 @@
       <div class="col s12">
         <br>
       <a href="#!"> <span style="padding-left: 20px">
-           Home
+        <font size="5px" face = "ARIAL">
+           <b>Home</b>
+        </font>
         </span></a>
-          <span style="padding-left: 20px">
-          Login
+          <span style="padding-left: 100px">
+            <font size="4px" face = "ARIAL">
+              Login
+            </font>
         </span>
       </div>
     </div>
@@ -16,6 +20,7 @@
         <div class="container">
             <div class="row">
                 <div class="col s12 offset-m2 m8 offset-l3 l6">
+
                     <form action="{% url 'login' %}" method="POST">{% csrf_token %}
 
                         <input type="hidden" name="next_url" value="{{next_url}}">
@@ -31,17 +36,24 @@
                                     <i class="material-icons prefix">lock</i>
                                     <input  id="password" name="password" type="password" class="validate">
                                     <label for="password">Senha</label>
-                                    <p class="center text-green"><small><a href="Esqueceu">Esqueceu sua senha?</a></small></p>
                                     <button class="btn waves-effect waves-light green" type="submit" formaction="">Enviar</button>
+                                    <br><p class="center text-green"><a href="Cadastro text-green">Deseja se cadastrar?</a></p>
+                                    <p class="center text-green"><a href="Esqueceu">Esqueceu sua senha?</a></p>
                                 </div>
-                            </div>
-                            <div class="card-action right-align">
-                                <a href="Cadastro text-green">Deseja se cadastrar?</a>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-<hr>
+        <!--<div class="row">
+      <div class="col s12 m5">
+        <div class="card-panel teal">
+          <span class="white-text" font="Arial"><center><b>Aviso</b><br><br>
+            Não esqueça de clicar em sair <br> ou fechar seu navegador quando você acabar.</center>
+          </span>
+        </div>
+      </div>
+    </div>-->
+
 {% endblock main_content %}
