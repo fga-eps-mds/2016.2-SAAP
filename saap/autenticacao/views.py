@@ -83,14 +83,6 @@ class RegistroView(View):
             self.valido(request.POST['sexo']) and \
             self.valido(request.POST['municipio']) and \
             data_de_nascimento is not None:
-
-        if (request.POST['first_name'] and request.POST['last_name'] and
-            request.POST['username'] and request.POST['email'] and
-            request.POST['confirmacao_email'] and request.POST['password'] and
-            request.POST['confirmacao_password'] and
-            request.POST['data_de_nascimento'] and request.POST['sexo'] and
-            request.POST['municipio']) is not None:
-
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
             username = request.POST['username']
