@@ -2,7 +2,7 @@
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.template import RequestContext
 from autenticacao.models import Usuario_saap
@@ -34,7 +34,7 @@ class LoginView(View):
 
     def get(self, request):
         if request.user.is_authenticated():
-            response = redirect('/')
+            response = render(request, 'perfil.html')
         else:
             response = render(request, 'login.html')
         return response
@@ -47,15 +47,11 @@ class LoginView(View):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('/logado')
+                return render(request, 'perfil.html')
             else:
                 messages.error(request, 'Conta desativada!')
-                return redirect('/contaDesativada')
         else:
             messages.success(request, 'Nome de usuário e/ou senha inválido(s)!')
-            return redirect('/usuarioInvalido')
-
-            return redirect('/usuarioInvalido')
 
         return render(request, 'login.html')
 
@@ -71,13 +67,14 @@ class RegistroView(View):
 
     def get(self, request):
         if request.user.is_authenticated():
-            response = redirect('/')
+            response = render(request, 'perfil.html')
         else:
             response = render(request, 'cadastro.html')
         return response
 
     def post(self, request):
 
+        print("%s", request.POST['data_de_nascimento'])
         first_name = ""
         last_name = ""
         username = ""
@@ -87,6 +84,7 @@ class RegistroView(View):
         confirmacao_password = ""
         sexo =  ""
         municipio = ""
+        uf = ""
         data_de_nascimento = "1900-01-01"
 
         if self.valido(request.POST['first_name']) and \
@@ -98,7 +96,8 @@ class RegistroView(View):
             self.valido(request.POST['confirmacao_password']) and \
             self.valido(request.POST['sexo']) and \
             self.valido(request.POST['municipio']) and \
-            data_de_nascimento is not None:
+            self.valido(request.POST['uf']) and \
+            self.valido(request.POST['data_de_nascimento']):
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
             username = request.POST['username']
@@ -109,7 +108,7 @@ class RegistroView(View):
             data_de_nascimento = request.POST['data_de_nascimento']
             sexo = request.POST['sexo']
             municipio = request.POST['municipio']
-
+            uf = request.POST['uf']
         else:
             response = redirect('/erroCadastro')
 
@@ -123,27 +122,33 @@ class RegistroView(View):
             user.data_de_nascimento = data_de_nascimento
             user.sexo = sexo
             user.municipio = municipio
+            user.uf = uf
             user.save()
             login(request, user)
-            response = redirect('/registrado')
+            response = render(request, 'perfil.html')
         else:
-            response = redirect('/erroRegistro')
-
-
-        user = Usuario_saap()
-        user.first_name = first_name
-        user.last_name = last_name
-        user.username = username
-        user.email = email
-        user.set_password(password)
-        user.data_de_nascimento = data_de_nascimento
-        user.sexo = sexo
-        user.municipio = municipio
-        user.save()
-        login(request, user)
-        response = redirect('/registrado')
+            response = redirect('/erroCadastro')
 
         return response
+
+class PerfilView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        if request.user.is_authenticated():
+            response = render(request, 'perfil.html')
+        else:
+            response = render(request, 'login.html')
+        return response
+
+class LogoutView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        logout(request)
+        response = render(request, 'login.html')
+        return response
+
 """
 
 class ResetPasswordRequestView(FormView):

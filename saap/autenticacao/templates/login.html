@@ -1,43 +1,50 @@
 {%  extends "base.html" %}
 {% block main_content %}
 <br>
-  <table width="100px">
-    <td>
-      <div class="row">
-        <div class="col offset-m2 m8 l6">
-          <!--Arrumar isso aqui-->
-          <form action='/accounts/auth/' method='POST'> {% csrf_token %}
-            <br><br>
-              <label for='username'><font color="black">Nome de Usuário</font></label>
-                <input type='text' name='Username' id='username'>
-                  <label for='password'><font color="black">Senha</font></label>
-                    <input type='password' name='Password' id='password'>
-                        <input type='submit' value='Acessar'>
-                        <br><br>
-                        <a href="http://127.0.0.1:8000/cadastro/"><span style="color:black"> Cadastre-se aqui </span></a>
-                        <br>
-                        <a href="http://127.0.0.1:8000/recuperacao_senha/"><span style="color:black"> Resete sua senha </span></a>
-                  </form>
+<table width="100px">
+  <td>
+    <div class="row">
+    <div class="col offset-m2 m8 l6">
+      <!--Arrumar isso aqui-->
+      <form action="{% url 'login' %}" method='POST'>
+        {% csrf_token %}
+        <br><br>
+        <label for='username'><font color="black">Nome de Usuário</font></label>
+        <input type='text' name='username' id='username'>
+        <label for='password'><font color="black">Senha</font></label>
+        <input type='password' name='password' id='password'>
+        <input type='submit' value='Acessar'>
+        <br><br>
+        <a href="http://127.0.0.1:8000/cadastro/"><span style="color:black"> Cadastre-se aqui </span></a>
+        <br>
+        <a href="http://127.0.0.1:8000/recuperacao_senha/"><span style="color:black"> Resete sua senha </span></a>
+        {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </form>
+    </div>
+  </td>
+  <td>
+    <div class="row">
+      <div class="col m8 ">
+        <div style="border: solid black; ">
+          <div style="padding-left: 5px;">
+            <div class="black-text">
+              <div align="center">
+                <br>Aviso <br> Não esqueça de clicar em sair <br>
+                ou fechar seu navegador quando você acabar.
               </div>
-            </td>
-            <td>
-              <div class="row">
-                <div class="col m8 ">
-                  <div style="border: solid black; ">
-                    <div style="padding-left: 5px;">
-                      <div class="black-text">
-                        <div align="center">
-                          <br>Aviso <br> Não esqueça de clicar em sair <br>
-                           ou fechar seu navegador quando você acabar.
-                         </div>
-                       </div>
-                       <br><br>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-            </td>
-          </table>
-          <br><br><br><br><br><br>
-
+            </div>
+            <br><br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </td>
+</table>
+<br><br><br><br><br><br>
 {% endblock main_content %}
