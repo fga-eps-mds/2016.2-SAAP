@@ -1,49 +1,44 @@
 {%  extends "base.html" %}
 {% block main_content %}
-<br>
-<table width="100px">
-  <td>
+<main>
+<br><br><br>
+<div class="container">
+
     <div class="row">
-    <div class="col offset-m2 m8 l6">
-      <!--Arrumar isso aqui-->
-      <form action="{% url 'login' %}" method='POST'>
-        {% csrf_token %}
-        <br><br>
-        <label for='username'><font color="black">Nome de Usuário</font></label>
-        <input type='text' name='username' id='username'>
-        <label for='password'><font color="black">Senha</font></label>
-        <input type='password' name='password' id='password'>
-        <input type='submit' value='Acessar'>
-        <br><br>
-        <a href="/cadastro"><span style="color:black"> Cadastre-se aqui </span></a>
-        <br>
-        {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-      </form>
-    </div>
-  </td>
-  <td>
-    <div class="row">
-      <div class="col m8 ">
-        <div style="border: solid black; ">
-          <div style="padding-left: 5px;">
-            <div class="black-text">
-              <div align="center">
-                <br>Aviso <br> Não esqueça de clicar em sair <br>
-                ou fechar seu navegador quando você acabar.
-              </div>
-            </div>
-            <br><br>
-          </div>
+        <div class="col s12 offset-m2 m8 offset-l3 l6">
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next_url" value="{{next_url}}">
+                <div class="login-card hoverable center-align">
+                    <div class="card-content">
+                        <br>
+                        <div class="input-field">
+                            <i class="material-icons prefix saap-dark-green-text">account_circle</i>
+                            <input  id="username" name="username" type="text" class="validate">
+                            <label for="username">Nome de Usuário</label>
+                        </div>
+                        <div class="input-field">
+                            <i class="material-icons prefix saap-dark-green-text">lock</i>
+                            <input  id="password" name="password" type="password" class="validate">
+                            <label for="password">Senha</label>
+                            <p class="center"><small><a href="#">Esqueceu a senha?</a></small></p>
+                            <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
+                        </div>
+                    </div>
+                    <div class="card-action right-align">
+                        <a href="{% url 'cadastro' %}">Deseja se cadastrar?</a>
+                    </div>
+                </div>
+            </form>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
-      </div>
     </div>
-  </td>
-</table>
-<br><br><br><br><br><br>
+</div>
+</main>
 {% endblock main_content %}
