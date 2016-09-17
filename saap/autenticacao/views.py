@@ -131,6 +131,7 @@ class LogoutView(View):
         logout(request)
         response = render(request, 'login.html')
         return response
+
 class MudarSenhaView(View):
     http_method_names = [u'get',u'post']
 
@@ -140,9 +141,14 @@ class MudarSenhaView(View):
 
     def post(self,request):
         user = request.user
+        nova_senha = request.POST['nova_senha']
+        nova_senha2 = request.POST['confirmacao_nova_senha']
 
-        if request.POST['nova_senha'] == request.POST['confirmacao_nova_senha']:
+        if nova_senha == nova_senha2:
             user.set_password(nova_senha)
             user.save()
         else:
-            messages.error('As senhas não são iguais! Digite novamente.')
+            messages.error(request, 'As senhas não são iguais! Digite novamente.')
+            return render(request, 'mudar_senha.html')
+
+        return render(request, 'perfil.html')

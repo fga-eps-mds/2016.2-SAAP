@@ -1,7 +1,7 @@
 # coding=utf-8
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from .views import (LoginView, RegistroView, PerfilView, LogoutView, MudarSenhaView)
+from .views import (LoginView, MudarSenhaView, RegistroView, PerfilView, LogoutView)
 
 
 urlpatterns = [
