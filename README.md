@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/Treinamento-MDS/Sistema-de-Apoio-Atividade-Parlamentar/badges/gpa.svg)](https://codeclimate.com/github/Treinamento-MDS/Sistema-de-Apoio-Atividade-Parlamentar)
+
 # Evolução do SAAP - Interlegis
 
 O objetivo do SAAP - Sistema de Apoio a Atividade Parlamentar é prover um conjunto de funcionalidades integradas que permite a otimização das tarefas relativas à atividade parlamentar.
