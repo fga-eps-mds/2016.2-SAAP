@@ -1,0 +1,16 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<FORM class = "caixa" method="post">
+
+    <LABEL>Nova senha <BR>
+          <INPUT name="nova_senha" type="password"></LABEL>
+                  {{ form.new_password }}
+                  <br>
+      <LABEL>Confirmação de Senha <BR>
+            <INPUT name="confirmacao_nova_senha" type="password"></LABEL>
+                    {{ form.new_password }}
+                        <br>
+
+      <INPUT type="submit" value="Mudar senha">
+</FORM>
+{% endblock main_content %}
