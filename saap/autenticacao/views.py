@@ -138,4 +138,11 @@ class MudarSenhaView(View):
         response = render (request, 'mudar_senha.html')
         return response
 
-    
+    def post(self,request):
+        user = request.user
+
+        if request.POST['nova_senha'] == request.POST['confirmacao_nova_senha']:
+            user.set_password(nova_senha)
+            user.save()
+        else:
+            messages.error('As senhas não são iguais! Digite novamente.')
