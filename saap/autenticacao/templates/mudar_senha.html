@@ -1,5 +1,6 @@
 {%  extends "base.html" %}
 {% block main_content %}
+<main>
 <form action="{% url 'mudar_senha' %}"  method="post">
   {% csrf_token %}
     <label>Nova senha <br>
@@ -20,4 +21,5 @@
       </ul>
       {% endif %}
 </form>
+</main>
 {% endblock main_content %}

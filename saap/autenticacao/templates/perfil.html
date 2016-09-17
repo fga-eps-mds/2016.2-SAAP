@@ -1,23 +1,7 @@
 {%  extends "base.html" %}
 {% block main_content %}
 {% load i18n %}
-<nav style="height:49px" >
-  <div class="nav-wrapper"  >
-    <div class="col s12">
-      <br>
-      <a href="#!"> <span style="padding-left: 20px">
-      <font size="5px" face = "ARIAL">
-      <b>Home</b>
-      </font>
-      </span></a>
-      <span style="padding-left: 100px">
-      <font size="4px" face = "ARIAL">
-      Perfil
-      </font>
-      </span>
-    </div>
-  </div>
-</nav>
+<main>
 <br>
 <table>
   <tr>
@@ -33,9 +17,11 @@
         <p class="text">{% trans 'Município/UF: ' %} <b>{{request.user.municipio}} - {{request.user.uf}}</b></p>-->
       <br><br>
       <a href="/mudar_senha/"><span style="color:black"> Mudar Senha </span></a>
+      <br>
       <a href="{% url 'logout' %}"><span style="color:black"> Fazer logout </span></a>
       <br><br><br><br><br><br>
     </td>
   </tr>
 </table>
+</main>
 {% endblock main_content %}

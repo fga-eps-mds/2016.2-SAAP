@@ -1,0 +1,25 @@
+diff --git a/.codeclimate.yml b/.codeclimate.yml
+index cf8d144..1f96716 100644
+--- a/.codeclimate.yml
++++ b/.codeclimate.yml
+@@ -1,7 +1,22 @@
+-languages:
+-  Ruby: false
+-  JavaScript: false
+-  PHP: false
+-  Python: true
+-# exclude_paths:
+-# - "foo/bar.rb"
++---
++engines:
++  duplication:
++    enabled: true
++    config:
++      languages:
++      - python
++  fixme:
++    enabled: true
++ratings:
++  paths:
++  - "**.py"
++exclude_paths: []
