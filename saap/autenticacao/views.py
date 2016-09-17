@@ -131,6 +131,11 @@ class LogoutView(View):
         logout(request)
         response = render(request, 'login.html')
         return response
-
 class MudarSenhaView(View):
     http_method_names = [u'get',u'post']
+
+    def get(self, request):
+        response = render (request, 'mudar_senha.html')
+        return response
+
+    
