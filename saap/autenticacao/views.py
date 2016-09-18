@@ -198,7 +198,7 @@ class ExcluirContaView(View):
         user = authenticate(username=request.user.username, password=password)
 
         if user is not None:
-            user.delete
+            user.delete()
             response = render(request, 'login.html')
             messages.success(request, 'Sua conta foi excluida')
             return response
