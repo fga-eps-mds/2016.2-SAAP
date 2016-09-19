@@ -1,68 +1,66 @@
 {%  extends "base.html" %}
 {% block main_content %}
-<nav style="height:49px" >
-  <div class="nav-wrapper"  >
-    <div class="col s12">
-      <br>
-      <a href="#!"> <span style="padding-left: 20px">
-      <font size="5px" face = "ARIAL">
-      <b>Home</b>
-      </font>
-      </span></a>
-      <span style="padding-left: 100px">
-      <font size="4px" face = "ARIAL">
-      Cadastro do Cidadão
-      </font>
-      </span>
-    </div>
-  </div>
-</nav>
-<br>
-<form action="{% url 'cadastro' %}" method='POST'>
-  {% csrf_token %}
-  <table>
-    <td width="5%"></td>
-    <td width="95%">
-      <table>
-        <tr>
-          <td width="50%">
-            <div style="width: 400px;">
-              <label for='first_name'><font color="black">Nome (*)</font></label>
-              <input type='text' name='first_name' id='first_name' required>
-              <label for='last_name'><font color="black">Sobrenome (*)</font></label>
-              <input type='text' name='last_name' id='last_name' required>
-              <label for='username'><font color="black">Nome de Usuário (*)</font></label>
-              <input type='text' name='username' id='username' required>
-              <label for='email'><font color="black">E-mail (*)</font></label>
-              <input type='text' name='email' id='email' required>
-              <label for='confirmacao_email'><font color="black">Confirmar e-mail (*)</font></label>
-              <input type='text' name='confirmacao_email' id='confirmacao_email' required>
-              <label for='password'><font color="black">Senha (*)</font></label>
-              <input type='password' name='password' id='password' required>
-              <label for='confirmacao_password'><font color="black">Confirmar senha (*)</font></label>
-              <input type='password' name='confirmacao_password' id='confirmacao_password' required>
-          </td>
-          </div>
-          <td width="50%">
-            <div style="width: 400px;">
-              <label for='data_de_nascimento'><font color="black">Data de Nascimento (*)</font></label>
-              <input type='date' name='data_de_nascimento' id='data_de_nascimento' required>
-              <label for='sexo'><font color="black">Sexo (*)</font></label><br><br>
-              <input name="sexo" type="radio" id="Masculino" value="Masculino" required/>
-              <label for="Masculino">Masculino</label>
-              <input name="sexo" type="radio" id="Feminino" value="Feminino"/>
-              <label for="Feminino">Feminino</label><br><br>
-              <label for='municipio'><font color="black">Município/UF (*)</font></label>
-              <table>
-                <tr>
-                  <td>
-                    <div style="width: 300px;">
-                      <input type='text' name='municipio' id='municipio' required> 
-                    </div>
-                  </td>
-                  <td>
+<main>
+<br><br><br>
+<div class="container">
+
+    <div class="row">
+        <div class="col s12 offset-m2 m8 offset-l1 l10">
+            <form action="{% url 'cadastro' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next_url" value="{{next_url}}">
+                <div class="login-card hoverable center-align">
+                    <div class="card-content">
+                        <br>
+<div class="row">
+
+        <div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">account_circle</i>
+          <input placeholder="John Doe" id="first_name" name="first_name" type="text" class="validate">
+          <label for="first_name">Nome</label>
+        </div>
+
+        <div class="input-field col s5">
+          <input placeholder="yyyy-mm-dd" id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate">
+          <label for="data_de_nascimento">Data de Nascimento</label>
+        </div>
+      </div>
+
+
+<div class="row">
+        <div class="input-field col s7" style="color:green">
+          <i class="material-icons prefix" style="color:green">account_circle</i>
+          <input placeholder="Smith" id="last_name" name="last_name" type="text" class="validate">
+          <label for="last_name">Sobrenome</label>
+        </div>
+
+
+   <div class="input-field col s5">
+    <select id="sexo" name="sexo">
+      <option value="" disabled selected>Selecionar</option>
+      <option value="Masculino">Masculino</option>
+      <option value="Feminino">Feminino</option>
+    </select>
+    <label>Sexo</label>
+
+   </div>
+</div>
+
+
+<div class="row">
+  <div class="input-field col s7" style="color:green">
+          <i class="material-icons prefix" style="color:green">account_circle</i>
+          <input placeholder="johnsmith" id="username" name="username" type="text" class="validate">
+          <label for="username">Nome de usuário</label>
+        </div>
+        <div class="input-field col s3">
+          <input placeholder="Guarulhos" id="municipio" name="municipio" type="text" class="validate">
+          <label for="municipio">Município</label>
+        </div>
+<div class="input-field col s2">
+          <td>
                     <div style="width: 50px;">
-                      <select name="uf" id="uf" required>
+                      <select name="uf" id="uf">
                         <option value="">UF</option>
                         <option value="AC">AC</option>
                         <option value="AL">AL</option>
@@ -94,22 +92,61 @@
                       </select>
                     </div>
                   </td>
-                </tr>
-              </table>
-              <br><br><br><br><br><br><br><br><br>
-          </td>
-          </div>
-        <tr>
-          <td>
-            <span style="padding-left: 415px">
-            <button type='button'>Cancelar</button>
-            <button type='submit'>Confirmar</button>
-            </span>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </table>
-  <br><br><br><br><br><br>
-</form>
+          <label for="municipio">UF</label>
+        </div>
+
+
+
+</div>
+
+<div class="row">
+<div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">email</i>
+          <input placeholder="name@email.com" id="email" name="email" type="email" class="validate">
+          <label for="email">E-mail</label>
+        </div>
+</div>
+
+<div class="row">
+        <div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">email</i>
+          <input placeholder="name@email.com" id="confirmacao_email" name="confirmacao_email" type="email" class="validate">
+          <label for="confirmacao_email">Confirmar E-mail</label>
+        </div>
+</div>
+<div class="row">
+        <div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">lock</i>
+          <input placeholder="********" id="password" name="password" type="password" class="validate">
+          <label for="password">Senha</label>
+        </div>
+</div>
+<div class="row">
+        <div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">lock</i>
+          <input placeholder="********" id="confirmacao_password" name="confirmacao_password" type="password" class="validate">
+          <label for="confirmacao_password">Confirmar Senha</label>
+        </div>
+</div>
+                        <div>
+                            <p class="center"><small><a href="#">Esqueceu a senha?</a></small></p>
+                            <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
+                        </div>
+                    </div>
+                    <div class="card-action right-align">
+                        <a href="{% url 'login' %}">Já possui conta?</a>
+                    </div>
+                </div>
+            </form>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</main>
 {% endblock main_content %}
