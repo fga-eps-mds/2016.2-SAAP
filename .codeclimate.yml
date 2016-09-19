@@ -1,7 +1,9 @@
-languages:
-  Ruby: false
-  JavaScript: false
-  PHP: false
-  Python: true
-# exclude_paths:
-# - "foo/bar.rb"
+---
+JavaScript: true
+Ruby: true
+Python: false
+PHP: false
+
+exclude_paths:
+- test/**/*
+- vendor/**/*
