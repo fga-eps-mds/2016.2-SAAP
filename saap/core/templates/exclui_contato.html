@@ -1,0 +1,18 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<form action="{% url 'exclui_contato' %}"  method="post">
+  {% csrf_token %}
+    <label>Digite o nome do contato que deseja excluir: <br>
+          <input type='text' name='busca_nome' id='nome' required>
+          <br><br>
+
+      <input type="submit" value="Exclui Contato">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+</form>
+{% endblock main_content %}
