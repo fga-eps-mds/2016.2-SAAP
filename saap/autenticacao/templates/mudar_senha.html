@@ -1,0 +1,23 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<form action="{% url 'mudar_senha' %}"  method="post">
+  {% csrf_token %}
+    <label>Nova senha <br>
+          <input name="nova_senha" type="password"></label>
+                  {{ form.new_password }}
+                  <br>
+      <label>Confirmação de Senha <BR>
+            <input name="confirmacao_nova_senha" type="password"></label>
+                    {{ form.new_password }}
+                        <br>
+
+      <input type="submit" value="Mudar senha">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+</form>
+{% endblock main_content %}
