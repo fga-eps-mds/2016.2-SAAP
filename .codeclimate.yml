@@ -1,9 +1,19 @@
 ---
-JavaScript: true
-Ruby: true
-Python: false
-PHP: false
-
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - python
+  fixme:
+    enabled: true
+  radon:
+    enabled: true
+ratings:
+  paths:
+  - "**.py"
 exclude_paths:
-- test/**/*
-- vendor/**/*
+- config/
+- "*/tests"
+- static/*
+- saap/saap/*
