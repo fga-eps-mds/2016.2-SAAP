@@ -167,7 +167,7 @@ class LogoutView(View):
 
 class MudarSenhaView(View):
     http_method_names = [u'get',u'post']
-    
+
     def get(self, request):
         response = render (request, 'mudar_senha.html')
         return response
@@ -185,7 +185,7 @@ class MudarSenhaView(View):
             return render(request, 'mudar_senha.html')
 
         return render(request, 'perfil.html')
-	
+
 class ExcluirContaView(View):
     http_method_names = [u'get', u'post']
 
@@ -199,9 +199,9 @@ class ExcluirContaView(View):
 
         if user is not None:
             user.delete()
+            messages.success(request, 'Sua conta foi excluída')
             response = render(request, 'login.html')
-            messages.success(request, 'Sua conta foi excluida')
             return response
         else:
             messages.error(request, 'Senha incorreta')
-
+            return render(request, 'excluir_conta.html')
