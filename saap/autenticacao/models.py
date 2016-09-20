@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
+from core.models import Contato
 
 
 # Create your models here.
@@ -53,6 +54,7 @@ class Ticket(models.Model):
     # def current_date(self):
     #     return datetime.datetime.now()
 
+
 class Cidadao(Usuario_saap):
 
     pass
@@ -60,4 +62,5 @@ class Cidadao(Usuario_saap):
 
 class OrganizadorContatos(Usuario_saap):
 
-    pass
+    contatos = models.ManyToManyField(Contato)
+
