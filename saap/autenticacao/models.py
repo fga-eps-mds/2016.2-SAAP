@@ -45,13 +45,13 @@ class Ticket(models.Model):
     corpo_texto = models.CharField(max_length=500)
     remetente = Usuario_saap()
     gabinete_destino = Gabinete_saap()
-    data_publicacao = models.DateField('data_de_publicacao')
+    data_publicacao = models.DateField('data_de_publicacao', auto_now=True)
     tipo_ticket = models.CharField(max_length=30)
     file = models.FileField()
 
-    @classmethod
-    def current_date(self):
-        return datetime.datetime.now()
+    # @classmethod
+    # def current_date(self):
+    #     return datetime.datetime.now()
 
 class Cidadao(Usuario_saap):
 

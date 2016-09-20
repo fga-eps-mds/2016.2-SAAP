@@ -187,7 +187,7 @@ class TicketView(View):
             anonimo = True
 
         titulo = request.POST['assunto']
-        corpo_texto = request.POST['descricao']
+        corpo_texto = request.POST.get('descricao')
 
         if anonimo is True:
             remetente = None
@@ -207,7 +207,6 @@ class TicketView(View):
             novo_ticket.corpo_texto = corpo_texto
             novo_ticket.remetente = remetente
             novo_ticket.gabinete_destino = None
-            novo_ticket.data_publicacao = novo_ticket.current_date()
             novo_ticket.tipo_ticket = tipo_ticket
             novo_ticket.file = arquivo_upload
             novo_ticket.save()

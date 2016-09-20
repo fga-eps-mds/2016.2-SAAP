@@ -21,28 +21,26 @@
                                 </select>
 
                                 <!--Assunto do Ticket-->
-                                <form class="col s12">
+                                <div class="col s12">
                                     <div class="row">
                                         <div class="input-field col s12">
                                             <i class="material-icons prefix">mode_edit</i>
-                                            <input id="assunto" type="text" class="validate">
+                                            <input id="assunto" name='assunto' type="text" class="validate">
                                             <label for="assunto">Assunto</label>
-                                            <label for="icon_prefix2">Assunto</label>
+                                            <label for="assunto">Assunto</label>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
 
                             <!--Mensagem do Ticket-->
-                            <form class="col s12">
-                                <div class="row">
+                            <div class="col s12">
                                     <div class="input-field col s12">
                                         <i class="material-icons prefix">textsms</i>
-                                        <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
-                                        <label for="icon_prefix2">Mensagem </label>
+                                        <textarea id="descricao" name="descricao" class="materialize-textarea" required="required"></textarea>
+                                        <label for="descricao">Mensagem </label>
                                     </div>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                         <!--Radio para anonimo-->
                         <div class="input-field col s12">
