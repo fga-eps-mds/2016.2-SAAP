@@ -19,5 +19,6 @@ urlpatterns = [
         name='mudar_senha'),
     url(r'^excluir_conta/$', login_required(ExcluirContaView.as_view()),
         name='excluir_conta'),
-
+    url(r'^criar_organizador/$', RegistroView.as_view(),
+        name='criar_organizador'),
 ]
