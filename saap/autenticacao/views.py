@@ -125,29 +125,37 @@ class RegistroView(View):
             municipio = request.POST['municipio']
             uf = request.POST['uf']
 
-            if request.path == '/cadastro/' and Cidadao.get_usuario_por_username(username).count() == 0:
-                user = Cidadao()
-            elif request.path == '/criar_organizador/' and OrganizadorContatos.get_usuario_por_username(username).count() == 0:
-                user = OrganizadorContatos()
+            if Cidadao.get_usuario_por_username(username).count() == 0 and \
+                OrganizadorContatos.get_usuario_por_username(username).count() == 0:
+                if request.path == '/cadastro/':
+                    user = Cidadao()
+                    user.first_name = first_name
+                    user.last_name = last_name
+                    user.username = username
+                    user.email = email
+                    user.set_password(password)
+                    user.data_de_nascimento = data_de_nascimento
+                    user.sexo = sexo
+                    user.municipio = municipio
+                    user.uf = uf
+                    user.save()
+                    login(request, user)
+                    response = render(request, 'perfil.html')
+                else:
+                    user = OrganizadorContatos()
+                    user.first_name = first_name
+                    user.last_name = last_name
+                    user.username = username
+                    user.email = email
+                    user.set_password(password)
+                    user.data_de_nascimento = data_de_nascimento
+                    user.sexo = sexo
+                    user.municipio = municipio
+                    user.uf = uf
+                    user.save()
+                    response = render(request, 'login.html')
             else:
                 response = redirect('/erroCadastro')
-
-            user.first_name = first_name
-            user.last_name = last_name
-            user.username = username
-            user.email = email
-            user.set_password(password)
-            user.data_de_nascimento = data_de_nascimento
-            user.sexo = sexo
-            user.municipio = municipio
-            user.uf = uf
-            user.save()
-
-            if request.path == '/cadastro/':
-                login(request, user)
-                response = render(request, 'perfil.html')
-            else:
-                response = render(request, 'login.html')
         else:
             response = redirect('/erroCadastro')
 
