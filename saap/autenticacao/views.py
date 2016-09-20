@@ -38,6 +38,13 @@ def checar_confirmacao(atributo, confirmacao_atributo):
     if atributo == confirmacao_atributo:
         return atributo
 
+def checar_vazio(campos):
+    nao_vazio = True
+    for campo in campos:
+        if campo == "":
+            nao_vazio = False
+    return nao_vazio
+
 class LoginView(View):
     http_method_names = [u'get', u'post']
 
@@ -101,19 +108,16 @@ class RegistroView(View):
         sexo =  ""
         municipio = ""
         uf = ""
-        data_de_nascimento = "1900-01-01"
+        data_de_nascimento = ""
 
-        if self.valido(request.POST['first_name']) and \
-            self.valido(request.POST['last_name']) and \
-            self.valido(request.POST['username']) and \
-            self.valido(request.POST['email']) and \
-            self.valido(request.POST['confirmacao_email']) and \
-            self.valido(request.POST['password']) and \
-            self.valido(request.POST['confirmacao_password']) and \
-            self.valido(request.POST['sexo']) and \
-            self.valido(request.POST['municipio']) and \
-            self.valido(request.POST['uf']) and \
-            self.valido(request.POST['data_de_nascimento']):
+        campos = [request.POST['first_name'], request.POST['last_name'], \
+            request.POST['username'], request.POST['email'], \
+            request.POST['confirmacao_email'], request.POST['password'], \
+            request.POST['confirmacao_password'], request.POST['sexo'], \
+            request.POST['municipio'], request.POST['uf'], \
+            request.POST['data_de_nascimento']]
+
+        if checar_vazio(campos):
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
             username = request.POST['username']
@@ -123,23 +127,23 @@ class RegistroView(View):
             sexo = request.POST['sexo']
             municipio = request.POST['municipio']
             uf = request.POST['uf']
-        else:
-            response = redirect('/erroCadastro')
 
-        if Cidadao.get_usuario_por_username(username).count() == 0:
-            user = Cidadao()
-            user.first_name = first_name
-            user.last_name = last_name
-            user.username = username
-            user.email = email
-            user.set_password(password)
-            user.data_de_nascimento = data_de_nascimento
-            user.sexo = sexo
-            user.municipio = municipio
-            user.uf = uf
-            user.save()
-            login(request, user)
-            response = render(request, 'perfil.html')
+            if Cidadao.get_usuario_por_username(username).count() == 0:
+                user = Cidadao()
+                user.first_name = first_name
+                user.last_name = last_name
+                user.username = username
+                user.email = email
+                user.set_password(password)
+                user.data_de_nascimento = data_de_nascimento
+                user.sexo = sexo
+                user.municipio = municipio
+                user.uf = uf
+                user.save()
+                login(request, user)
+                response = render(request, 'perfil.html')
+            else:
+                response = redirect('/erroCadastro')
         else:
             response = redirect('/erroCadastro')
 
