@@ -27,16 +27,23 @@ from utils.forms import PasswordResetRequestForm, SetPasswordForm"""
 
 # Create your views here.
 
+def checar_autenticacao(request, resposta_autenticado, resposta_nao_autenticado):
+    if request.user.is_authenticated():
+        resposta = render(request, resposta_autenticado)
+    else:
+        resposta = render(request, resposta_nao_autenticado)
+    return resposta
+
+def checar_confirmacao(atributo, confirmacao_atributo):
+    if atributo == confirmacao_atributo:
+        return atributo
 
 class LoginView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        if request.user.is_authenticated():
-            response = render(request, 'perfil.html')
-        else:
-            response = render(request, 'login.html')
-        return response
+        resposta = checar_autenticacao(request, 'perfil.html', 'login.html')
+        return resposta
 
     def post(self, request):
         username = request.POST['username']
@@ -79,15 +86,11 @@ class RegistroView(View):
             return False
 
     def get(self, request):
-        if request.user.is_authenticated():
-            response = render(request, 'perfil.html')
-        else:
-            response = render(request, 'cadastro.html')
-        return response
+        resposta = checar_autenticacao(request, 'perfil.html', 'cadastro.html')
+        return resposta
 
     def post(self, request):
 
-        print("%s", request.POST['data_de_nascimento'])
         first_name = ""
         last_name = ""
         username = ""
@@ -114,10 +117,8 @@ class RegistroView(View):
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
             username = request.POST['username']
-            if request.POST['email'] == request.POST['confirmacao_email']:
-                email = request.POST['email']
-            if request.POST['password'] == request.POST['confirmacao_password']:
-                password = request.POST['password']
+            email = checar_confirmacao(request.POST['email'], request.POST['confirmacao_email'])
+            password = checar_confirmacao(request.POST['password'], request.POST['confirmacao_password'])
             data_de_nascimento = request.POST['data_de_nascimento']
             sexo = request.POST['sexo']
             municipio = request.POST['municipio']
@@ -148,11 +149,8 @@ class PerfilView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        if request.user.is_authenticated():
-            response = render(request, 'perfil.html')
-        else:
-            response = render(request, 'login.html')
-        return response
+        resposta = checar_autenticacao(request, 'perfil.html', 'login.html')
+        return resposta
 
 class LogoutView(View):
     http_method_names = [u'get', u'post']
