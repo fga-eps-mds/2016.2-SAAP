@@ -86,14 +86,11 @@ class LoginView(View):
 class RegistroView(View):
     http_method_names = [u'get', u'post']
 
-    def valido(self, arg):
-        if arg is not "":
-            return True
-        else:
-            return False
-
     def get(self, request):
-        resposta = checar_autenticacao(request, 'perfil.html', 'cadastro.html')
+        if request.path == '/cadastro/':
+            resposta = checar_autenticacao(request, 'perfil.html', 'cadastro.html')
+        elif request.path == '/criar_organizador/':
+            resposta = render(request, 'criar_organizador.html')
         return resposta
 
     def post(self, request):
@@ -128,22 +125,29 @@ class RegistroView(View):
             municipio = request.POST['municipio']
             uf = request.POST['uf']
 
-            if Cidadao.get_usuario_por_username(username).count() == 0:
+            if request.path == '/cadastro/' and Cidadao.get_usuario_por_username(username).count() == 0:
                 user = Cidadao()
-                user.first_name = first_name
-                user.last_name = last_name
-                user.username = username
-                user.email = email
-                user.set_password(password)
-                user.data_de_nascimento = data_de_nascimento
-                user.sexo = sexo
-                user.municipio = municipio
-                user.uf = uf
-                user.save()
+            elif request.path == '/criar_organizador/' and OrganizadorContatos.get_usuario_por_username(username).count() == 0:
+                user = OrganizadorContatos()
+            else:
+                response = redirect('/erroCadastro')
+
+            user.first_name = first_name
+            user.last_name = last_name
+            user.username = username
+            user.email = email
+            user.set_password(password)
+            user.data_de_nascimento = data_de_nascimento
+            user.sexo = sexo
+            user.municipio = municipio
+            user.uf = uf
+            user.save()
+
+            if request.path == '/cadastro/':
                 login(request, user)
                 response = render(request, 'perfil.html')
             else:
-                response = redirect('/erroCadastro')
+                response = render(request, 'login.html')
         else:
             response = redirect('/erroCadastro')
 
