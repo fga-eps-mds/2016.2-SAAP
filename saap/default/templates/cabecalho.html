@@ -1,0 +1,18 @@
+{% block header %}
+
+  <nav>
+    <div class="nav-wrapper saap-dark-green">
+        <img src="../static/images/brasao-da-republica-dark-green.png" height="64" class="responsive-image" width="64">
+        <a href="/">
+        <img src="../static/images/logov1.png" height="64" class="brand-logo responsive-image center">
+        </a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="#">Página Inicial</a></li>
+        <li><a href="#">Sobre a Câmara</a></li>
+        <li><a href="#">Vereadores</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+{% endblock %}

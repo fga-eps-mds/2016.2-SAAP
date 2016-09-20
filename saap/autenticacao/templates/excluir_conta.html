@@ -1,0 +1,33 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<br>
+<table width="100px">
+  <td>
+    <div class="row">
+    <div class="col offset-m2 m8 l6">
+      <!--Arrumar isso aqui-->
+      <form action="{% url 'excluir_conta' %}" method='POST'>
+        {% csrf_token %}
+        <br><br>
+        <b>Deseja excluir sua conta? Digite sua senha para continuar.
+        <br><br>
+        <label for='password'><font color="black">Senha</font></label>
+        <input type='password' name='password' id='password'>
+        <input type='submit' value='Excluir minha conta'>
+        <br><br><br><br><br><br><br>
+        {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </form>
+    </div>
+  </td>
+  <td>
+    
+    </td>
+</table>
+<br><br><br><br><br><br>
+{% endblock main_content %}
