@@ -40,7 +40,7 @@ class Gabinete_saap(models.Model):
 
 class Ticket(models.Model):
 
-    envio_anonimo = models.BooleanField(default=False)
+    envio_identificado = models.BooleanField(default=False)
     titulo = models.CharField(max_length=100)
     corpo_texto = models.CharField(max_length=500)
     remetente = Usuario_saap()
