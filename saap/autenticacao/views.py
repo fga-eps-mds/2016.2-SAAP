@@ -7,25 +7,7 @@ from django.contrib import messages
 from django.template import RequestContext
 from autenticacao.models import Usuario_saap, Cidadao, OrganizadorContatos
 from django.utils.translation import ugettext
-from django.contrib.auth.forms import (
-    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,
-)
-"""from django.core.mail import send_mail
-from django import forms
-from django.contrib.auth import get_user_model
-from django.contrib.auth.tokens import default_token_generator
-from django.db.models.query_utils import Q
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template import loader
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
-from reset_password.settings import DEFAULT_FROM_EMAIL
-from django.views.generic import *
-from utils.forms import PasswordResetRequestForm, SetPasswordForm"""
 
-# Create your views here.
 
 def checar_autenticacao(request, resposta_autenticado, resposta_nao_autenticado):
     if request.user.is_authenticated():

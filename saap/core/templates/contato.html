@@ -1,44 +1,30 @@
 {%  extends "base.html" %}
 {% block main_content %}
-<nav style="height:49px" >
-  <div class="nav-wrapper"  >
-    <div class="col s12">
-      <br>
-      <a href="#!"> <span style="padding-left: 20px">
-      <font size="5px" face = "ARIAL">
-      <b>Home</b>
-      </font>
-      </span></a>
-      <span style="padding-left: 100px">
-      <font size="4px" face = "ARIAL">
-      Contato
-      </font>
-      </span>
-    </div>
-  </div>
-</nav>
-<br>
-<h1>Lista de Contatos</h1>
+
+<div class="container">
+            <div class="row">
+                 <div class="col s6 m6 l6">
+                   <ul class="collection">
+                     <p>Lista de Contatos</p>
+                   {% for contato in lista_contatos %}
+                   <li class="collection-item avatar">
+                     <img src="../static/images/contato.png" alt="" class="circle">
+                     <span class="title">{{ contato.nome }}</span>
+                     <p> {{ contato.cpf }}<br>
+                       {{ contato.email }}<br>
+                       {{ contato.telefone}}<br>
+                     </p>
+                 <i class="material-icons">grade</i>
+                   </li>
+                   {% endfor %}
+                   <br>
+                   <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green left" type="submit'">Excluir contato</button>
+                   <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green right" type="submit'">Cadastrar contato</button>
+                 </ul></div>
+            </div>
+      </div>
 
 
-
-                {% for contato in lista_contatos %}
-
-                                <h6>{{ contato.nome }}</h6>
-                                <p>{{ contato.cpf }}</p>
-                                <p>{{ contato.email }}</p>
-                                <p>{{ contato.telefone}}</p>
-                                <br>
-
-                {% empty %}
-                        <li>Sem itens na lista.</li>
-
-                {% endfor %}
-
-                <br><br>
-                <a href="/exclui_contato"><button style="color:black">Excluir um contato</button></a>
-                <a href="/cadastro_contato"><button style="color:black">Cadastrar contato </button></a>
-                <br><br><br><br><br><br>
 
 
 {% endblock main_content %}

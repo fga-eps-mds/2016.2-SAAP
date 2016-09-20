@@ -2,11 +2,11 @@
 {% block main_content %}
 <form action="{% url 'exclui_contato' %}"  method="post">
   {% csrf_token %}
-    <label>Digite o nome do contato que deseja excluir: <br>
-          <input type='text' name='busca_nome' id='nome' required>
+    <label>Digite o email do contato que deseja excluir: <br>
+          <input type='text' name='busca_email' id='nome' required>
           <br><br>
 
-      <input type="submit" value="Exclui Contato">
+      <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green left" type="submit'">Excluir contato</button>
       {% if messages %}
       <ul class="messages">
         {% for message in messages %}

@@ -4,9 +4,6 @@ from django.db import models
 from django import forms
 
 
-
-# Create your models here.
-
 class Contato(models.Model):
 
     nome = models.CharField(max_length=60,default='')
