@@ -28,3 +28,13 @@ class Usuario_saap(User):
     @classmethod
     def get_usuario_por_username(cls, username):
         return Usuario_saap.objects.filter(username = username)
+
+class Cidadao(Usuario_saap):
+
+    pass
+
+
+class OrganizadorContatos(Usuario_saap):
+
+    pass
+

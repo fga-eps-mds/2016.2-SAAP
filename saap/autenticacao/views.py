@@ -5,7 +5,7 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.template import RequestContext
-from autenticacao.models import Usuario_saap
+from autenticacao.models import Usuario_saap, Cidadao, OrganizadorContatos
 from django.utils.translation import ugettext
 from django.contrib.auth.forms import (
     AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,
@@ -46,7 +46,21 @@ class LoginView(View):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render(request, 'perfil.html')
+
+                try:
+                    tipo_usuario = Cidadao.objects.get(username=username)
+                except:
+                    tipo_usuario = None
+                if tipo_usuario.__class__ is Cidadao:
+                    return render(request, 'perfil.html')
+
+                try:
+                    tipo_usuario = OrganizadorContatos.objects.get(username=username)
+                except:
+                    tipo_usuario = None
+                if tipo_usuario.__class__ is OrganizadorContatos:
+                    return redirect('/OrganizadorContatos')
+
             else:
                 messages.error(request, 'Conta desativada!')
         else:
@@ -111,8 +125,8 @@ class RegistroView(View):
         else:
             response = redirect('/erroCadastro')
 
-        if Usuario_saap.get_usuario_por_username(username).count() == 0:
-            user = Usuario_saap()
+        if Cidadao.get_usuario_por_username(username).count() == 0:
+            user = Cidadao()
             user.first_name = first_name
             user.last_name = last_name
             user.username = username
