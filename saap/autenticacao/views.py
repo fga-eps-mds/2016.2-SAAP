@@ -5,6 +5,7 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.template import RequestContext
+from autenticacao.models import Ticket
 from autenticacao.models import Usuario_saap, Cidadao, OrganizadorContatos
 from django.utils.translation import ugettext
 from django.contrib.auth.forms import (
@@ -163,6 +164,68 @@ class LogoutView(View):
         logout(request)
         response = render(request, 'login.html')
         return response
+
+
+class TicketView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        if request.user.is_authenticated():
+            response = render(request, 'ticket.html')
+        else:
+            response = render(request, 'login.html')
+        return response
+
+    def post(self, request):
+
+        novo_ticket = Ticket()
+
+        # Checking if checkbox is checked
+        if request.POST.get('enviar_anonimamente', False):
+            anonimo = False
+        else:
+            anonimo = True
+
+        titulo = request.POST['assunto']
+        corpo_texto = request.POST['descricao']
+
+        if anonimo is True:
+            remetente = None
+        else:
+            remetente = request.user
+
+        tipo_ticket = request.POST['tipo_mensagem']
+        arquivo_upload = None
+
+        # Setting new ticket
+        if request.user.is_authenticated() is False:
+
+            response = render(request, 'login.html')
+        else:
+            novo_ticket.envio_anonimo = anonimo
+            novo_ticket.titulo = titulo
+            novo_ticket.corpo_texto = corpo_texto
+            novo_ticket.remetente = remetente
+            novo_ticket.gabinete_destino = None
+            novo_ticket.data_publicacao = novo_ticket.current_date()
+            novo_ticket.tipo_ticket = tipo_ticket
+            novo_ticket.file = arquivo_upload
+            novo_ticket.save()
+
+            response = render(request, 'perfil.html')
+
+        return response
+
+#Upload de arquivos
+    def upload_file(request):
+        if request.method == 'POST':
+            form = UploadFileForm(request.POST, request.FILES)
+            if form.is_valid():
+                handle_uploaded_file(request.FILES['file'])
+                return HttpResponseRedirect('/success/url/')
+        else:
+            form = UploadFileForm()
+        return render_to_response('ticket.html', {'form': form})
 
 
 class MudarSenhaView(View):

@@ -1,7 +1,8 @@
 # coding=utf-8
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from .views import (LoginView, MudarSenhaView, RegistroView, PerfilView, LogoutView, ExcluirContaView)
+from .views import (LoginView, MudarSenhaView, RegistroView, PerfilView, 
+                    LogoutView, ExcluirContaView, TicketView)
 
 
 urlpatterns = [
@@ -15,6 +16,8 @@ urlpatterns = [
         name='perfil'),
     url(r'^logout/$', login_required(LogoutView.as_view()),
         name='logout'),
+    url(r'^ticket/$', TicketView.as_view(),
+        name='ticket'),
     url(r'^mudar_senha/$', login_required(MudarSenhaView.as_view()),
         name='mudar_senha'),
     url(r'^excluir_conta/$', login_required(ExcluirContaView.as_view()),
