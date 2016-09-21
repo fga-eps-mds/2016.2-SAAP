@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
+from core.models import Contato, Ticket
 
 
 # Create your models here.
@@ -37,22 +38,6 @@ class Gabinete_saap(models.Model):
     municipio = models.CharField(max_length=250)
     uf = models.CharField(max_length=2)
 
-
-class Ticket(models.Model):
-
-    envio_identificado = models.BooleanField(default=False)
-    titulo = models.CharField(max_length=100)
-    corpo_texto = models.CharField(max_length=500)
-    remetente = Usuario_saap()
-    gabinete_destino = Gabinete_saap()
-    data_publicacao = models.DateField('data_de_publicacao', auto_now=True)
-    tipo_ticket = models.CharField(max_length=30)
-    file = models.FileField()
-
-    # @classmethod
-    # def current_date(self):
-    #     return datetime.datetime.now()
-
 class Cidadao(Usuario_saap):
 
     pass
@@ -60,4 +45,6 @@ class Cidadao(Usuario_saap):
 
 class OrganizadorContatos(Usuario_saap):
 
-    pass
+    contatos = models.ManyToManyField(Contato)
+    tickets = models.ManyToManyField(Ticket)
+

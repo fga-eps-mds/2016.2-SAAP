@@ -12,6 +12,15 @@
                         <div class="card-content">
                             <div class="input-field col s12">
                                 <!--<i class="material-icons prefix">label</i>-->
+
+
+<select name="nome_organizador" id="nome_organizador" required>
+<option>Nome do Organizador</option>
+{% for organizador in lista_organizadores %}
+              <option>{{ organizador.first_name }}</option>
+             {% endfor %}
+</select>
+
                                 <select name="tipo_mensagem" id="tipo_mensagem" required>
                                     <option>Tipo de ticket</option>
                                     <option>Incidente</option>
@@ -24,7 +33,7 @@
                                     <div class="row">
                                         <div class="input-field col s12">
                                             <i class="material-icons prefix">mode_edit</i>
-                                            <input id="assunto" name='assunto' type="text" class="validate">
+                                            <input id="assunto" name='assunto' type="text" class="validate" required>
                                             <label for="assunto">Assunto</label>
                                             <label for="assunto">Assunto</label>
                                         </div>
@@ -36,7 +45,7 @@
                             <div class="col s12">
                                     <div class="input-field col s12">
                                         <i class="material-icons prefix">textsms</i>
-                                        <textarea id="descricao" name="descricao" class="materialize-textarea" required="required"></textarea>
+                                        <textarea id="descricao" name="descricao" class="materialize-textarea" required></textarea>
                                         <label for="descricao">Mensagem </label>
                                     </div>
                             </div>
