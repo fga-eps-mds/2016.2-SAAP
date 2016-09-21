@@ -1,7 +1,8 @@
 # coding=utf-8
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from .views import (LoginView, MudarSenhaView, RegistroView, PerfilView, LogoutView, ExcluirContaView)
+from .views import (LoginView, MudarSenhaView, RegistroView, PerfilView,
+                    LogoutView, ExcluirContaView)
 
 
 urlpatterns = [
@@ -19,5 +20,6 @@ urlpatterns = [
         name='mudar_senha'),
     url(r'^excluir_conta/$', login_required(ExcluirContaView.as_view()),
         name='excluir_conta'),
-
+    url(r'^criar_organizador/$', RegistroView.as_view(),
+        name='criar_organizador'),
 ]

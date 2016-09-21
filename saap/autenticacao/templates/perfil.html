@@ -2,28 +2,29 @@
 {% block main_content %}
 {% load i18n %}
 <main>
-<br>
-<table>
-  <tr>
-    <td width="5%"></td>
-    <td width="95%">
-      <p class="text">{% trans 'Olá ' %} <b>{{user.first_name}}</b>, seja bem vindo ao Sistema de Apoio à Atividade Parlamentar!</p>
-      <br>
-      <p class="text">Informações:</p>
-      <p class="text">{% trans 'Nome completo: ' %} <b>{{request.user.get_full_name}}</b></p>
-      <p class="text">{% trans 'E-mail: ' %} <b>{{request.user.email}}</b></p>
-      <!--<p class="text">{% trans 'Data de nascimento: ' %} <b>{{request.user.data_de_nascimento}}</b></p>
-        <p class="text">{% trans 'Sexo: ' %} <b>{{request.user.sexo}}</b></p>
-        <p class="text">{% trans 'Município/UF: ' %} <b>{{request.user.municipio}} - {{request.user.uf}}</b></p>-->
-      <br><br>
-      <a href="/mudar_senha/"><span style="color:black"> Mudar Senha </span></a>
-      <br>
-      <a href="{% url 'logout' %}"><span style="color:black"> Fazer logout </span></a>
-      <br>
-      <a href="{% url 'excluir_conta' %}"><span style="color:black"> Excluir minha conta </span></a>
-      <br><br><br><br><br><br>
-    </td>
-  </tr>
-</table>
+  <div class="container">
+      <div class="row">
+        <div class="col s12 offset-m2 m8 offset-l3 l6">
+          <div class="login-card hoverable center-align">
+            <div class="card-content">
+              <br><br>
+              <table>
+                    <p class="text">{% trans 'Olá ' %} <b>{{user.first_name}}</b>, seja bem vindo ao Sistema de Apoio à Atividade Parlamentar!</p>
+                    <br>
+                      <p class="text">Informações:</p>
+                      <p class="text">{% trans 'Nome completo: ' %} <b>{{request.user.get_full_name}}</b></p>
+                      <p class="text">{% trans 'E-mail: ' %} <b>{{request.user.email}}</b></p>
+                      <br><br>
+                      <br>
+                      <div class="center-align">
+                        <a href="{% url 'excluir_conta' %}"> <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Excluir Conta</button></a>
+                      </div>
+                      <br><br><br><br>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 </main>
 {% endblock main_content %}

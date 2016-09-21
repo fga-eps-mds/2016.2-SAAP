@@ -1,0 +1,62 @@
+    {%  extends "base.html" %}
+{% block main_content %}
+{% load i18n %}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 offset-m2 m8 offset-l3 l6">
+                <form action="{% url 'ticket' %}" method='POST'>
+                    {% csrf_token %}
+                    <!---->
+                    <div class="login-card hoverable center-align">
+                        <div class="card-content">
+                            <div class="input-field col s12">
+                                <!--<i class="material-icons prefix">label</i>-->
+                                <select name="tipo_mensagem" id="tipo_mensagem" required>
+                                    <option>Tipo de ticket</option>
+                                    <option>Incidente</option>
+                                    <option>Requisição</option>
+                                    <option>Melhorias</option>
+                                </select>
+
+                                <!--Assunto do Ticket-->
+                                <div class="col s12">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <i class="material-icons prefix">mode_edit</i>
+                                            <input id="assunto" name='assunto' type="text" class="validate">
+                                            <label for="assunto">Assunto</label>
+                                            <label for="assunto">Assunto</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Mensagem do Ticket-->
+                            <div class="col s12">
+                                    <div class="input-field col s12">
+                                        <i class="material-icons prefix">textsms</i>
+                                        <textarea id="descricao" name="descricao" class="materialize-textarea" required="required"></textarea>
+                                        <label for="descricao">Mensagem </label>
+                                    </div>
+                            </div>
+                        </div>
+                        <!--Radio para anonimo-->
+                        <div class="input-field col s12">
+                            <p>
+                                <input name="enviar_anonimamente" type="checkbox" id="enviar_anonimamente" />
+                                <label for="enviar_anonimamente">Deseja enviar anonimamente ?</label>
+                            </p>
+                            <br>
+                            <div>
+                                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
+                            </div>
+                            <br>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock main_content %}

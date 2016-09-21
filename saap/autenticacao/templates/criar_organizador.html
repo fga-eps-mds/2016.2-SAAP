@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col s12 offset-m2 m8 offset-l1 l10">
-            <form action="{% url 'cadastro' %}" method="POST">
+            <form action="{% url 'criar_organizador' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="next_url" value="{{next_url}}">
                 <div class="login-card hoverable center-align">
@@ -129,11 +129,8 @@
         </div>
 </div>
                         <div>
-                            <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
+                            <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Criar Organizador</button>
                         </div>
-                    </div>
-                    <div class="card-action right-align">
-                        <a href="{% url 'login' %}">Já possui conta?</a>
                     </div>
                 </div>
             </form>

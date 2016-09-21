@@ -3,7 +3,8 @@ from django.views.generic import View
 from django.contrib import messages
 from django.template import RequestContext
 from django.utils.translation import ugettext
-from core.models import Contato
+from core.models import Contato, Ticket
+
 
 def checar_vazio(campos):
     nao_vazio = True
@@ -11,6 +12,18 @@ def checar_vazio(campos):
         if campo == "":
             nao_vazio = False
     return nao_vazio
+
+
+def funcao(self):
+    campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
+        request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
+        request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
+        request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
+        request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
+        request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
+        request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
+        request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
+        request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
 
 class CadastroView(View):
     http_method_names = [u'get', u'post']
@@ -48,15 +61,8 @@ class CadastroView(View):
         dependente_partido = ""
         dependente_data_filiacao = ""
 
-        campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
-            request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
-            request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
-            request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
-            request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
-            request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
-            request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
-            request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
-            request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
+
+        funcao(self)
 
         if checar_vazio(campos) :
 
@@ -119,6 +125,7 @@ class CadastroView(View):
             lista_contatos = list(contatos)
             response = render(request,'contato.html',locals())
         else:
+
             messages.error(request,'Preencha todos os campos!')
             response = render(request,'contato.html')
 
@@ -147,15 +154,7 @@ class AtualizaContato(View):
 
     def post(self, request):
 
-        campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
-            request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
-            request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
-            request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
-            request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
-            request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
-            request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
-            request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
-            request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
+        funcao(self)
 
         if checar_vazio(campos) :
 
@@ -224,6 +223,7 @@ class AtualizaContato(View):
 
         return response
 
+
 class ContatoView(View):
     http_method_names = [u'get', u'post']
 
@@ -231,3 +231,75 @@ class ContatoView(View):
         contatos = Contato.objects.all()
         lista_contatos = list(contatos)
         return render(request,'contato.html',locals())
+
+
+class TicketView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        if request.user.is_authenticated():
+            response = render(request, 'ticket.html')
+        else:
+            response = render(request, 'login.html')
+        return response
+
+
+    def post(self, request):
+
+        novo_ticket = Ticket()
+
+        # Checking if checkbox is checked
+        if request.POST.get('enviar_anonimamente', False):
+            anonimo = False
+        else:
+            anonimo = True
+
+        titulo = request.POST['assunto']
+        corpo_texto = request.POST.get('descricao')
+
+        if anonimo is True:
+            remetente = None
+        else:
+            remetente = request.user
+
+        tipo_ticket = request.POST['tipo_mensagem']
+        arquivo_upload = None
+
+        # Setting new ticket
+        if request.user.is_authenticated() is False:
+
+            response = render(request, 'login.html')
+        else:
+            novo_ticket.envio_anonimo = anonimo
+            novo_ticket.titulo = titulo
+            novo_ticket.corpo_texto = corpo_texto
+            novo_ticket.remetente = remetente
+            novo_ticket.gabinete_destino = None
+            novo_ticket.tipo_ticket = tipo_ticket
+            novo_ticket.file = arquivo_upload
+            novo_ticket.save()
+            tickets = Ticket.objects.all()
+            lista_tickets = list(tickets)
+
+            response = render(request, 'perfil.html')
+
+        return response
+
+
+    # def get(self, request):
+    #
+    #     tickets = Ticket.objects.all()
+    #     lista_tickets = list(tickets)
+    #     response = render(request,'contato.html',locals())
+    #     return response
+
+#Upload de arquivos
+    # def upload_file(request):
+    #     if request.method == 'POST':
+    #         form = UploadFileForm(request.POST, request.FILES)
+    #         if form.is_valid():
+    #             handle_uploaded_file(request.FILES['file'])
+    #             return HttpResponseRedirect('/success/url/')
+    #     else:
+    #         form = UploadFileForm()
+    #     return render_to_response('ticket.html', {'form': form})

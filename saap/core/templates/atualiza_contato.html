@@ -1,0 +1,78 @@
+{%  extends "base.html" %}
+{% block main_content %}
+
+<form action="{% url 'atualiza_contato' %}" method='POST'>
+  {% csrf_token %}
+  <label>Digite o email do contato que deseja atualizar: <br>
+        <input type='text' name='busca_email' id='nome' >
+        <br><br>
+  <table>
+    <td width="10%"> </td>
+
+          <td width="50%">
+            <div style="width: 400px;">
+              <label for='nome'><font color="black">Nome</font></label>
+              <input type='text' name='nome' id='nome' >
+              <label for="telefone">Telefone (xx-xxxx-xxxx):</label><br/>
+              <input type='text' name='telefone' id='nome' >
+              <label for="celular">Celular (xx-xxxxx-xxxx):</label><br/>
+              <input type='text' name='celular' id='nome' >
+              <label for="fax">Fax (xx-xxxx-xxxx):</label><br/>
+              <input type='text' name='fax' id='nome' >
+
+          </div>
+            <label for='data_de_nascimento'><font color="black">Data de Nascimento</font></label>
+            <input type='date' name='data_de_nascimento' id='data_de_nascimento' >
+            <label for='sexo'><font color="black">Sexo</font></label><br><br>
+            <input name="sexo" type="radio" id="Masculino" value="Masculino" />
+            <label for="Masculino">Masculino</label>
+            <input name="sexo" type="radio" id="Feminino" value="Feminino"/>
+            <label for="Feminino">Feminino</label><br><br>
+            <label for='cpf'><font color="black">CPF (Somente números)</font></label>
+            <input type="text" ="" name="cpf" pattern="[0-9]+$" />
+            <label for='rg'><font color="black">RG (Somente números)</font></label>
+            <input type="text" ="" name="rg" pattern="[0-9]+$" />
+            <br>
+                    <label for='endereco'><font color="black">Endereço</font></label>
+                    <input type='text' name='endereco' id='endereco' >
+                    <label for='cidade'><font color="black">Cidade</font></label>
+                    <input type='text' name='cidade' id='cidade' >
+                    <label for='cep'><font color="black">CEP (Somente números)</font></label>
+                    <input type="text" ="" name="cep" pattern="[0-9]+$" />
+                    <label for='estado'><font color="black">Estado</font></label>
+                    <input type='text' name='estado' id='estado' >
+                    <label for='email'><font color="black">E-mail</font></label>
+                    <input type="email" class="input-text" name="email" />
+                    <div style="width: 50px;">
+                      <select name="grupo" id="grupo" >
+                        <option value="">Grupo</option>
+                        <option value="opção1">Opção 1</option>
+                      </select>
+                      <div style="width: 50px;">
+                        <select name="titulo" id="titulo" >
+                          <option value="">Título</option>
+                          <option value="opção1">Op 1</option>
+                        </select>
+                  </td>
+                  <td>
+
+                    </div>
+                  </td>
+              </table>
+              <br><br><br>
+          </td>
+          </div>
+        <tr>
+          <td>
+            <span style="padding-left: 415px">
+            <button type='button'>Cancelar</button>
+            <button type='submit'>Confirmar</button>
+            </span>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </table>
+  <br><br><br><br><br><br>
+</form>
+{% endblock main_content %}

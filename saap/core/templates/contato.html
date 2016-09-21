@@ -9,7 +9,7 @@
            <p>Lista de Contatos</p>
            {% for contato in lista_contatos %}
              <li class="collection-item avatar">
-               <img src="../static/images/contato.png" alt="" class="circle">
+               <img src="../static/images/contato.png" alt="" class="circle"></img>
                 <span class="title">{{ contato.nome }}</span>
                 <p> {{ contato.cpf }}<br>
                   {{ contato.email }}<br>
@@ -19,21 +19,22 @@
               </li>
             {% endfor %}
             <br>
-            <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green left" type="submit'">Excluir contato</button>
-            <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green right" type="submit'">Cadastrar contato</button>
+            <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green left" type="submit'">Excluir contato</button></a>
+            <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green right" type="submit'">Cadastrar contato</button></a>
           </ul>
         </div>
 
         <div class="col s6 m6 l6 ">
           <ul class="collection">
             <p>Tickets Recebidos</p>
-            {% for contato in ticket %}
+
+            {% for ticket in lista_tickets %}
               <li class="collection-item avatar">
-                <img src="../static/images/contato.png" alt="" class="circle">
-                 <span class="title">{{ ticket.nome }}</span>
-                 <p> {{ contato.cpf }}<br>
-                   {{ contato.email }}<br>
-                   {{ contato.telefone}}<br>
+                <img src="../static/images/contato.png" alt="" class="circle"></img>
+                 <span class="title">{{ ticket.remetente }}</span>
+                 <p> {{ ticket.titulo }}<br>
+                   {{ ticket.tipo_ticket }}<br>
+                   {{ ticket.corpo_texto}}<br>
                  </p>
                  <i class="material-icons">grade</i>
                </li>

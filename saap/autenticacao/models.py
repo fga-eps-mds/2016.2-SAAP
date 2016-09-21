@@ -30,6 +30,14 @@ class Usuario_saap(User):
     def get_usuario_por_username(cls, username):
         return Usuario_saap.objects.filter(username = username)
 
+
+class Gabinete_saap(models.Model):
+
+    participantes = models.ManyToManyField(Usuario_saap)
+    nome_gabinete = models.CharField(max_length=100)
+    municipio = models.CharField(max_length=250)
+    uf = models.CharField(max_length=2)
+
 class Cidadao(Usuario_saap):
 
     pass
@@ -38,4 +46,7 @@ class Cidadao(Usuario_saap):
 class OrganizadorContatos(Usuario_saap):
 
     contatos = models.ManyToManyField(Contato)
+<<<<<<< HEAD
 
+=======
+>>>>>>> fa95c4f67479bea0c78d53a50314ff797808eff5
