@@ -240,7 +240,7 @@ class ContatoView(View):
         organizador = OrganizadorContatos.objects.get(username=request.user.username)
         contatos = organizador.contatos.all()
         lista_contatos = list(contatos)
-        tickets = Ticket.objects.all()
+        tickets = organizador.tickets.all()
         lista_tickets = list(tickets)
         return render(request,'contato.html',locals())
 
@@ -250,7 +250,9 @@ class TicketView(View):
 
     def get(self, request):
         if request.user.is_authenticated():
-            response = render(request, 'ticket.html')
+            organizadores = OrganizadorContatos.objects.all()
+            lista_organizadores = list(organizadores)
+            response = render(request, 'ticket.html',locals())
         else:
             response = render(request, 'login.html')
         return response
@@ -289,7 +291,9 @@ class TicketView(View):
             novo_ticket.tipo_ticket = tipo_ticket
             novo_ticket.file = arquivo_upload
             novo_ticket.save()
-            tickets = Ticket.objects.all()
+            organizador = OrganizadorContatos.objects.get(first_name=request.POST['nome_organizador'])
+            organizador.tickets.add(novo_ticket)
+            tickets = organizador.tickets.all()
             lista_tickets = list(tickets)
 
             response = render(request, 'perfil.html')

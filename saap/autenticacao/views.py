@@ -38,6 +38,8 @@ def checar_tipo_usuario(request, username):
         organizador = OrganizadorContatos.objects.get(username=request.user.username)
         contatos = organizador.contatos.all()
         lista_contatos = list(contatos)
+        tickets = organizador.tickets.all()
+        lista_tickets = list(tickets)
         return render(request,'contato.html',locals())
 
 class LoginView(View):

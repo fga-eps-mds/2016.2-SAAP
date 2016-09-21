@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
-from core.models import Contato
+from core.models import Contato, Ticket
 
 
 # Create your models here.
@@ -46,4 +46,5 @@ class Cidadao(Usuario_saap):
 class OrganizadorContatos(Usuario_saap):
 
     contatos = models.ManyToManyField(Contato)
+    tickets = models.ManyToManyField(Ticket)
 

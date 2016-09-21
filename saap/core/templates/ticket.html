@@ -12,6 +12,15 @@
                         <div class="card-content">
                             <div class="input-field col s12">
                                 <!--<i class="material-icons prefix">label</i>-->
+
+
+<select name="nome_organizador" id="nome_organizador" required>
+<option>Nome do Organizador</option>
+{% for organizador in lista_organizadores %}
+              <option>{{ organizador.first_name }}</option>
+             {% endfor %}
+</select>
+
                                 <select name="tipo_mensagem" id="tipo_mensagem" required>
                                     <option>Tipo de ticket</option>
                                     <option>Incidente</option>
