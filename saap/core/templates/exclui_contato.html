@@ -3,29 +3,21 @@
 <main>
 <br><br><br>
 <div class="container">
-
     <div class="row">
         <div class="col s12 offset-m2 m8 offset-l3 l6">
-            <form action="{% url 'login' %}" method="POST">
-                {% csrf_token %}
+          <form action="{% url 'exclui_contato' %}"  method="post">
+            {% csrf_token %}
                 <input type="hidden" name="next_url" value="{{next_url}}">
                 <div class="login-card hoverable center-align">
                     <div class="card-content">
                         <br>
                         <div class="input-field">
                             <i class="material-icons prefix saap-dark-green-text">account_circle</i>
-                            <input  id="username" name="username" type="text" class="validate" required>
-                            <label for="username">Nome de Usuário</label>
+                            <label for="busca_email">Digite o email do contato que deseja excluir:</label>
+                            <input  id="busca_email" name="busca_email" type="text" class="validate">
+                            <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green left" type="submit'">Excluir contato</button>
+                            <br><br>
                         </div>
-                        <div class="input-field">
-                            <i class="material-icons prefix saap-dark-green-text">lock</i>
-                            <input  id="password" name="password" type="password" class="validate" required>
-                            <label for="password">Senha</label>
-                            <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
-                        </div>
-                    </div>
-                    <div class="card-action right-align">
-                        <a href="{% url 'cadastro' %}">Deseja se cadastrar?</a>
                     </div>
                 </div>
             </form>
