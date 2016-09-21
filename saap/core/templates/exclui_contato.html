@@ -1,18 +1,29 @@
 {%  extends "base.html" %}
 {% block main_content %}
-<form action="{% url 'exclui_contato' %}"  method="post">
-  {% csrf_token %}
-    <label>Digite o email do contato que deseja excluir: <br>
-          <input type='text' name='busca_email' id='nome' required>
-          <br><br>
 
-      <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green left" type="submit'">Excluir contato</button>
-      {% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-</form>
+<main>
+<br><br><br>
+<div class="container">
+    <div class="row">
+        <div class="col s12 offset-m2 m8 offset-l3 l6">
+          <form action="{% url 'exclui_contato' %}"  method="post">
+            {% csrf_token %}
+                <input type="hidden" name="next_url" value="{{next_url}}">
+                <div class="login-card hoverable center-align">
+                    <div class="card-content">
+                        <br>
+                        <div class="input-field">
+                            <i class="material-icons prefix saap-dark-green-text">account_circle</i>
+                            <label for="busca_email">Digite o email do contato que deseja excluir:</label>
+                            <input  id="busca_email" name="busca_email" type="text" class="validate">
+                            <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green left" type="submit'">Excluir contato</button>
+                            <br><br>  
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</main>
 {% endblock main_content %}

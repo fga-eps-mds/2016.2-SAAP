@@ -36,12 +36,27 @@ class CadastroView(View):
         email = ""
         grupo = ""
         titulo = ""
+        titulo_de_eleitor = ""
+        zona = ""
+        secao = ""
+        profissao = ""
+        cargo = ""
+        empresa = ""
+        dependente_nome = ""
+        dependente_aniversario = ""
+        dependente_parentesco = ""
+        dependente_partido = ""
+        dependente_data_filiacao = ""
 
         campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
             request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
             request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
             request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
-            request.POST['grupo'], request.POST['titulo']]
+            request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
+            request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
+            request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
+            request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
+            request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
 
         if checar_vazio(campos) :
 
@@ -60,6 +75,17 @@ class CadastroView(View):
             email = request.POST['email']
             grupo = request.POST['grupo']
             titulo = request.POST['titulo']
+            titulo_de_eleitor = request.POST['titulo_de_eleitor']
+            zona = request.POST['zona']
+            secao = request.POST['secao']
+            profissao = request.POST['profissao']
+            cargo = request.POST['cargo']
+            empresa = request.POST['empresa']
+            dependente_nome = request.POST['dependente_nome']
+            dependente_aniversario = request.POST['dependente_aniversario']
+            dependente_parentesco = request.POST['dependente_parentesco']
+            dependente_partido = request.POST['dependente_partido']
+            dependente_data_filiacao = request.POST['dependente_data_filiacao']
 
             contato = Contato()
             contato.nome = nome
@@ -77,6 +103,17 @@ class CadastroView(View):
             contato.email = email
             contato.grupo = grupo
             contato.titulo = titulo
+            contato.titulo_de_eleitor = titulo_de_eleitor
+            contato.zona = zona
+            contato.secao = secao
+            contato.profissao = profissao
+            contato.cargo = cargo
+            contato.empresa = empresa
+            contato.dependente_nome = dependente_nome
+            contato.dependente_aniversario = dependente_aniversario
+            contato.dependente_parentesco = dependente_parentesco
+            contato.dependente_partido = dependente_partido
+            contato.dependente_data_filiacao = dependente_data_filiacao
             contato.save()
             contatos = Contato.objects.all()
             lista_contatos = list(contatos)
@@ -110,11 +147,15 @@ class AtualizaContato(View):
 
     def post(self, request):
 
-        campos = [request.POST['nome'],request.POST['data_de_nascimento'],
-        request.POST['sexo'],request.POST['telefone'], request.POST['celular'],
-        request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],
-        request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],
-        request.POST['grupo'], request.POST['titulo']]
+        campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
+            request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
+            request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
+            request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
+            request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
+            request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
+            request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
+            request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
+            request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
 
         if checar_vazio(campos) :
 
@@ -133,6 +174,17 @@ class AtualizaContato(View):
             email = request.POST['email']
             grupo = request.POST['grupo']
             titulo = request.POST['titulo']
+            titulo_de_eleitor = request.POST['titulo_de_eleitor']
+            zona = request.POST['zona']
+            secao = request.POST['secao']
+            profissao = request.POST['profissao']
+            cargo = request.POST['cargo']
+            empresa = request.POST['empresa']
+            dependente_nome = request.POST['dependente_nome']
+            dependente_aniversario = request.POST['dependente_aniversario']
+            dependente_parentesco = request.POST['dependente_parentesco']
+            dependente_partido = request.POST['dependente_partido']
+            dependente_data_filiacao = request.POST['dependente_data_filiacao']
 
             busca_email = request.POST['busca_email']
             contato = Contato.objects.get(email = busca_email)
@@ -151,8 +203,20 @@ class AtualizaContato(View):
             contato.email = email
             contato.grupo = grupo
             contato.titulo = titulo
+            contato.titulo_de_eleitor = titulo_de_eleitor
+            contato.zona = zona
+            contato.secao = secao
+            contato.profissao = profissao
+            contato.cargo = cargo
+            contato.empresa = empresa
+            contato.dependente_nome = dependente_nome
+            contato.dependente_aniversario = dependente_aniversario
+            contato.dependente_parentesco = dependente_parentesco
+            contato.dependente_partido = dependente_partido
+            contato.dependente_data_filiacao = dependente_data_filiacao
             contato.save()
             contatos = Contato.objects.all()
+            lista_contatos = list(contatos)
             response = render(request,'contato.html',locals())
         else:
             messages.error(request,'Preencha todos os campos!')

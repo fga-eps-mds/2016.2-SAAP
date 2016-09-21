@@ -6,7 +6,7 @@
     <td width="10%"> </td>
 
           <td width="50%">
-            <div style="width: 400px;">
+            <div style="width: 400px">
               <label for='nome'><font color="black">Nome</font></label>
               <input type='text' name='nome' id='nome' required>
               <label for="telefone">Telefone (xx-xxxx-xxxx):</label><br/>
@@ -17,8 +17,7 @@
               <input type='text' name='fax' id='nome' required>
 
           </div>
-
-
+          <div style="width: 400px">
             <label for='data_de_nascimento'><font color="black">Data de Nascimento</font></label>
             <input type='date' name='data_de_nascimento' id='data_de_nascimento' required>
             <label for='sexo'><font color="black">Sexo</font></label><br><br>
@@ -31,6 +30,8 @@
             <label for='rg'><font color="black">RG (Somente números)</font></label>
             <input type="text" required="required" name="rg" pattern="[0-9]+$" />
             <br>
+            </div>
+            <div style="width: 400px">
                     <label for='endereco'><font color="black">Endereço</font></label>
                     <input type='text' name='endereco' id='endereco' required>
                     <label for='cidade'><font color="black">Cidade</font></label>
@@ -41,19 +42,46 @@
                     <input type='text' name='estado' id='estado' required>
                     <label for='email'><font color="black">E-mail</font></label>
                     <input type="email" required="required" class="input-text" name="email" />
-                    <div style="width: 50px;">
+            </div>
+                    <div style="width: 400px">
                       <select name="grupo" id="grupo" required>
                         <option value="">Grupo</option>
                         <option value="opção1">Opção 1</option>
                       </select>
-                      <div style="width: 50px;">
+                    </div>
+                      <div style="width: 400px">
                         <select name="titulo" id="titulo" required>
                           <option value="">Título</option>
                           <option value="opção1">Op 1</option>
                         </select>
-                  </td>
-                  <td>
-
+                      </div>
+                  <div style="width: 400px">
+                  <label for='titulo_de_eleitor'><font color="black">Título de Eleitor</font></label>
+                  <input type='text' name='titulo_de_eleitor' id='titulo_de_eleitor' required>
+                  <label for='zona'><font color="black">Zona</font></label>
+                  <input type='text' name='zona' id='zona' required>
+                  <label for='secao'><font color="black">Seção</font></label>
+                  <input type='text' name='secao' id='secao' required>
+                  <label for='profissao'><font color="black">Profissão</font></label>
+                  <input type='text' name='profissao' id='profissao' required>
+                  <label for='cargo'><font color="black">Cargo</font></label>
+                  <input type='text' name='cargo' id='cargo' required>
+                  <label for='empresa'><font color="black">Empresa</font></label>
+                  <input type='text' name='empresa' id='empresa' required>
+                  </div>
+                  <div style="width: 400px">
+                  <P>Dependente</p>
+                  <label for='dependente_nome'><font color="black">Nome</font></label>
+                  <input type='text' name='dependente_nome' id='dependente_nome' required>
+                  <label for='dependente_aniversario'><font color="black">Aniversário</font></label>
+                  <input type='text' name='dependente_aniversario' id='dependente_aniversario' required>
+                  <label for='dependente_parentesco'><font color="black">Parentesco</font></label>
+                  <input type='text' name='dependente_parentesco' id='dependente_parentesco' required>
+                  <label for='dependente_parentesco'><font color="black">Partido</font></label>
+                  <input type='text' name='dependente_partido' id='dependente_partido' required>
+                  <label for='dependente_partido'><font color="black">Data de Filiação</font></label>
+                  <input type='date' name='dependente_data_filiacao' id='dependente_data_filiacaos' required>
+                  </div>
                     </div>
                   </td>
               </table>
