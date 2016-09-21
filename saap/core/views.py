@@ -125,8 +125,9 @@ class CadastroView(View):
             lista_contatos = list(contatos)
             response = render(request,'contato.html',locals())
         else:
-
             messages.error(request,'Preencha todos os campos!')
+            contatos = Contato.objects.all()
+            lista_contatos = list(contatos)
             response = render(request,'contato.html')
 
         return response
@@ -140,9 +141,15 @@ class DeletarContatoView(View):
 
     def post(self, request):
         busca_email = request.POST['busca_email']
-        c = Contato.objects.get(email = busca_email)
-        c.delete()
-        response = render(request,'cadastro_contato.html')
+
+        if Contato.objects.get(email = busca_email).count() == 0:
+            messages.error(request,'Contato nao existe!')
+            response = render(request,'exclui_contato.html')
+        else:
+            c = Contato.objects.get(email = busca_email)
+            c.delete()
+            response = render(request,'cadastro_contato.html')
+
         return response
 
 class AtualizaContato(View):

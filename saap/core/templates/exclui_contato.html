@@ -1,6 +1,5 @@
 {%  extends "base.html" %}
 {% block main_content %}
-
 <main>
 <br><br><br>
 <div class="container">
@@ -17,11 +16,18 @@
                             <label for="busca_email">Digite o email do contato que deseja excluir:</label>
                             <input  id="busca_email" name="busca_email" type="text" class="validate">
                             <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green left" type="submit'">Excluir contato</button>
-                            <br><br>  
+                            <br><br>
                         </div>
                     </div>
                 </div>
             </form>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
     </div>
 </div>
