@@ -1,7 +1,10 @@
 # coding=utf-8
-
 from django.db import models
-from django import forms
+from django.contrib.auth.models import User
+from django.core.exceptions import *
+#from autenticacao.models import Gabinete_saap
+
+
 
 
 class Contato(models.Model):
@@ -32,3 +35,18 @@ class Contato(models.Model):
     dependente_parentesco = models.CharField(max_length=30,default='')
     dependente_partido = models.CharField(max_length=30,default='')
     dependente_data_filiacao = models.DateField('')
+
+class Ticket(models.Model):
+
+    envio_identificado = models.BooleanField(default=False)
+    titulo = models.CharField(max_length=100)
+    corpo_texto = models.CharField(max_length=500)
+    #remetente = Usuario_saap()
+    #gabinete_destino = Gabinete_saap()
+    data_publicacao = models.DateField('data_de_publicacao', auto_now=True)
+    tipo_ticket = models.CharField(max_length=30)
+    #file = models.FileField()
+
+    # @classmethod
+    # def current_date(self):
+    #     return datetime.datetime.now()
