@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+LETTUCE_APPS = ('autenticacao',)
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'autenticacao',
     'default',
     'core',
+    'lettuce.django'
 ]
 
 MIDDLEWARE = [
