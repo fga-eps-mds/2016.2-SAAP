@@ -3,15 +3,15 @@ from django.views.generic import View
 from django.contrib import messages
 from django.template import RequestContext
 from django.utils.translation import ugettext
-from core.models import Contato
-from core.models import Ticket
+from core.models import Contato, Ticket
 
-def checar_campo_vazio(campos):
-    nao_vazio = True
-    for campo in campos:
-        if campo == "":
-            nao_vazio = False
-    return nao_vazio
+
+# def checar_vazio(campos):
+#     nao_vazio = True
+#     for campo in campos:
+#         if campo == "":
+#             nao_vazio = False
+#     return nao_vazio
 
 def funcao(self):
     campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
