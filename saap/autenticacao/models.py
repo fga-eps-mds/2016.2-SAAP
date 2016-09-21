@@ -46,7 +46,3 @@ class Cidadao(Usuario_saap):
 class OrganizadorContatos(Usuario_saap):
 
     contatos = models.ManyToManyField(Contato)
-<<<<<<< HEAD
-
-=======
->>>>>>> fa95c4f67479bea0c78d53a50314ff797808eff5
