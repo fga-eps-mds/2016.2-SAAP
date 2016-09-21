@@ -35,12 +35,7 @@ def checar_tipo_usuario(request, username):
     except:
         tipo_usuario = None
     if tipo_usuario.__class__ is OrganizadorContatos:
-        organizador = OrganizadorContatos.objects.get(username=request.user.username)
-        contatos = organizador.contatos.all()
-        lista_contatos = list(contatos)
-        tickets = organizador.tickets.all()
-        lista_tickets = list(tickets)
-        return render(request,'contato.html',locals())
+        return render_contatos_tickets(request)
 
 class LoginView(View):
     http_method_names = [u'get', u'post']

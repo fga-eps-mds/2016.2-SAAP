@@ -7,6 +7,18 @@ from core.models import Contato, Ticket
 from autenticacao.models import OrganizadorContatos
 from default.views import checar_vazio
 
+def capturar_campos(request):
+    campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
+        request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
+        request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
+        request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
+        request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
+        request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
+        request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
+        request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
+        request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
+    return campos
+
 class CadastroView(View):
     http_method_names = [u'get', u'post']
 
@@ -43,16 +55,10 @@ class CadastroView(View):
         dependente_partido = ""
         dependente_data_filiacao = ""
 
+        import ipdb
+        ipdb.set_trace()
 
-        campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
-            request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
-            request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
-            request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
-            request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
-            request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
-            request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
-            request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
-            request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
+        campos = capturar_campos(request)
 
         if checar_vazio(campos) :
 
@@ -154,15 +160,7 @@ class AtualizaContato(View):
 
     def post(self, request):
 
-        campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
-            request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
-            request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
-            request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
-            request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
-            request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
-            request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
-            request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
-            request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
+        campos = capturar_campos(request)
 
         if checar_vazio(campos) :
 
@@ -237,12 +235,7 @@ class ContatoView(View):
     http_method_names = [u'get', u'post']
 
     def get (self, request):
-        organizador = OrganizadorContatos.objects.get(username=request.user.username)
-        contatos = organizador.contatos.all()
-        lista_contatos = list(contatos)
-        tickets = organizador.tickets.all()
-        lista_tickets = list(tickets)
-        return render(request,'contato.html',locals())
+        return render_contatos_tickets(request)
 
 
 class TicketView(View):
