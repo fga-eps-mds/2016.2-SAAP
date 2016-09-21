@@ -7,3 +7,4 @@ pylint==1.4.4
 psycopg2
 pytest-django==3.0.0
 pytest
+pytest-cov==2.3.1

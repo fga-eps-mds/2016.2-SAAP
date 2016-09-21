@@ -5,32 +5,15 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.template import RequestContext
-from autenticacao.models import Ticket
-from autenticacao.models import Usuario_saap, Cidadao, OrganizadorContatos
+from autenticacao.models import Cidadao, OrganizadorContatos
 from django.utils.translation import ugettext
-from django.contrib.auth.forms import (
-    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,
-)
-"""from django.core.mail import send_mail
-from django import forms
-from django.contrib.auth import get_user_model
-from django.contrib.auth.tokens import default_token_generator
-from django.db.models.query_utils import Q
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template import loader
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
-from reset_password.settings import DEFAULT_FROM_EMAIL
-from django.views.generic import *
-from utils.forms import PasswordResetRequestForm, SetPasswordForm"""
-
-# Create your views here.
+from default.views import *
+from core.views import (ContatoView)
+from django.contrib.auth.decorators import login_required
 
 def checar_autenticacao(request, resposta_autenticado, resposta_nao_autenticado):
     if request.user.is_authenticated():
-        resposta = render(request, resposta_autenticado)
+        resposta = resposta_autenticado
     else:
         resposta = render(request, resposta_nao_autenticado)
     return resposta
@@ -39,18 +22,26 @@ def checar_confirmacao(atributo, confirmacao_atributo):
     if atributo == confirmacao_atributo:
         return atributo
 
-def checar_vazio(campos):
-    nao_vazio = True
-    for campo in campos:
-        if campo == "":
-            nao_vazio = False
-    return nao_vazio
+def checar_tipo_usuario(request, username):
+    try:
+        tipo_usuario = Cidadao.objects.get(username=username)
+    except:
+        tipo_usuario = None
+    if tipo_usuario.__class__ is Cidadao:
+        return render(request, 'perfil.html')
+
+    try:
+        tipo_usuario = OrganizadorContatos.objects.get(username=username)
+    except:
+        tipo_usuario = None
+    if tipo_usuario.__class__ is OrganizadorContatos:
+        return render_contatos_tickets(request)
 
 class LoginView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        resposta = checar_autenticacao(request, 'perfil.html', 'login.html')
+        resposta = checar_autenticacao(request, checar_tipo_usuario(request, request.user.username), 'login.html')
         return resposta
 
     def post(self, request):
@@ -61,21 +52,7 @@ class LoginView(View):
         if user is not None:
             if user.is_active:
                 login(request, user)
-
-                try:
-                    tipo_usuario = Cidadao.objects.get(username=username)
-                except:
-                    tipo_usuario = None
-                if tipo_usuario.__class__ is Cidadao:
-                    return render(request, 'perfil.html')
-
-                try:
-                    tipo_usuario = OrganizadorContatos.objects.get(username=username)
-                except:
-                    tipo_usuario = None
-                if tipo_usuario.__class__ is OrganizadorContatos:
-                    return redirect('/OrganizadorContatos')
-
+                return checar_tipo_usuario(request, username)
             else:
                 messages.error(request, 'Conta desativada!')
         else:
@@ -158,7 +135,7 @@ class RegistroView(View):
             else:
                 response = redirect('/erroCadastro')
         else:
-            response = redirect('/erroCadastro')
+            response = redirect('/erroCadastroCampoVazio')
 
         return response
 
@@ -176,68 +153,6 @@ class LogoutView(View):
         logout(request)
         response = render(request, 'login.html')
         return response
-
-
-class TicketView(View):
-    http_method_names = [u'get', u'post']
-
-    def get(self, request):
-        if request.user.is_authenticated():
-            response = render(request, 'ticket.html')
-        else:
-            response = render(request, 'login.html')
-        return response
-
-    def post(self, request):
-
-        novo_ticket = Ticket()
-
-        # Checking if checkbox is checked
-        if request.POST.get('enviar_anonimamente', False):
-            anonimo = False
-        else:
-            anonimo = True
-
-        titulo = request.POST['assunto']
-        corpo_texto = request.POST.get('descricao')
-
-        if anonimo is True:
-            remetente = None
-        else:
-            remetente = request.user
-
-        tipo_ticket = request.POST['tipo_mensagem']
-        arquivo_upload = None
-
-        # Setting new ticket
-        if request.user.is_authenticated() is False:
-
-            response = render(request, 'login.html')
-        else:
-            novo_ticket.envio_anonimo = anonimo
-            novo_ticket.titulo = titulo
-            novo_ticket.corpo_texto = corpo_texto
-            novo_ticket.remetente = remetente
-            novo_ticket.gabinete_destino = None
-            novo_ticket.tipo_ticket = tipo_ticket
-            novo_ticket.file = arquivo_upload
-            novo_ticket.save()
-
-            response = render(request, 'perfil.html')
-
-        return response
-
-#Upload de arquivos
-    def upload_file(request):
-        if request.method == 'POST':
-            form = UploadFileForm(request.POST, request.FILES)
-            if form.is_valid():
-                handle_uploaded_file(request.FILES['file'])
-                return HttpResponseRedirect('/success/url/')
-        else:
-            form = UploadFileForm()
-        return render_to_response('ticket.html', {'form': form})
-
 
 class MudarSenhaView(View):
     http_method_names = [u'get',u'post']

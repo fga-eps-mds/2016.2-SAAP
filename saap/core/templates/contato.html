@@ -1,0 +1,78 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<main>
+  <div class="container">
+    <div class="row">
+       <div class="col s6 m6 l6">
+         <ul class="collection">
+           <p>Lista de Contatos</p>
+           {% for contato in lista_contatos %}
+             <li class="collection-item avatar">
+               <img src="../static/images/contato.png" alt="" class="circle"></img>
+                <span class="title">{{ contato.nome }}</span>
+                <p>
+                  Email : {{ contato.email }}<br>
+                  Telefone : {{ contato.telefone}}<br>
+                  Celular : {{ contato.celular}}<br>
+                  Fax : {{ contato.fax}}<br>
+                  Data de Nascimento: {{ contato.data_de_nascimento}}<br>
+                  Sexo: {{ contato.sexo}}<br>
+                  CPF: {{ contato.cpf }}<br>
+                  RG: {{ contato.rg}}<br>
+                  Endereço: {{ contato.endereco}}<br>
+                  Cidade : {{ contato.cidade}}<br>
+                  Estado : {{ contato.estado}}<br>
+                  CEP : {{ contato.cep}}<br>
+                  Grupo : {{ contato.grupo}}<br>
+                  Título : {{ contato.titlo}}<br>
+                  Título de Eleitor : {{ contato.titulo_de_eleitor}}<br>
+                  Zona : {{ contato.zona}}<br>
+                  Seção : {{ contato.secao}}<br>
+                  Profissão : {{ contato.profissao}}<br>
+                  Cargo : {{ contato.cargo}}<br>
+                  Empresa : {{ contato.empresa}}<br>
+                  <br>
+                  Dependente<br>
+                  Nome : {{ contato.dependente_nome}}<br>
+                  Aniversário : {{ contato.dependente_aniversario}}<br>
+                  Partido : {{ contato.dependente_partido}}<br>
+                  Parentesco : {{ contato.dependente_parentesco}}<br>
+                  Data da filiação : {{ contato.dependente_data_filiacao}}<br>
+                </p>
+                <i class="material-icons">grade</i>
+              </li>
+            {% endfor %}
+            <br>
+            <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Excluir</button></a>
+            <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Cadastrar</button></a>
+            <a href="/atualiza_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Atualizar</button></a>
+          </ul>
+        </div>
+
+        <div class="col s6 m6 l6 ">
+          <ul class="collection">
+            <p>Tickets Recebidos</p>
+
+            {% for ticket in lista_tickets %}
+              <li class="collection-item avatar">
+                <img src="../static/images/contato.png" alt="" class="circle"></img>
+                 <span class="title">{{ ticket.remetente }}</span>
+                 <p> {{ ticket.titulo }}<br>
+                   {{ ticket.tipo_ticket }}<br>
+                   {{ ticket.corpo_texto}}<br>
+                 </p>
+                 <i class="material-icons">grade</i>
+               </li>
+             {% endfor %}
+             <br>
+           </ul>
+         </div>
+
+      </div>
+  </div>
+
+<main>
+
+
+
+{% endblock main_content %}
