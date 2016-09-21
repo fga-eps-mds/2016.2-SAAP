@@ -5,13 +5,15 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.template import RequestContext
-from autenticacao.models import Usuario_saap, Cidadao, OrganizadorContatos
+from autenticacao.models import Cidadao, OrganizadorContatos
 from django.utils.translation import ugettext
 from default.views import *
+from core.views import (ContatoView)
+from django.contrib.auth.decorators import login_required
 
 def checar_autenticacao(request, resposta_autenticado, resposta_nao_autenticado):
     if request.user.is_authenticated():
-        resposta = render(request, resposta_autenticado)
+        resposta = resposta_autenticado
     else:
         resposta = render(request, resposta_nao_autenticado)
     return resposta
@@ -20,11 +22,29 @@ def checar_confirmacao(atributo, confirmacao_atributo):
     if atributo == confirmacao_atributo:
         return atributo
 
+def checar_tipo_usuario(request, username):
+    try:
+        tipo_usuario = Cidadao.objects.get(username=username)
+    except:
+        tipo_usuario = None
+    if tipo_usuario.__class__ is Cidadao:
+        return render(request, 'perfil.html')
+
+    try:
+        tipo_usuario = OrganizadorContatos.objects.get(username=username)
+    except:
+        tipo_usuario = None
+    if tipo_usuario.__class__ is OrganizadorContatos:
+        organizador = OrganizadorContatos.objects.get(username=request.user.username)
+        contatos = organizador.contatos.all()
+        lista_contatos = list(contatos)
+        return render(request,'contato.html',locals())
+
 class LoginView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        resposta = checar_autenticacao(request, 'perfil.html', 'login.html')
+        resposta = checar_autenticacao(request, checar_tipo_usuario(request, request.user.username), 'login.html')
         return resposta
 
     def post(self, request):
@@ -35,21 +55,7 @@ class LoginView(View):
         if user is not None:
             if user.is_active:
                 login(request, user)
-
-                try:
-                    tipo_usuario = Cidadao.objects.get(username=username)
-                except:
-                    tipo_usuario = None
-                if tipo_usuario.__class__ is Cidadao:
-                    return render(request, 'perfil.html')
-
-                try:
-                    tipo_usuario = OrganizadorContatos.objects.get(username=username)
-                except:
-                    tipo_usuario = None
-                if tipo_usuario.__class__ is OrganizadorContatos:
-                    return redirect('/OrganizadorContatos')
-
+                return checar_tipo_usuario(request, username)
             else:
                 messages.error(request, 'Conta desativada!')
         else:
@@ -132,7 +138,7 @@ class RegistroView(View):
             else:
                 response = redirect('/erroCadastro')
         else:
-            response = redirect('/erroCadastro')
+            response = redirect('/erroCadastroCampoVazio')
 
         return response
 
