@@ -13,6 +13,17 @@ def checar_vazio(campos):
             nao_vazio = False
     return nao_vazio
 
+def funcao(self):
+    campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
+        request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
+        request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
+        request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
+        request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
+        request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
+        request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
+        request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
+        request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
+
 class CadastroView(View):
     http_method_names = [u'get', u'post']
 
@@ -49,15 +60,7 @@ class CadastroView(View):
         dependente_partido = ""
         dependente_data_filiacao = ""
 
-        campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
-            request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
-            request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
-            request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
-            request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
-            request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
-            request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
-            request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
-            request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
+        funcao(self)
 
         if checar_vazio(campos) :
 
@@ -120,8 +123,8 @@ class CadastroView(View):
             lista_contatos = list(contatos)
             response = render(request,'contato.html',locals())
         else:
-            messages.error(request,'Preencha todos os campos!')
-            response = render(request,'contato.html')
+                        messages.error(request,'Preencha todos os campos!')
+                        response = render(request,'contato.html')
 
         return response
 
@@ -147,16 +150,7 @@ class AtualizaContato(View):
         return response
 
     def post(self, request):
-
-        campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
-            request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
-            request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
-            request.POST['cidade'], request.POST['cep'], request.POST['estado'], request.POST['email'],\
-            request.POST['grupo'], request.POST['titulo'], request.POST['titulo_de_eleitor'], \
-            request.POST['zona'],request.POST['secao'], request.POST['profissao'], \
-            request.POST['cargo'], request.POST['empresa'],request.POST['dependente_nome'],\
-            request.POST['dependente_aniversario'], request.POST['dependente_parentesco'],\
-            request.POST['dependente_partido'],request.POST['dependente_data_filiacao']]
+        funcao(self)
 
         if checar_vazio(campos) :
 
@@ -287,7 +281,7 @@ class TicketView(View):
 
         return response
 
-        
+
     # def get(self, request):
     #
     #     tickets = Ticket.objects.all()
