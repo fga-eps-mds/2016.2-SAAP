@@ -6,7 +6,7 @@ from django.utils.translation import ugettext
 from core.models import Contato
 from core.models import Ticket
 
-def checar_vazio(campos):
+def checar_campo_vazio(campos):
     nao_vazio = True
     for campo in campos:
         if campo == "":
