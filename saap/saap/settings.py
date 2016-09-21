@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'autenticacao',
     'default',
     'core',
-    'lettuce.django'
+    'aloe_django'
 ]
 
 MIDDLEWARE = [
