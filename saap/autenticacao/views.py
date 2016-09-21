@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.template import RequestContext
 from autenticacao.models import Usuario_saap, Cidadao, OrganizadorContatos
 from django.utils.translation import ugettext
-
+from default.views import *
 
 def checar_autenticacao(request, resposta_autenticado, resposta_nao_autenticado):
     if request.user.is_authenticated():
@@ -19,13 +19,6 @@ def checar_autenticacao(request, resposta_autenticado, resposta_nao_autenticado)
 def checar_confirmacao(atributo, confirmacao_atributo):
     if atributo == confirmacao_atributo:
         return atributo
-
-def checar_vazio(campos):
-    nao_vazio = True
-    for campo in campos:
-        if campo == "":
-            nao_vazio = False
-    return nao_vazio
 
 class LoginView(View):
     http_method_names = [u'get', u'post']

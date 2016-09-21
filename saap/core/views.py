@@ -4,17 +4,9 @@ from django.contrib import messages
 from django.template import RequestContext
 from django.utils.translation import ugettext
 from core.models import Contato, Ticket
+from default.views import *
 
-
-def checar_vazio(campos):
-    nao_vazio = True
-    for campo in campos:
-        if campo == "":
-            nao_vazio = False
-    return nao_vazio
-
-
-def funcao(self):
+def campos(self):
     campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
         request.POST['sexo'],request.POST['telefone'], request.POST['celular'],\
         request.POST['fax'], request.POST['cpf'], request.POST['rg'], request.POST['endereco'],\
@@ -62,7 +54,7 @@ class CadastroView(View):
         dependente_data_filiacao = ""
 
 
-        funcao(self)
+        campos(self)
 
         if checar_vazio(campos) :
 
@@ -161,7 +153,7 @@ class AtualizaContato(View):
 
     def post(self, request):
 
-        funcao(self)
+        campos(self)
 
         if checar_vazio(campos) :
 
