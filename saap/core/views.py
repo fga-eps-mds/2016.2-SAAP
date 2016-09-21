@@ -226,6 +226,8 @@ class ContatoView(View):
     def get (self, request):
         contatos = Contato.objects.all()
         lista_contatos = list(contatos)
+        tickets = Ticket.objects.all()
+        lista_tickets = list(tickets)
         return render(request,'contato.html',locals())
 
 
@@ -239,24 +241,23 @@ class TicketView(View):
             response = render(request, 'login.html')
         return response
 
-
     def post(self, request):
 
         novo_ticket = Ticket()
 
         # Checking if checkbox is checked
         if request.POST.get('enviar_anonimamente', False):
-            anonimo = False
-        else:
             anonimo = True
+        else:
+            anonimo = False
 
         titulo = request.POST['assunto']
         corpo_texto = request.POST.get('descricao')
 
         if anonimo is True:
-            remetente = None
+            remetente = "Anonimo"
         else:
-            remetente = request.user
+            remetente = request.user.get_full_name()
 
         tipo_ticket = request.POST['tipo_mensagem']
         arquivo_upload = None
@@ -280,22 +281,3 @@ class TicketView(View):
             response = render(request, 'perfil.html')
 
         return response
-
-
-    # def get(self, request):
-    #
-    #     tickets = Ticket.objects.all()
-    #     lista_tickets = list(tickets)
-    #     response = render(request,'contato.html',locals())
-    #     return response
-
-#Upload de arquivos
-    # def upload_file(request):
-    #     if request.method == 'POST':
-    #         form = UploadFileForm(request.POST, request.FILES)
-    #         if form.is_valid():
-    #             handle_uploaded_file(request.FILES['file'])
-    #             return HttpResponseRedirect('/success/url/')
-    #     else:
-    #         form = UploadFileForm()
-    #     return render_to_response('ticket.html', {'form': form})

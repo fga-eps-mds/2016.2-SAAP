@@ -2,8 +2,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
-#from autenticacao.models import Gabinete_saap
-
+# from autenticacao.models import Gabinete_saap
+# from autenticacao.models import Usuario_saap
+from saap import *
+# from autenticacao.models import
 
 
 
@@ -41,8 +43,8 @@ class Ticket(models.Model):
     envio_identificado = models.BooleanField(default=False)
     titulo = models.CharField(max_length=100)
     corpo_texto = models.CharField(max_length=500)
-    #remetente = Usuario_saap()
-    #gabinete_destino = Gabinete_saap()
+    remetente = models.CharField(max_length=250)
+    # gabinete_destino = Gabinete_saap()
     data_publicacao = models.DateField('data_de_publicacao', auto_now=True)
     tipo_ticket = models.CharField(max_length=30)
     #file = models.FileField()
