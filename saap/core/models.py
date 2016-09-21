@@ -8,7 +8,6 @@ from saap import *
 # from autenticacao.models import
 
 
-
 class Contato(models.Model):
 
     nome = models.CharField(max_length=60,default='')

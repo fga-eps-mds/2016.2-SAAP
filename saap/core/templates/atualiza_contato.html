@@ -6,12 +6,21 @@
 
     <div class="row">
         <div class="col s12 offset-m2 m8 offset-l1 l10">
-          <form action="{% url 'cadastro_contato' %}" method='POST'>
+          <form action="{% url 'atualiza_contato' %}" method='POST'>
             {% csrf_token %}
                 <input type="hidden" name="next_url" value="{{next_url}}">
                 <div class="login-card hoverable center-align">
                     <div class="card-content">
                         <br>
+<div class="row">
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;Digite o email do contato que deseja atualizar:</p>
+  <br>
+  <div class="input-field col s7">
+            <i class="material-icons prefix" style="color:green">email</i>
+            <input placeholder="name@email.com" id="busca_email" name="busca_email" type="email" class="validate">
+            <label for="email">E-mail</label>
+  </div>
+  </div>
 <div class="row">
 
         <div class="input-field col s7">
@@ -177,8 +186,7 @@
 </div>
 
                     <div class="card-action right-align">
-                      <button class="btn waves-effect waves-light saap-dark-green " type="reset">Cancelar</button>
-                      <button class="btn waves-effect waves-light saap-dark-green " type="submit">Confirmar</button>  
+                      <button class="btn waves-effect waves-light saap-dark-green " type="submit">Confirmar</button>
                     </div>
             </form>
             {% if messages %}

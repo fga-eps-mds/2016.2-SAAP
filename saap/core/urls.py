@@ -2,6 +2,7 @@
 from django.conf.urls import url
 from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView, AtualizaContato)
 
+
 urlpatterns = [
     url(r'^cadastro_contato/$', CadastroView.as_view(),
         name='cadastro_contato'),
@@ -13,5 +14,6 @@ urlpatterns = [
         name='atualiza_contato'),
     url(r'^ticket/$', TicketView.as_view(),
         name='ticket'),
+
 
 ]

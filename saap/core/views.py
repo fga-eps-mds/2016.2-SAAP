@@ -6,12 +6,13 @@ from django.utils.translation import ugettext
 from core.models import Contato, Ticket
 
 
-# def checar_vazio(campos):
-#     nao_vazio = True
-#     for campo in campos:
-#         if campo == "":
-#             nao_vazio = False
-#     return nao_vazio
+def checar_vazio(campos):
+    nao_vazio = True
+    for campo in campos:
+        if campo == "":
+            nao_vazio = False
+    return nao_vazio
+
 
 def funcao(self):
     campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
@@ -59,6 +60,7 @@ class CadastroView(View):
         dependente_parentesco = ""
         dependente_partido = ""
         dependente_data_filiacao = ""
+
 
         funcao(self)
 
@@ -123,8 +125,10 @@ class CadastroView(View):
             lista_contatos = list(contatos)
             response = render(request,'contato.html',locals())
         else:
-                        messages.error(request,'Preencha todos os campos!')
-                        response = render(request,'contato.html')
+            messages.error(request,'Preencha todos os campos!')
+            contatos = Contato.objects.all()
+            lista_contatos = list(contatos)
+            response = render(request,'contato.html')
 
         return response
 
@@ -137,9 +141,15 @@ class DeletarContatoView(View):
 
     def post(self, request):
         busca_email = request.POST['busca_email']
-        c = Contato.objects.get(email = busca_email)
-        c.delete()
-        response = render(request,'cadastro_contato.html')
+
+        if Contato.objects.get(email = busca_email).count() == 0:
+            messages.error(request,'Contato nao existe!')
+            response = render(request,'exclui_contato.html')
+        else:
+            c = Contato.objects.get(email = busca_email)
+            c.delete()
+            response = render(request,'cadastro_contato.html')
+
         return response
 
 class AtualizaContato(View):
@@ -150,6 +160,7 @@ class AtualizaContato(View):
         return response
 
     def post(self, request):
+
         funcao(self)
 
         if checar_vazio(campos) :
