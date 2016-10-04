@@ -25,18 +25,18 @@
                   <label for="first_name">Nome</label>
                 </div>
                 <div class="input-field col s5">
-                  <input placeholder="yyyy-mm-dd" id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate">
+                  <input placeholder="yyyy-mm-dd" id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate" value='{{data.data_de_nascimento}}'>
                   <label for="data_de_nascimento">Data de Nascimento</label>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s7" style="color:green">
                   <i class="material-icons prefix" style="color:green">account_circle</i>
-                  <input placeholder="Smith" id="last_name" name="last_name" type="text" class="validate">
+                  <input placeholder="Smith" id="last_name" name="last_name" type="text" class="validate" value='{{data.last_name}}'>
                   <label for="last_name">Sobrenome</label>
                 </div>
                 <div class="input-field col s5">
-                  <select id="sexo" name="sexo">
+                  <select id="sexo" name="sexo" value='{{data.sexo}}'>
                     <option value="" selected>Selecionar</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Feminino">Feminino</option>
@@ -47,17 +47,17 @@
               <div class="row">
                 <div class="input-field col s7" style="color:green">
                   <i class="material-icons prefix" style="color:green">account_circle</i>
-                  <input placeholder="johnsmith" id="username" name="username" type="text" class="validate">
+                  <input placeholder="johnsmith" id="username" name="username" type="text" class="validate" value='{{data.username}}'>
                   <label for="username">Nome de usuário</label>
                 </div>
                 <div class="input-field col s3">
-                  <input placeholder="Guarulhos" id="municipio" name="municipio" type="text" class="validate">
+                  <input placeholder="Guarulhos" id="municipio" name="municipio" type="text" class="validate" value='{{data.municipio}}'>
                   <label for="municipio">Município</label>
                 </div>
                 <div class="input-field col s2">
                   <td>
                     <div style="width: 50px;">
-                      <select name="uf" id="uf">
+                      <select name="uf" id="uf" value='{{data.uf}}'>
                         <option value="">UF</option>
                         <option value="AC">AC</option>
                         <option value="AL">AL</option>
@@ -95,14 +95,14 @@
               <div class="row">
                 <div class="input-field col s7">
                   <i class="material-icons prefix" style="color:green">email</i>
-                  <input placeholder="name@email.com" id="email" name="email" type="email" class="validate">
+                  <input placeholder="name@email.com" id="email" name="email" type="email" class="validate" value='{{data.email}}'>
                   <label for="email">E-mail</label>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s7">
                   <i class="material-icons prefix" style="color:green">email</i>
-                  <input placeholder="name@email.com" id="confirmacao_email" name="confirmacao_email" type="email" class="validate">
+                  <input placeholder="name@email.com" id="confirmacao_email" name="confirmacao_email" type="email" class="validate" value='{{data.confirmacao_email}}'>
                   <label for="confirmacao_email">Confirmar E-mail</label>
                 </div>
               </div>
