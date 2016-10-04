@@ -45,18 +45,26 @@ class LoginView(View):
         return resposta
 
     def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
+        campos_validados = checar_campos([request.POST['username'], \
+            request.POST['password']])
 
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return checar_tipo_usuario(request, username)
+        if campos_validados is True:
+
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return checar_tipo_usuario(request, username)
+                else:
+                    messages.error(request, 'Conta desativada!')
             else:
-                messages.error(request, 'Conta desativada!')
+                messages.success(request, 'Nome de usuário e/ou senha inválido(s)!')
         else:
-            messages.success(request, 'Nome de usuário e/ou senha inválido(s)!')
+            messages.error(request, 'O campo "%s" não foi preenchido!' % \
+                campos_login[campos_validados])
 
         return render(request, 'login.html')
 
@@ -73,14 +81,15 @@ class RegistroView(View):
 
     def post(self, request):
 
-        campos = [request.POST['first_name'], request.POST['last_name'], \
-            request.POST['username'], request.POST['email'], \
-            request.POST['confirmacao_email'], request.POST['password'], \
-            request.POST['confirmacao_password'], request.POST['sexo'], \
-            request.POST['municipio'], request.POST['uf'], \
-            request.POST['data_de_nascimento']]
+        campos_validados = checar_campos([request.POST['first_name'], \
+            request.POST['last_name'], request.POST['username'], \
+            request.POST['email'], request.POST['confirmacao_email'], \
+            request.POST['password'], request.POST['confirmacao_password'], \
+            request.POST['data_de_nascimento'], request.POST['sexo'], \
+            request.POST['municipio'], request.POST['uf']])
 
-        if checar_vazio(campos):
+        if campos_validados is True:
+
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
             username = request.POST['username']
@@ -91,39 +100,47 @@ class RegistroView(View):
             municipio = request.POST['municipio']
             uf = request.POST['uf']
 
-            if Cidadao.get_usuario_por_username(username).count() == 0 and \
-                OrganizadorContatos.get_usuario_por_username(username).count() == 0:
-                if request.path == '/cadastro/':
-                    user = Cidadao()
-                    user.first_name = first_name
-                    user.last_name = last_name
-                    user.username = username
-                    user.email = email
-                    user.set_password(password)
-                    user.data_de_nascimento = data_de_nascimento
-                    user.sexo = sexo
-                    user.municipio = municipio
-                    user.uf = uf
-                    user.save()
-                    login(request, user)
-                    response = render(request, 'perfil.html')
+            if checar_data(data_de_nascimento):
+
+                if Cidadao.get_usuario_por_username(username).count() == 0 and \
+                    OrganizadorContatos.get_usuario_por_username(username).count() == 0:
+                    if request.path == '/cadastro/':
+                        user = Cidadao()
+                        user.first_name = first_name
+                        user.last_name = last_name
+                        user.username = username
+                        user.email = email
+                        user.set_password(password)
+                        user.data_de_nascimento = data_de_nascimento
+                        user.sexo = sexo
+                        user.municipio = municipio
+                        user.uf = uf
+                        user.save()
+                        login(request, user)
+                        response = render(request, 'perfil.html')
+                    else:
+                        user = OrganizadorContatos()
+                        user.first_name = first_name
+                        user.last_name = last_name
+                        user.username = username
+                        user.email = email
+                        user.set_password(password)
+                        user.data_de_nascimento = data_de_nascimento
+                        user.sexo = sexo
+                        user.municipio = municipio
+                        user.uf = uf
+                        user.save()
+                        response = render(request, 'login.html')
                 else:
-                    user = OrganizadorContatos()
-                    user.first_name = first_name
-                    user.last_name = last_name
-                    user.username = username
-                    user.email = email
-                    user.set_password(password)
-                    user.data_de_nascimento = data_de_nascimento
-                    user.sexo = sexo
-                    user.municipio = municipio
-                    user.uf = uf
-                    user.save()
-                    response = render(request, 'login.html')
+                    response = render_mensagem_erro(request, 'Já existe um \
+                        usuário com esse "Nome de Usuário"!', 'cadastro.html')
             else:
-                response = redirect('/erroCadastro')
+                response = render_mensagem_erro(request, 'Formato de data \
+                    inválido (AAAA-MM-DD)!', 'cadastro.html')
         else:
-            response = redirect('/erroCadastroCampoVazio')
+            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+                preenchido!' % campos_cadastro[campos_validados], \
+                'cadastro.html')
 
         return response
 
