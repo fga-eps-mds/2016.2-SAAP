@@ -61,7 +61,7 @@ class LoginView(View):
                 else:
                     messages.error(request, 'Conta desativada!')
             else:
-                messages.success(request, 'Nome de usuário e/ou senha inválido(s)!')
+                messages.error(request, 'Nome de usuário e/ou senha inválido(s)!')
         else:
             messages.error(request, 'O campo "%s" não foi preenchido!' % \
                 campos_login[campos_validados])
@@ -80,6 +80,17 @@ class RegistroView(View):
         return resposta
 
     def post(self, request):
+
+        data = {}
+        data['first_name'] = request.POST['first_name']
+        data['last_name'] = request.POST['last_name']
+        data['username '] = request.POST['username']
+        data['email'] = request.POST['email']
+        data['confirmacao_email'] = request.POST['confirmacao_email']
+        data['data_de_nascimento'] = request.POST['data_de_nascimento']
+        data['sexo'] = request.POST['sexo']
+        data['municipio'] = request.POST['municipio']
+        data['uf'] = request.POST['uf']
 
         campos_validados = checar_campos([request.POST['first_name'], \
             request.POST['last_name'], request.POST['username'], \
@@ -133,14 +144,14 @@ class RegistroView(View):
                         response = render(request, 'login.html')
                 else:
                     response = render_mensagem_erro(request, 'Já existe um \
-                        usuário com esse "Nome de Usuário"!', 'cadastro.html')
+                        usuário com esse "Nome de Usuário"!', 'cadastro.html', {'data':data})
             else:
                 response = render_mensagem_erro(request, 'Formato de data \
-                    inválido (AAAA-MM-DD)!', 'cadastro.html')
+                    inválido (AAAA-MM-DD)!', 'cadastro.html', {'data':data})
         else:
             response = render_mensagem_erro(request, 'O campo "%s" não foi \
                 preenchido!' % campos_cadastro[campos_validados], \
-                'cadastro.html')
+                'cadastro.html', {'data':data})
 
         return response
 
