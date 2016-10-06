@@ -23,9 +23,20 @@ def click(scenario, link):
   world.browser.find_element_by_link_text(link).click()
 
 @step(r'I select "(.*)" from "(.*)"')
-def select(scenario, text, select_id):
-  select = Select(world.browser.find_element_by_id(select_id))
-  select.select_by_visible_text(text)
+def multiselect_set_selections(driver, labels, element_id):
+   # el = driver.find_element_by_id(element_id)
+    el = world.browser.find_element_by_id(element_id)
+    for option in el.find_elements_by_tag_name('option'):
+        if option.text in labels:
+            option.click()
+
+#@step(r'I select "(.*)" from "(.*)"')
+#def select(scenario, text, select_id):
+#  print(80*"-")
+#  print("")
+#  print(80*"-")
+#  select = Select(world.browser.find_element_by_id(select_id))
+#  select.select_by_visible_text(text)
 
 @step(r'I access "(.*)"')
 def access_url(step,url):
