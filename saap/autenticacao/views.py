@@ -45,6 +45,10 @@ class LoginView(View):
         return resposta
 
     def post(self, request):
+
+        data = {}
+        data['username'] = request.POST['username']
+
         campos_validados = checar_campos([request.POST['username'], \
             request.POST['password']])
 
@@ -66,7 +70,7 @@ class LoginView(View):
             messages.error(request, 'O campo "%s" não foi preenchido!' % \
                 campos_login[campos_validados])
 
-        return render(request, 'login.html')
+        return render(request, 'login.html', {'data':data})
 
 
 class RegistroView(View):
@@ -88,7 +92,7 @@ class RegistroView(View):
             'RN', 'RS', 'RO', 'RR', 'SC', 'SE', 'SP', 'TO']
         data['first_name'] = request.POST['first_name']
         data['last_name'] = request.POST['last_name']
-        data['username '] = request.POST['username']
+        data['username'] = request.POST['username']
         data['email'] = request.POST['email']
         data['confirmacao_email'] = request.POST['confirmacao_email']
         data['data_de_nascimento'] = request.POST['data_de_nascimento']

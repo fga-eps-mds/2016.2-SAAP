@@ -8,7 +8,7 @@
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}
@@ -30,7 +30,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="input-field col s7" style="color:green">
+                <div class="input-field col s7">
                   <i class="material-icons prefix" style="color:green">account_circle</i>
                   <input placeholder="Smith" id="last_name" name="last_name" type="text" class="validate" value='{{data.last_name}}'>
                   <label for="last_name">Sobrenome</label>
@@ -56,7 +56,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="input-field col s7" style="color:green">
+                <div class="input-field col s7">
                   <i class="material-icons prefix" style="color:green">account_circle</i>
                   <input placeholder="johnsmith" id="username" name="username" type="text" class="validate" value='{{data.username}}'>
                   <label for="username">Nome de usuário</label>
