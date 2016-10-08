@@ -223,44 +223,65 @@ class TicketView(View):
 
     def post(self, request):
 
-        novo_ticket = Ticket()
+        data = {}
+        data['campos_tipo_mensagem'] = ['Incidente', 'Requisição', 'Melhorias']
+        data['nome_organizador'] = request.POST['nome_organizador']
+        data['tipo_mensagem'] = request.POST['tipo_mensagem']
+        data['assunto'] = request.POST['assunto']
+        data['descricao'] = request.POST['descricao']
 
-        # Checking if checkbox is checked
-        if request.POST.get('enviar_anonimamente', False):
-            anonimo = True
+        campos_validados = checar_campos([request.POST['nome_organizador'], \
+            request.POST['tipo_mensagem'], request.POST['assunto'], \
+            request.POST['descricao']])
+
+        if campos_validados is True:
+
+            novo_ticket = Ticket()
+
+            # Checking if checkbox is checked
+            if request.POST.get('enviar_anonimamente', False):
+                anonimo = True
+            else:
+                anonimo = False
+
+            titulo = request.POST['assunto']
+            corpo_texto = request.POST.get('descricao')
+
+            if anonimo is True:
+                remetente = "Anonimo"
+            else:
+                remetente = request.user.get_full_name()
+
+            tipo_ticket = request.POST['tipo_mensagem']
+            arquivo_upload = None
+
+            # Setting new ticket
+            if request.user.is_authenticated() is False:
+
+                response = render(request, 'login.html')
+            else:
+                novo_ticket.envio_anonimo = anonimo
+                novo_ticket.titulo = titulo
+                novo_ticket.corpo_texto = corpo_texto
+                novo_ticket.remetente = remetente
+                novo_ticket.gabinete_destino = None
+                novo_ticket.tipo_ticket = tipo_ticket
+                novo_ticket.file = arquivo_upload
+                novo_ticket.save()
+                organizador = OrganizadorContatos.objects.get(first_name = \
+                    request.POST['nome_organizador'])
+                organizador.tickets.add(novo_ticket)
+                tickets = organizador.tickets.all()
+                lista_tickets = list(tickets)
+
+                response = render(request, 'perfil.html')
+
         else:
-            anonimo = False
-
-        titulo = request.POST['assunto']
-        corpo_texto = request.POST.get('descricao')
-
-        if anonimo is True:
-            remetente = "Anonimo"
-        else:
-            remetente = request.user.get_full_name()
-
-        tipo_ticket = request.POST['tipo_mensagem']
-        arquivo_upload = None
-
-        # Setting new ticket
-        if request.user.is_authenticated() is False:
-
-            response = render(request, 'login.html')
-        else:
-            novo_ticket.envio_anonimo = anonimo
-            novo_ticket.titulo = titulo
-            novo_ticket.corpo_texto = corpo_texto
-            novo_ticket.remetente = remetente
-            novo_ticket.gabinete_destino = None
-            novo_ticket.tipo_ticket = tipo_ticket
-            novo_ticket.file = arquivo_upload
-            novo_ticket.save()
-            organizador = OrganizadorContatos.objects.get(first_name=request.POST['nome_organizador'])
-            organizador.tickets.add(novo_ticket)
-            tickets = organizador.tickets.all()
-            lista_tickets = list(tickets)
-
-            response = render(request, 'perfil.html')
+            messages.error(request, 'O campo "%s" não foi preenchido!' \
+                % campos_ticket[campos_validados])
+            organizadores = OrganizadorContatos.objects.all()
+            lista_organizadores = list(organizadores)
+            response = render(request, 'ticket.html', locals())
 
         return response
 

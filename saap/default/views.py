@@ -8,6 +8,8 @@ campos_login = ["Nome de Usuário", "Senha"]
 campos_cadastro = ["Nome", "Sobrenome", "Nome de Usuário", "E-mail", \
     "Confirmar E-mail", "Senha", "Confirmar Senha", "Data de Nascimento", \
     "Sexo", "Município", "UF (Unidade Federativa)"]
+campos_ticket = ["Nome do Organizador", "Tipo de Ticket", "Assunto", \
+    "Mensagem"]
 
 def checar_data(data):
     partes_data = data.split("-")

@@ -45,9 +45,9 @@
                       <option value="" >Selecionar</option>
                       {% for campo in data.campos_sexo %}
                         {% if campo == data.sexo %}
-                          <option value={{ campo }} selected>{{ campo }}</option>
+                          <option value="{{ campo }}" selected>{{ campo }}</option>
                         {% else %}
-                          <option value={{ campo }} >{{ campo }}</option>
+                          <option value="{{ campo }}" >{{ campo }}</option>
                         {% endif %}
                       {% endfor %}
                     {% endif %}
@@ -102,9 +102,9 @@
                           <option value="" >UF</option>
                           {% for campo in data.campos_uf %}
                             {% if campo == data.uf %}
-                              <option value={{ campo }} selected>{{ campo }}</option>
+                              <option value="{{ campo }}" selected>{{ campo }}</option>
                             {% else %}
-                              <option value={{ campo }} >{{ campo }}</option>
+                              <option value="{{ campo }}" >{{ campo }}</option>
                             {% endif %}
                           {% endfor %}
                         {% endif %}
