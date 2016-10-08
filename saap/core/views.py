@@ -149,9 +149,7 @@ filiacao']
             organizador = OrganizadorContatos.objects.get(username=request.\
                 user.username)
             organizador.contatos.add(contato)
-            contatos = organizador.contatos.all()
-            lista_contatos = list(contatos)
-            response = render(request,'contato.html',locals())
+            response = render_contatos_tickets(request)
         else:
             organizador = OrganizadorContatos.objects.get(username=request.\
                 user.username)
