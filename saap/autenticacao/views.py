@@ -20,7 +20,9 @@ def checar_autenticacao(request, resposta_autenticado, resposta_nao_autenticado)
 
 def checar_confirmacao(atributo, confirmacao_atributo):
     if atributo == confirmacao_atributo:
-        return atributo
+        return True
+    else:
+        return False
 
 def checar_tipo_usuario(request, username):
     try:
@@ -73,14 +75,11 @@ class LoginView(View):
         return render(request, 'login.html', {'data':data})
 
 
-class RegistroView(View):
+class RegistroCidadaoView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        if request.path == '/cadastro/':
-            resposta = checar_autenticacao(request, 'perfil.html', 'cadastro.html')
-        elif request.path == '/criar_organizador/':
-            resposta = render(request, 'criar_organizador.html')
+        resposta = checar_autenticacao(request, 'perfil.html', 'cadastro.html')
         return resposta
 
     def post(self, request):
@@ -113,43 +112,41 @@ class RegistroView(View):
             last_name = request.POST['last_name']
             username = request.POST['username']
             email = checar_confirmacao(request.POST['email'], request.POST['confirmacao_email'])
+            if email is True:
+                email = request.POST['email']
+            else:
+                return render_mensagem_erro(request, 'O e-mail informado é \
+                    diferente da confirmação de e-mail! Digite novamente.', \
+                    'cadastro.html', {'data':data})
             password = checar_confirmacao(request.POST['password'], request.POST['confirmacao_password'])
+            if password is True:
+                password = request.POST['password']
+            else:
+                return render_mensagem_erro(request, 'A senha informada é \
+                    diferente da confirmação de senha! Digite novamente.', \
+                    'cadastro.html', {'data':data})
             data_de_nascimento = request.POST['data_de_nascimento']
             sexo = request.POST['sexo']
             municipio = request.POST['municipio']
             uf = request.POST['uf']
 
-            if checar_data(data_de_nascimento):
+            if checar_data(data_de_nascimento) :
 
                 if Cidadao.get_usuario_por_username(username).count() == 0 and \
                     OrganizadorContatos.get_usuario_por_username(username).count() == 0:
-                    if request.path == '/cadastro/':
-                        user = Cidadao()
-                        user.first_name = first_name
-                        user.last_name = last_name
-                        user.username = username
-                        user.email = email
-                        user.set_password(password)
-                        user.data_de_nascimento = data_de_nascimento
-                        user.sexo = sexo
-                        user.municipio = municipio
-                        user.uf = uf
-                        user.save()
-                        login(request, user)
-                        response = render(request, 'perfil.html')
-                    else:
-                        user = OrganizadorContatos()
-                        user.first_name = first_name
-                        user.last_name = last_name
-                        user.username = username
-                        user.email = email
-                        user.set_password(password)
-                        user.data_de_nascimento = data_de_nascimento
-                        user.sexo = sexo
-                        user.municipio = municipio
-                        user.uf = uf
-                        user.save()
-                        response = render(request, 'login.html')
+                    user = Cidadao()
+                    user.first_name = first_name
+                    user.last_name = last_name
+                    user.username = username
+                    user.email = email
+                    user.set_password(password)
+                    user.data_de_nascimento = data_de_nascimento
+                    user.sexo = sexo
+                    user.municipio = municipio
+                    user.uf = uf
+                    user.save()
+                    login(request, user)
+                    response = render(request, 'perfil.html')
                 else:
                     response = render_mensagem_erro(request, 'Já existe um \
                         usuário com esse "Nome de Usuário"!', 'cadastro.html', {'data':data})
@@ -160,6 +157,90 @@ class RegistroView(View):
             response = render_mensagem_erro(request, 'O campo "%s" não foi \
                 preenchido!' % campos_cadastro[campos_validados], \
                 'cadastro.html', {'data':data})
+
+        return response
+
+class RegistroOrganizadorView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        resposta = render(request, 'criar_organizador.html')
+        return resposta
+
+    def post(self, request):
+
+        data = {}
+        data['campos_sexo'] = ['Masculino', 'Feminino']
+        data['campos_uf'] = ['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', \
+            'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', \
+            'RN', 'RS', 'RO', 'RR', 'SC', 'SE', 'SP', 'TO']
+        data['first_name'] = request.POST['first_name']
+        data['last_name'] = request.POST['last_name']
+        data['username'] = request.POST['username']
+        data['email'] = request.POST['email']
+        data['confirmacao_email'] = request.POST['confirmacao_email']
+        data['data_de_nascimento'] = request.POST['data_de_nascimento']
+        data['sexo'] = request.POST['sexo']
+        data['municipio'] = request.POST['municipio']
+        data['uf'] = request.POST['uf']
+
+        campos_validados = checar_campos([request.POST['first_name'], \
+            request.POST['last_name'], request.POST['username'], \
+            request.POST['email'], request.POST['confirmacao_email'], \
+            request.POST['password'], request.POST['confirmacao_password'], \
+            request.POST['data_de_nascimento'], request.POST['sexo'], \
+            request.POST['municipio'], request.POST['uf']])
+
+        if campos_validados is True:
+
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            username = request.POST['username']
+            email = checar_confirmacao(request.POST['email'], request.POST['confirmacao_email'])
+            if email is True:
+                email = request.POST['email']
+            else:
+                return render_mensagem_erro(request, 'O e-mail informado é \
+                    diferente da confirmação de e-mail! Digite novamente.', \
+                    'criar_organizador.html', {'data':data})
+            password = checar_confirmacao(request.POST['password'], request.POST['confirmacao_password'])
+            if password is True:
+                password = request.POST['password']
+            else:
+                return render_mensagem_erro(request, 'A senha informada é \
+                    diferente da confirmação de senha! Digite novamente.', \
+                    'criar_organizador.html', {'data':data})
+            data_de_nascimento = request.POST['data_de_nascimento']
+            sexo = request.POST['sexo']
+            municipio = request.POST['municipio']
+            uf = request.POST['uf']
+
+            if checar_data(data_de_nascimento) :
+
+                if Cidadao.get_usuario_por_username(username).count() == 0 and \
+                    OrganizadorContatos.get_usuario_por_username(username).count() == 0:
+                    user = OrganizadorContatos()
+                    user.first_name = first_name
+                    user.last_name = last_name
+                    user.username = username
+                    user.email = email
+                    user.set_password(password)
+                    user.data_de_nascimento = data_de_nascimento
+                    user.sexo = sexo
+                    user.municipio = municipio
+                    user.uf = uf
+                    user.save()
+                    response = render(request, 'login.html')
+                else:
+                    response = render_mensagem_erro(request, 'Já existe um \
+                        usuário com esse "Nome de Usuário"!', 'criar_organizador.html', {'data':data})
+            else:
+                response = render_mensagem_erro(request, 'Formato de data \
+                    inválido (AAAA-MM-DD)!', 'criar_organizador.html', {'data':data})
+        else:
+            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+                preenchido!' % campos_cadastro[campos_validados], \
+                'criar_organizador.html', {'data':data})
 
         return response
 
@@ -227,14 +308,28 @@ class ExcluirContaView(View):
         return response
 
     def post(self, request):
+
+        data = {}
+        data['password'] = request.POST['password']
+
+        campos_validados = checar_campos([request.POST['password']])
+
         password = request.POST['password']
         user = authenticate(username=request.user.username, password=password)
 
-        if user is not None:
-            user.delete()
-            messages.success(request, 'Sua conta foi excluída')
-            response = render(request, 'login.html')
-            return response
+        if campos_validados is True:
+
+            if user is not None:
+                user.delete()
+                messages.success(request, 'Sua conta foi excluída')
+                response = render(request, 'login.html')
+                return response
+            else:
+                response = render_mensagem_erro(request, 'Senha incorreta! \
+                    Digite novamente.', 'excluir_conta.html', {'data':data})
         else:
-            messages.error(request, 'Senha incorreta! Digite novamente.')
-            return render(request, 'excluir_conta.html')
+            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+                preenchido!' % campos_excluir_conta[campos_validados], \
+                'excluir_conta.html', {'data':data})
+
+        return response
