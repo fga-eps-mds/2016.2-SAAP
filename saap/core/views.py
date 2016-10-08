@@ -29,9 +29,67 @@ class CadastroView(View):
 
     def post (self,request):
 
-        campos = capturar_campos(request)
+        data = {}
+        data['campos_sexo'] = ['Masculino', 'Feminino']
+        data['campos_grupos'] = ['Grupo 1', 'Grupo 2', 'Grupo 3']
+        data['campos_titulos'] = ['Senhor', 'Doutor']
+        data['nome'] = request.POST['nome']
+        data['data_de_nascimento'] = request.POST['data_de_nascimento']
+        data['telefone'] = request.POST['telefone']
+        data['sexo'] = request.POST['sexo']
+        data['celular'] = request.POST['celular']
+        data['cpf'] = request.POST['cpf']
+        data['fax'] = request.POST['fax']
+        data['rg'] = request.POST['rg']
+        data['endereco'] = request.POST['endereco']
+        data['cidade'] = request.POST['cidade']
+        data['estado'] = request.POST['estado']
+        data['cep'] = request.POST['cep']
+        data['email'] = request.POST['email']
+        data['grupo'] = request.POST['grupo']
+        data['titulo'] = request.POST['titulo']
+        data['titulo_de_eleitor'] = request.POST['titulo_de_eleitor']
+        data['profissao'] = request.POST['profissao']
+        data['zona'] = request.POST['zona']
+        data['cargo'] = request.POST['cargo']
+        data['secao'] = request.POST['secao']
+        data['empresa'] = request.POST['empresa']
+        data['dependente_nome'] = request.POST['dependente_nome']
+        data['dependente_aniversario'] = request.POST['dependente_aniversario']
+        data['dependente_parentesco'] = request.POST['dependente_parentesco']
+        data['dependente_partido'] = request.POST['dependente_partido']
+        data['dependente_data_filiacao'] = request.POST['dependente_data_\
+filiacao']
 
-        if checar_vazio(campos) :
+        campos_validados = checar_campos([request.POST['nome'], \
+            request.POST['data_de_nascimento'], request.POST['telefone'], \
+            request.POST['sexo'], request.POST['celular'], request.POST['cpf'],\
+            request.POST['fax'], request.POST['rg'], request.POST['endereco'], \
+            request.POST['cidade'], request.POST['estado'], \
+            request.POST['cep'], request.POST['email'], request.POST['grupo'], \
+            request.POST['titulo'], request.POST['titulo_de_eleitor'], \
+            request.POST['profissao'], request.POST['zona'], request.POST['cargo'], \
+            request.POST['secao'], request.POST['empresa'], \
+            request.POST['dependente_nome'], request.POST['dependente_aniversario'], \
+            request.POST['dependente_parentesco'], request.POST['dependente_partido'],\
+            request.POST['dependente_data_filiacao']])
+
+        if campos_validados is True:
+
+            if not checar_data(request.POST['data_de_nascimento']):
+                return render_mensagem_erro(request, 'Formato de data \
+                    inválido (AAAA-MM-DD) no campo "Data de Nascimento"!',\
+                    'cadastro_contato.html', {'data':data})
+
+            if not checar_data(request.POST['dependente_aniversario']):
+                return render_mensagem_erro(request, 'Formato de data \
+                    inválido (AAAA-MM-DD) no campo "Aniversário do \
+                    Dependente"!', 'cadastro_contato.html', {'data':data})
+
+            if not checar_data(request.POST['dependente_data_filiacao']):
+                return render_mensagem_erro(request, 'Formato de data \
+                    inválido (AAAA-MM-DD) no campo "Data de Filiação do \
+                    Dependente"!', 'cadastro_contato.html', {'data':data})
 
             nome = request.POST['nome']
             data_de_nascimento = request.POST['data_de_nascimento']
@@ -88,17 +146,20 @@ class CadastroView(View):
             contato.dependente_partido = dependente_partido
             contato.dependente_data_filiacao = dependente_data_filiacao
             contato.save()
-            organizador = OrganizadorContatos.objects.get(username=request.user.username)
+            organizador = OrganizadorContatos.objects.get(username=request.\
+                user.username)
             organizador.contatos.add(contato)
             contatos = organizador.contatos.all()
             lista_contatos = list(contatos)
             response = render(request,'contato.html',locals())
         else:
-            messages.error(request,'Preencha todos os campos!')
-            organizador = OrganizadorContatos.objects.get(username=request.user.username)
+            organizador = OrganizadorContatos.objects.get(username=request.\
+                user.username)
             contatos = organizador.contatos.all()
             lista_contatos = list(contatos)
-            response = render(request,'contato.html')
+            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+                preenchido!' % campos_cadastrar_contato[campos_validados], \
+                'cadastro_contato.html', {'data':data})
 
         return response
 

@@ -12,6 +12,12 @@ campos_ticket = ["Nome do Organizador", "Tipo de Ticket", "Assunto", \
     "Mensagem"]
 campos_mudar_senha = ["Nova Senha", "Confirmação Nova Senha"]
 campos_excluir_conta = ["Senha"]
+campos_cadastrar_contato = ["Nome", "Data de Nascimento", "Telefone \
+    Residencial", "Sexo", "Telefone Celular", "CPF", "Fax", "RG", "Endereço",
+    "Cidade", "Estado", "CEP", "E-mail", "Grupo", "Título", "Título de Eleitor",
+    "Profissão", "Zona Eleitoral", "Cargo", "Seção Eleitoral", "Empresa", \
+    "Nome do Dependente", "Aniversário do Dependente", "Parentesco do Dependente", \
+    "Partido do Dependente", "Data de Filiação do Dependente"]
 
 def checar_data(data):
     partes_data = data.split("-")
