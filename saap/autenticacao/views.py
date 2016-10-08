@@ -186,18 +186,38 @@ class MudarSenhaView(View):
         return response
 
     def post(self,request):
-        user = request.user
-        nova_senha = request.POST['nova_senha']
-        nova_senha2 = request.POST['confirmacao_nova_senha']
 
-        if nova_senha == nova_senha2:
-            user.set_password(nova_senha)
-            user.save()
+        data = {}
+        data['nova_senha'] = request.POST['nova_senha']
+        data['confirmacao_nova_senha'] = request.POST['confirmacao_nova_senha']
+
+        campos_validados = checar_campos([request.POST['nova_senha'], \
+            request.POST['confirmacao_nova_senha']])
+
+        if campos_validados is True:
+
+            user = request.user
+            username = user.username
+            nova_senha = request.POST['nova_senha']
+            nova_senha2 = request.POST['confirmacao_nova_senha']
+
+            if nova_senha == nova_senha2:
+                user.set_password(nova_senha)
+                user.save()
+                user = authenticate(username=username, password=nova_senha)
+                login(request, user)
+                response = render(request, 'perfil.html')
+            else:
+                messages.error(request, 'As senhas não são iguais! \
+                    Digite novamente.')
+                response = render(request, 'mudar_senha.html')
+
         else:
-            messages.error(request, 'As senhas não são iguais! Digite novamente.')
-            return render(request, 'mudar_senha.html')
+            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+                preenchido!' % campos_mudar_senha[campos_validados], \
+                'mudar_senha.html', {'data':data})
 
-        return render(request, 'perfil.html')
+        return response
 
 class ExcluirContaView(View):
     http_method_names = [u'get', u'post']
@@ -216,5 +236,5 @@ class ExcluirContaView(View):
             response = render(request, 'login.html')
             return response
         else:
-            messages.error(request, 'Senha incorreta')
+            messages.error(request, 'Senha incorreta! Digite novamente.')
             return render(request, 'excluir_conta.html')
