@@ -8,15 +8,29 @@ import aloe_webdriver.django
 from aloe import around, world, step
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
+from autenticacao.models import Cidadao
 
 @around.each_example
 @contextmanager
 def with_browser(scenario,outline,steps):
-    world.browser = webdriver.Chrome()
-    yield  
+    world.browser = webdriver.Chrome("")
+    yield
     world.browser.quit()
     delattr(world,'browser')
 
+@step(r'A user is registered')
+def register(scenario):
+    c = Cidadao()
+    c.first_name = 'test_name'
+    c.last_name = 'test_last'
+    c.username = 'test_name'
+    c.email = 'test@email.com'
+    c.set_password('123456')
+    c.data_de_nascimento = '1990-10-10'
+    c.sexo = 'Mascclino'
+    c.municipio = 'Brasilia'
+    c.uf = 'DF'
+    c.save()
 
 @step(r'I click in "(.*)"')
 def click(scenario, link):
@@ -66,4 +80,3 @@ def when_i_press_group1(step, group1):
 @step(u'Then I should see "([^"]*)"')
 def then_i_should_see_group1(step, group1):
     assert False, 'This step must be implemented'
-
