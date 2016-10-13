@@ -285,3 +285,6 @@ class DeletarTicketView(View):
         ticket = Ticket.objects.get(id=pk)
         ticket.delete()
         return redirect('/')
+
+class VereadorView (View):
+    pass
