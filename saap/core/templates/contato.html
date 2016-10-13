@@ -58,9 +58,9 @@
                 <img src="../static/images/contato.png" alt="" class="circle"></img>
                  <span class="title">{{ ticket.remetente }}</span>
                   <form action="/publicar_ticket/" method="POST">
+            {% csrf_token %}
                   <input type="hidden" name="ticket_id" value="{{ticket.id}}"> 
                   <a href="/deletar_ticket/{{ticket.id}}"class="btn-floating btn-large waves-effect waves-light saap-dark-green right"><i class="material-icons">delete</i></a>
-            {% csrf_token %}
                   <button class="btn-floating btn-large waves-effect waves-light saap-dark-green right" type="submit"><i class="material-icons">done</i></button>
                   </form>
                  <p> {{ ticket.titulo }}<br>
