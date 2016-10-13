@@ -46,6 +46,7 @@ class Ticket(models.Model):
     # gabinete_destino = Gabinete_saap()
     data_publicacao = models.DateField('data_de_publicacao', auto_now=True)
     tipo_ticket = models.CharField(max_length=30)
+    aprovado = models.BooleanField(default=False)
     #file = models.FileField()
 
     # @classmethod
