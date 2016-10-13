@@ -73,18 +73,6 @@ class RegistroView(View):
 
     def post(self, request):
 
-        first_name = ""
-        last_name = ""
-        username = ""
-        email = ""
-        confirmacao_email = ""
-        password = ""
-        confirmacao_password = ""
-        sexo =  ""
-        municipio = ""
-        uf = ""
-        data_de_nascimento = ""
-
         campos = [request.POST['first_name'], request.POST['last_name'], \
             request.POST['username'], request.POST['email'], \
             request.POST['confirmacao_email'], request.POST['password'], \
