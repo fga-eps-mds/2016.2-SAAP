@@ -28,33 +28,6 @@ class CadastroView(View):
 
     def post (self,request):
 
-        nome = ""
-        data_de_nascimento = ""
-        sexo = ""
-        telefone = ""
-        celular = ""
-        fax = ""
-        cpf = ""
-        rg= ""
-        endereco = ""
-        cidade = ""
-        cep = ""
-        estado = ""
-        email = ""
-        grupo = ""
-        titulo = ""
-        titulo_de_eleitor = ""
-        zona = ""
-        secao = ""
-        profissao = ""
-        cargo = ""
-        empresa = ""
-        dependente_nome = ""
-        dependente_aniversario = ""
-        dependente_parentesco = ""
-        dependente_partido = ""
-        dependente_data_filiacao = ""
-
         import ipdb
         ipdb.set_trace()
 
