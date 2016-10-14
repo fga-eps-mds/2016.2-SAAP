@@ -287,9 +287,9 @@ class DeletarTicketView(View):
         return redirect('/')
 
 
-class VereadorView (View):
+class VereadorView(View):
     http_method_names = [u'get', u'post']
 
     def get (self, request):
-        response = render(request, 'pagina_vereador.html')
+        response = render(request, 'vereador.html')
         return response
