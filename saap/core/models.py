@@ -65,4 +65,18 @@ class Documento(models.Model):
     tipo_documento = models.CharField(max_length=100)
     remetente = models.CharField(max_length=100)
     titulo_documento = models.CharField(max_length=100)
-    corpo_texto_doc = models.CharField(max_length=1000000)    
+    corpo_texto_doc = models.CharField(max_length=1000000)
+
+class Template(models.Model):
+
+    titulo_template = models.CharField(max_length=100)
+    altura_pagina = models.FloatField()
+    largura_pagina = models.FloatField()
+    margem_superior = models.FloatField()
+    margem_inferior = models.FloatField()
+    margem_esquerda = models.FloatField()
+    margem_direita = models.FloatField()
+    altura_etiqueta = models.FloatField()
+    largura_etiqueta = models.FloatField()
+    espacamento_etiqueta = models.FloatField()
+    etiquetas_por_linha = models.FloatField()
