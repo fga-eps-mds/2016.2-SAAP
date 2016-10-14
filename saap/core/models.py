@@ -57,3 +57,7 @@ class OrganizadorGabinete(models.Model):
     template = models.ManyToManyField(Template)
     documento = models.ManyToManyField(Documento)
     boletim = models.ManyToManyField(Boletim)
+
+class Boletim(models.Model):
+    titulo_boletim = models.CharField(max_length=100)
+    corpo_texto_boletim = models.CharField(max_length= 5000)
