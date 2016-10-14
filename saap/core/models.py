@@ -7,7 +7,6 @@ from django.core.exceptions import *
 from saap import *
 # from autenticacao.models import
 
-
 class Contato(models.Model):
 
     nome = models.CharField(max_length=60,default='')
@@ -46,8 +45,13 @@ class Ticket(models.Model):
     # gabinete_destino = Gabinete_saap()
     data_publicacao = models.DateField('data_de_publicacao', auto_now=True)
     tipo_ticket = models.CharField(max_length=30)
-    #file = models.FileField()
 
-    # @classmethod
-    # def current_date(self):
-    #     return datetime.datetime.now()
+class OrganizadorGabinete(models.Model):
+
+    nome = models.CharField(max_length=100,default='')
+    partido = models.CharField(max_length=100,default='')
+    gabinete = Gabinete_saap()
+    tickets = models.ManyToManyField(Ticket)
+    template = models.ManyToManyField(Template)
+    documento = models.ManyToManyField(Documento)
+    boletim = models.ManyToManyField(Boletim)
