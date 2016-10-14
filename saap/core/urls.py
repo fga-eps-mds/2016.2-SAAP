@@ -22,4 +22,6 @@ urlpatterns = [
         name='deletar_ticket'),
     url(r'^vereador/$', VereadorView.as_view(),
         name='vereador'),
+    url(r'^vereadores/$', VereadoresView.as_view(),
+        name='vereadores'),
 ]
