@@ -5,7 +5,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext
 from core.models import Contato, Ticket
 from autenticacao.models import OrganizadorContatos
-from default.views import checar_vazio
+from default.views import *
 
 def capturar_campos(request):
     campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
@@ -287,9 +287,31 @@ class DeletarTicketView(View):
         return redirect('/')
 
 
-class VereadorView(View):
+class VereadoresView(View):
     http_method_names = [u'get', u'post']
 
-    def get (self, request):
-        response = render(request, 'vereador.html')
+    def get(self, request):
+        organizadores = OrganizadorContatos.objects.all()
+        lista_organizadores = list(organizadores)
+        response = render(request, 'vereadores.html', locals())
         return response
+
+    def post(self, request):
+
+        campos_validados = checar_campos([request.POST['nome_organizador']])
+
+        if campos_validados is True:
+
+            organizador = OrganizadorContatos.objects.get(first_name=request.\
+POST['nome_organizador'])
+            tickets = organizador.tickets.filter(aprovado=True)
+            lista_tickets = list(tickets)
+            resposta = render(request, 'vereador.html', locals())
+
+        else:
+            organizadores = OrganizadorContatos.objects.all()
+            lista_organizadores = list(organizadores)
+            messages.error(request, 'É necessário selecionar algum vereador!')
+            resposta = render(request, 'vereadores.html', locals())
+
+        return resposta
