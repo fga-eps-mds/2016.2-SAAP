@@ -2,8 +2,8 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView, 
-                    AtualizaContato, PublicarTicketView,DeletarTicketView)
-
+                    AtualizaContato, VereadorView, PublicarTicketView, 
+                    DeletarTicketView)
 
 urlpatterns = [
     url(r'^cadastro_contato/$', login_required(CadastroView.as_view()),
@@ -20,5 +20,6 @@ urlpatterns = [
         name='publicar_ticket'),
     url(r'^deletar_ticket/(?P<pk>[0-9]+)/$', DeletarTicketView.as_view(),
         name='deletar_ticket'),
-
+    url(r'^vereador/$', VereadorView.as_view(),
+        name='vereador'),
 ]
