@@ -48,3 +48,12 @@ class OrganizadorContatos(Usuario_saap):
     contatos = models.ManyToManyField(Contato)
     tickets = models.ManyToManyField(Ticket)
 
+class OrganizadorGabinete(Usuario_saap):
+
+    nome = models.CharField(max_length=100,default='')
+    partido = models.CharField(max_length=100,default='')
+    gabinete = Gabinete_saap()
+    tickets = models.ManyToManyField(Ticket)
+    template = models.ManyToManyField(Template)
+    documento = models.ManyToManyField(Documento)
+    boletim = models.ManyToManyField(Boletim)
