@@ -1,4 +1,5 @@
 # coding=utf-8
+from autenticacao.models import Usuario_saap
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
@@ -48,7 +49,7 @@ class Ticket(models.Model):
     aprovado = models.BooleanField(default=False)
     #file = models.FileField()
 
-class OrganizadorGabinete(models.Model):
+class OrganizadorGabinete(Usuario_saap):
 
     nome = models.CharField(max_length=100,default='')
     partido = models.CharField(max_length=100,default='')
