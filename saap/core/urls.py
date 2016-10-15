@@ -2,7 +2,7 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView, 
-                    AtualizaContato, PublicarTicketView)
+                    AtualizaContato, PublicarTicketView,DeletarTicketView)
 
 
 urlpatterns = [
@@ -18,4 +18,7 @@ urlpatterns = [
         name='ticket'),
     url(r'^publicar_ticket/$', PublicarTicketView.as_view(),
         name='publicar_ticket'),
+    url(r'^deletar_ticket/$', DeletarTicketView.as_view(),
+        name='publicar_ticket'),
+
 ]
