@@ -268,7 +268,7 @@ class TicketView(View):
         return response
 
 class PublicarTicketView(View):
-    http_method_names = [u'get', u'post', u'delete']
+    http_method_names = [u'get', u'post']
 
     def post(self, request):
         ticket_id = request.POST.get('ticket_id')
