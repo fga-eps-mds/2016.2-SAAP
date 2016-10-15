@@ -50,7 +50,6 @@ class OrganizadorContatos(Usuario_saap):
 
 class OrganizadorGabinete(Usuario_saap):
 
-    nome = models.CharField(max_length=100,default='')
     partido = models.CharField(max_length=100,default='')
     gabinete = Gabinete_saap()
     tickets = models.ManyToManyField(Ticket)
