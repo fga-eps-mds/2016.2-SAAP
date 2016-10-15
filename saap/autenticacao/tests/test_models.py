@@ -43,10 +43,10 @@ def test_deleta_usuario():
     # db_before.count() > db_after.count()
     assert db_before is not \
     None and db_after.count() is 0
-    
+
 @pytest.mark.django_db
 def test_busca_username():
-    
+
     u = Usuario_saap()
     u.first_name = 'test_name'
     u.last_name = 'test_last'
@@ -61,4 +61,54 @@ def test_busca_username():
     verifica_user = Usuario_saap.busca_username('test_name')
 
     assert verifica_user.count() > 0
-    u.delete()
+    u.delete() #Essa linha não vai executar ...
+
+@pytest.mark.django.db
+def test_criar_vereador():
+
+    ver = Usuario_saap.busca_username('vereadorteste')
+    if ver.count() >= 1:
+        ver[1].delete()
+    else:
+        #do nothing
+    #endif
+
+    vereador = OrganizadorGabinete()
+    vereador.first_name = 'Vereador'
+    vereador.last_name = 'Tal'
+    vereador.username = 'vereadorteste'
+    vereador.email = 'email@example.com'
+    vereador.set_password('12345678')
+    vereador.data_de_nascimento = '1990-10-10'
+    vereador.sexo = 'Masculino'
+    vereador.municipio = 'Brasilia'
+    vereador.uf = 'DF'
+    vereador.gabinete = Gabinete_saap()
+    vereador.save()
+
+    verificador = Usuario_saap.busca_username('vereadorteste')
+
+    assert verificador.count() == 1
+
+@pytest.mark,django.db
+def test_deletar_vereador():
+
+        ver = Usuario_saap.busca_username('vereadorteste')
+        if ver.count() >= 1:
+            ver[1].delete()
+            ver = Usuario_saap.busca_username('vereadorteste')
+            assert ver.count() == 0
+        else:
+            vereador = OrganizadorGabinete()
+            vereador.username = 'vereadorteste'
+            vereador.save()
+
+            ver = Usuario_saap.busca_username('vereadorteste')
+
+            if ver.count() = 1:
+                vereador.delete()
+                ver = Usuario_saap.busca_username('vereadorteste')
+
+                assert ver.count() == 0
+            else:
+                self.fail('TEST_ERROR: UNABLE TO DELETE VEREADOR')
