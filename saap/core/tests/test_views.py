@@ -42,7 +42,6 @@ def test_enviar_ticket():
     Ticket.objects.all()[0].delete()
 
 
-
 @pytest.mark.django_db
 def test_deletar_ticket():
     client = Client()
@@ -80,3 +79,10 @@ def test_deletar_ticket():
     
     tickets_after = Ticket.objects.all().count()
     assert tickets_before > tickets_after
+
+@pytest.mark.django_db
+def test_vereadores_view_get():
+
+	client = Client()
+	response = client.get('/vereadores/')
+	assert response.status_code is 200
