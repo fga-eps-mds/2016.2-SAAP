@@ -18,7 +18,7 @@ urlpatterns = [
         name='ticket'),
     url(r'^publicar_ticket/$', PublicarTicketView.as_view(),
         name='publicar_ticket'),
-    url(r'^deletar_ticket/$', DeletarTicketView.as_view(),
-        name='publicar_ticket'),
+    url(r'^deletar_ticket/(?P<pk>[0-9]+)/$', DeletarTicketView.as_view(),
+        name='deletar_ticket'),
 
 ]

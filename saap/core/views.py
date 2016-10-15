@@ -308,6 +308,7 @@ class PublicarTicketView(View):
 class DeletarTicketView(View):
     http_method_names = [u'get']
 
-    def get(self,request):
-
+    def get(self,request,pk):
+        ticket = Ticket.objects.get(id=pk)
+        ticket.delete()
         return redirect('/')
