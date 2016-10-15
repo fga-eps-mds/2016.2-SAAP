@@ -1,0 +1,148 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<main>
+<br><br><br>
+<div class="container">
+
+    <div class="row">
+        <div class="col s12 offset-m2 m8 offset-l1 l10">
+            <form action="{% url 'criar_organizador' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next_url" value="{{next_url}}">
+                <div class="login-card hoverable center-align">
+                    <div class="card-content">
+                        <br>
+<div class="row">
+
+        <div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">account_circle</i>
+          <input placeholder="John Doe" id="first_name" name="first_name" type="text" class="validate" required>
+          <label for="first_name">Nome</label>
+        </div>
+
+        <div class="input-field col s5">
+          <input placeholder="yyyy-mm-dd" id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate" required>
+          <label for="data_de_nascimento">Data de Nascimento</label>
+        </div>
+      </div>
+
+
+<div class="row">
+        <div class="input-field col s7" style="color:green">
+          <i class="material-icons prefix" style="color:green">account_circle</i>
+          <input placeholder="Smith" id="last_name" name="last_name" type="text" class="validate" required>
+          <label for="last_name">Sobrenome</label>
+        </div>
+
+
+   <div class="input-field col s5">
+    <select id="sexo" name="sexo">
+      <option value="" selected>Selecionar</option>
+      <option value="Masculino">Masculino</option>
+      <option value="Feminino">Feminino</option>
+    </select>
+    <label>Sexo</label>
+
+   </div>
+</div>
+
+
+<div class="row">
+  <div class="input-field col s7" style="color:green">
+          <i class="material-icons prefix" style="color:green">account_circle</i>
+          <input placeholder="johnsmith" id="username" name="username" type="text" class="validate" required>
+          <label for="username">Nome de usuário</label>
+        </div>
+        <div class="input-field col s3">
+          <input placeholder="Guarulhos" id="municipio" name="municipio" type="text" class="validate" required>
+          <label for="municipio">Município</label>
+        </div>
+<div class="input-field col s2">
+          <td>
+                    <div style="width: 50px;">
+                      <select name="uf" id="uf">
+                        <option value="">UF</option>
+                        <option value="AC">AC</option>
+                        <option value="AL">AL</option>
+                        <option value="AM">AM</option>
+                        <option value="AP">AP</option>
+                        <option value="BA">BA</option>
+                        <option value="CE">CE</option>
+                        <option value="DF">DF</option>
+                        <option value="ES">ES</option>
+                        <option value="GO">GO</option>
+                        <option value="MA">MA</option>
+                        <option value="MG">MG</option>
+                        <option value="MS">MS</option>
+                        <option value="MT">MT</option>
+                        <option value="PA">PA</option>
+                        <option value="PB">PB</option>
+                        <option value="PE">PE</option>
+                        <option value="PI">PI</option>
+                        <option value="PR">PR</option>
+                        <option value="RJ">RJ</option>
+                        <option value="RN">RN</option>
+                        <option value="RS">RS</option>
+                        <option value="RO">RO</option>
+                        <option value="RR">RR</option>
+                        <option value="SC">SC</option>
+                        <option value="SE">SE</option>
+                        <option value="SP">SP</option>
+                        <option value="TO">TO</option>
+                      </select>
+                    </div>
+                  </td>
+          <label for="municipio">UF</label>
+        </div>
+
+
+
+</div>
+
+<div class="row">
+<div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">email</i>
+          <input placeholder="name@email.com" id="email" name="email" type="email" class="validate" required>
+          <label for="email">E-mail</label>
+        </div>
+</div>
+
+<div class="row">
+        <div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">email</i>
+          <input placeholder="name@email.com" id="confirmacao_email" name="confirmacao_email" type="email" class="validate" required>
+          <label for="confirmacao_email">Confirmar E-mail</label>
+        </div>
+</div>
+<div class="row">
+        <div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">lock</i>
+          <input placeholder="********" id="password" name="password" type="password" class="validate" required>
+          <label for="password">Senha</label>
+        </div>
+</div>
+<div class="row">
+        <div class="input-field col s7">
+          <i class="material-icons prefix" style="color:green">lock</i>
+          <input placeholder="********" id="confirmacao_password" name="confirmacao_password" type="password" class="validate" required>
+          <label for="confirmacao_password">Confirmar Senha</label>
+        </div>
+</div>
+                        <div>
+                            <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Criar Organizador</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</main>
+{% endblock main_content %}
