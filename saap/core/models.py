@@ -1,5 +1,4 @@
 # coding=utf-8
-from autenticacao.models import Usuario_saap
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
@@ -46,16 +45,6 @@ class Ticket(models.Model):
     # gabinete_destino = Gabinete_saap()
     data_publicacao = models.DateField('data_de_publicacao', auto_now=True)
     tipo_ticket = models.CharField(max_length=30)
-
-class OrganizadorGabinete(Usuario_saap):
-
-    nome = models.CharField(max_length=100,default='')
-    partido = models.CharField(max_length=100,default='')
-    gabinete = Gabinete_saap()
-    tickets = models.ManyToManyField(Ticket)
-    template = models.ManyToManyField(Template)
-    documento = models.ManyToManyField(Documento)
-    boletim = models.ManyToManyField(Boletim)
 
 class Boletim(models.Model):
     titulo_boletim = models.CharField(max_length=100)
