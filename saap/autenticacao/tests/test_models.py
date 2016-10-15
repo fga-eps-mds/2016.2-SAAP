@@ -111,4 +111,5 @@ def test_deletar_vereador():
 
                 assert ver.count() == 0
             else:
+                #Commit again
                 self.fail('TEST_ERROR: UNABLE TO DELETE VEREADOR')
