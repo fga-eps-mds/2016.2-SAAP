@@ -268,14 +268,22 @@ class TicketView(View):
         return response
 
 class PublicarTicketView(View):
-    http_method_names = [u'get', u'post']
-    
+    http_method_names = [u'get', u'post', u'delete']
+
     def post(self, request):
         ticket_id = request.POST.get('ticket_id')
-        ticket = Ticket.objects.get(id=ticket_id)
+        ticket = Ticket.objects.get(id = ticket_id)
         ticket.aprovado = True
-        ticket.save()
-        return render(request, 'vereadores.html') # pagina vereador aqui depois
+
+        if ticket.aprovado == True:
+            ticket.save()
+            messages.success(request, 'Ticket enviado para pagina do Vereador')
+            response = render (request, 'vereadores.html') #pagina do vereador
+            return response
+
+        else:
+            messages.error(request, 'Erro ao tentar publicar Ticket')
+            return render (request, 'redirect/')
 
 
 class DeletarTicketView(View):
