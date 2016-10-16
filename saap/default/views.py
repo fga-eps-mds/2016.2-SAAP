@@ -4,6 +4,11 @@ from django.contrib import messages
 
 # Create your views here.
 
+data = {}
+data['campos_sexo'] = ['Masculino', 'Feminino']
+data['campos_uf'] = ['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', \
+    'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', \
+    'RN', 'RS', 'RO', 'RR', 'SC', 'SE', 'SP', 'TO']
 campos_login = ["Nome de Usuário", "Senha"]
 campos_cadastro = ["Nome", "Sobrenome", "Nome de Usuário", "E-mail", \
     "Confirmar E-mail", "Senha", "Confirmar Senha", "Data de Nascimento", \
