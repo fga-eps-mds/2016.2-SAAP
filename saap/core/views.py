@@ -292,3 +292,23 @@ class TicketView(View):
             response = render(request, 'perfil.html')
 
         return response
+
+class PublicarTicketView(View):
+    http_method_names = [u'post']
+    
+    def post(self, request):
+        ticket_id = request.POST.get('ticket_id')
+        ticket = Ticket.objects.get(id=ticket_id)
+        ticket.aprovado = True
+        ticket.save()
+        return render(request, 'perfil.html') # pagina vereador aqui depois
+
+
+
+class DeletarTicketView(View):
+    http_method_names = [u'get']
+
+    def get(self,request,pk):
+        ticket = Ticket.objects.get(id=pk)
+        ticket.delete()
+        return redirect('/')
