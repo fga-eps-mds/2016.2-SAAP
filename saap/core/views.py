@@ -29,9 +29,6 @@ class CadastroView(View):
 
     def post (self,request):
 
-        import ipdb
-        ipdb.set_trace()
-
         campos = capturar_campos(request)
 
         if checar_vazio(campos) :
