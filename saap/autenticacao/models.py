@@ -16,7 +16,7 @@ class Usuario_saap(User):
 
     @classmethod
     def busca_nome(cls, nome):
-        return Usuario_saap.objects.filter(first_name__startswith(nome))
+        return Usuario_saap.objects.filter(first_name__startswith=nome)
 
     @classmethod
     def deleta_usuario(cls, idArg):
@@ -24,11 +24,11 @@ class Usuario_saap(User):
 
     @classmethod
     def busca_username(cls, username):
-        return Usuario_saap.objects.filter(username__startswith(username))
+        return Usuario_saap.objects.filter(username__startswith=username)
 
     @classmethod
     def get_usuario_por_username(cls, username):
-        return Usuario_saap.objects.filter(username = username)
+        return Usuario_saap.objects.filter(username=username)
 
 
 class Gabinete_saap(models.Model):
