@@ -1,5 +1,6 @@
 # coding=utf-8
 from core.views import *
+from autenticacao.models import OrganizadorContatos
 import pytest
 from django.test import Client
 from core.models import Ticket
@@ -42,7 +43,6 @@ def test_enviar_ticket():
     Ticket.objects.all()[0].delete()
 
 
-
 @pytest.mark.django_db
 def test_deletar_ticket():
     client = Client()
@@ -80,3 +80,29 @@ def test_deletar_ticket():
     
     tickets_after = Ticket.objects.all().count()
     assert tickets_before > tickets_after
+
+@pytest.mark.django_db
+def test_vereadores_view_get():
+
+	client = Client()
+	response = client.get('/vereadores/')
+	assert response.status_code is 200
+
+@pytest.mark.django_db
+def test_vereadores_view_post_nao_existe():
+
+	client = Client()
+	response = client.post('/vereadores/', {'nome_organizador': ''})
+	assert response.status_code is 200
+
+@pytest.mark.django_db
+def test_vereadores_view_post_existe():
+
+	organizador = OrganizadorContatos()
+	organizador.first_name = 'Organizador'
+	organizador.data_de_nascimento = '1900-01-01'
+	organizador.save()
+	client = Client()
+	response = client.post('/vereadores/', {'nome_organizador': 'Organizador'})
+	assert response.status_code is 200
+	organizador.delete()
