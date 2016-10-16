@@ -1,0 +1,28 @@
+{%  extends "base.html" %}
+{% block main_content %}
+
+<main>
+  <div class="container">
+    <div class="row">
+      <div class="col s6 m6 l6 ">
+        <ul class="collection">
+          <p>Tickets Publicados</p>
+          {% for ticket in lista_tickets %}
+          <li class="collection-item avatar">
+            <img src="../static/images/contato.png" alt="" class="circle"></img>
+            <span class="title">{{ ticket.remetente }}</span>
+            <p> {{ ticket.titulo }}<br>
+              {{ ticket.tipo_ticket }}<br>
+              {{ ticket.corpo_texto}}<br>
+            </p>
+            <i class="material-icons">grade</i>
+          </li>
+          {% endfor %}
+          <br>
+        </ul>
+      </div>
+    </div>
+  </div>
+<main>
+
+{% endblock main_content %}

@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib import messages
@@ -5,7 +6,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext
 from core.models import Contato, Ticket
 from autenticacao.models import OrganizadorContatos
-from default.views import checar_vazio
+from default.views import *
 
 def capturar_campos(request):
     campos = [request.POST['nome'],request.POST['data_de_nascimento'],\
@@ -27,33 +28,6 @@ class CadastroView(View):
         return response
 
     def post (self,request):
-
-        nome = ""
-        data_de_nascimento = ""
-        sexo = ""
-        telefone = ""
-        celular = ""
-        fax = ""
-        cpf = ""
-        rg= ""
-        endereco = ""
-        cidade = ""
-        cep = ""
-        estado = ""
-        email = ""
-        grupo = ""
-        titulo = ""
-        titulo_de_eleitor = ""
-        zona = ""
-        secao = ""
-        profissao = ""
-        cargo = ""
-        empresa = ""
-        dependente_nome = ""
-        dependente_aniversario = ""
-        dependente_parentesco = ""
-        dependente_partido = ""
-        dependente_data_filiacao = ""
 
         import ipdb
         ipdb.set_trace()
@@ -292,3 +266,60 @@ class TicketView(View):
             response = render(request, 'perfil.html')
 
         return response
+
+class PublicarTicketView(View):
+    http_method_names = [u'get', u'post']
+
+    def post(self, request):
+        ticket_id = request.POST.get('ticket_id')
+        ticket = Ticket.objects.get(id = ticket_id)
+        ticket.aprovado = True
+
+        if ticket.aprovado == True:
+            ticket.save()
+            messages.success(request, 'Ticket enviado para pagina do Vereador')
+            response = render (request, 'vereadores.html') #pagina do vereador
+            return response
+
+        else:
+            messages.error(request, 'Erro ao tentar publicar Ticket')
+            return render (request, 'redirect/')
+
+
+class DeletarTicketView(View):
+    http_method_names = [u'get']
+
+    def get(self,request,pk):
+        ticket = Ticket.objects.get(id=pk)
+        ticket.delete()
+        return redirect('/')
+
+
+class VereadoresView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        organizadores = OrganizadorContatos.objects.all()
+        lista_organizadores = list(organizadores)
+        response = render(request, 'vereadores.html', locals())
+        return response
+
+    def post(self, request):
+
+        campos_validados = checar_campos([request.POST['nome_organizador']])
+
+        if campos_validados is True:
+
+            organizador = OrganizadorContatos.objects.get(first_name=request.\
+POST['nome_organizador'])
+            tickets = organizador.tickets.filter(aprovado=True)
+            lista_tickets = list(tickets)
+            resposta = render(request, 'vereador.html', locals())
+
+        else:
+            organizadores = OrganizadorContatos.objects.all()
+            lista_organizadores = list(organizadores)
+            messages.error(request, 'É necessário selecionar algum vereador!')
+            resposta = render(request, 'vereadores.html', locals())
+
+        return resposta
