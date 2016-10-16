@@ -278,7 +278,9 @@ class PublicarTicketView(View):
         if ticket.aprovado == True:
             ticket.save()
             messages.success(request, 'Ticket enviado para pagina do Vereador')
-            response = render (request, 'vereadores.html') #pagina do vereador
+            organizadores = OrganizadorContatos.objects.all()
+            lista_organizadores = list(organizadores)
+            response = render (request, 'vereadores.html',locals()) #pagina do vereador
             return response
 
         else:
