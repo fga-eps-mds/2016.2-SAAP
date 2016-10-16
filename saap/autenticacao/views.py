@@ -99,12 +99,7 @@ class RegistroCidadaoView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        campos_validados = checar_campos([request.POST['first_name'], \
-            request.POST['last_name'], request.POST['username'], \
-            request.POST['email'], request.POST['confirmacao_email'], \
-            request.POST['password'], request.POST['confirmacao_password'], \
-            request.POST['data_de_nascimento'], request.POST['sexo'], \
-            request.POST['municipio'], request.POST['uf']])
+        campos_validados = checar_campos_registro(request)
 
         if campos_validados is True:
 
@@ -184,12 +179,7 @@ class RegistroOrganizadorView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        campos_validados = checar_campos([request.POST['first_name'], \
-            request.POST['last_name'], request.POST['username'], \
-            request.POST['email'], request.POST['confirmacao_email'], \
-            request.POST['password'], request.POST['confirmacao_password'], \
-            request.POST['data_de_nascimento'], request.POST['sexo'], \
-            request.POST['municipio'], request.POST['uf']])
+        campos_validados = checar_campos_registro(request)
 
         if campos_validados is True:
 

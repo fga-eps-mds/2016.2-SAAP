@@ -54,3 +54,14 @@ def render_contatos_tickets(request):
     tickets = organizador.tickets.all()
     lista_tickets = list(tickets)
     return render(request,'contato.html',locals())
+
+def checar_campos_registro(request):
+
+    campos_validados = checar_campos([request.POST['first_name'], \
+        request.POST['last_name'], request.POST['username'], \
+        request.POST['email'], request.POST['confirmacao_email'], \
+        request.POST['password'], request.POST['confirmacao_password'], \
+        request.POST['data_de_nascimento'], request.POST['sexo'], \
+        request.POST['municipio'], request.POST['uf']])
+
+    return campos_validados
