@@ -94,9 +94,7 @@ class RegistroCidadaoView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        validado = checar_validacoes_usuario(request, request.POST\
-            ['data_de_nascimento'], request.POST['username'], {'data':data},\
-            'cadastro.html')
+        validado = checar_validacoes_usuario(request, 'criar_organizador.html')
 
         if validado is True:
 
@@ -162,9 +160,7 @@ class RegistroOrganizadorView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        validado = checar_validacoes_usuario(request, request.POST\
-            ['data_de_nascimento'], request.POST['username'], {'data':data},\
-            'criar_organizador.html')
+        validado = checar_validacoes_usuario(request, 'criar_organizador.html')
 
         if validado is True:
 

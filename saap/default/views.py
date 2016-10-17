@@ -139,27 +139,26 @@ def atualizar_contato(request, contato):
 
     return contato
 
-def checar_validacoes_usuario(request, data_de_nascimento, username, data, \
-    template):
+def checar_validacoes_usuario(request, template):
 
     campos_validados = checar_campos_registro(request)
 
     if campos_validados is True:
         pass
-        if checar_data(data_de_nascimento):
+        if checar_data(request.POST['data_de_nascimento']):
             pass
-            if checar_existe_usuario(username):
+            if checar_existe_usuario(request.POST['username']):
                 return True
             else:
                 response = render_mensagem_erro(request, 'Já existe um \
                     usuário com esse "Nome de Usuário"!', \
-                    template, data)
+                    template, {'data':data})
         else:
             response = render_mensagem_erro(request, 'Formato de data \
-                inválido (AAAA-MM-DD)!', template, data)
+                inválido (AAAA-MM-DD)!', template, {'data':data})
     else:
         response = render_mensagem_erro(request, 'O campo "%s" não foi \
             preenchido!' % campos_cadastro[campos_validados], \
-            template, data)
+            template, {'data':data})
 
     return response
