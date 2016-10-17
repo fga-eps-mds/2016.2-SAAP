@@ -46,6 +46,9 @@ class Ticket(models.Model):
     data_publicacao = models.DateField('data_de_publicacao', auto_now=True)
     tipo_ticket = models.CharField(max_length=30)
 
+    aprovado = models.BooleanField(default=False)
+    #file = models.FileField()
+
 class Boletim(models.Model):
     titulo_boletim = models.CharField(max_length=100)
     corpo_texto_boletim = models.CharField(max_length= 5000)

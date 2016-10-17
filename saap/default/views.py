@@ -1,7 +1,19 @@
 from django.shortcuts import render
 from autenticacao.models import OrganizadorContatos
+from django.contrib import messages
 
 # Create your views here.
+
+def checar_campos(campos):
+    for i in range(len(campos)):
+        if campos[i] == "":
+            return i
+    return True
+
+def render_mensagem_erro(request, mensagem, template, data):
+    messages.error(request, mensagem)
+    response = render(request, template, data)
+    return response
 
 def checar_vazio(campos):
     nao_vazio = True

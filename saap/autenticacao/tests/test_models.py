@@ -1,5 +1,5 @@
 # coding=utf-8
-from autenticacao.models import Usuario_saap
+from autenticacao.models import *
 import pytest
 # Create your tests here.
 
@@ -63,15 +63,13 @@ def test_busca_username():
     assert verifica_user.count() > 0
     u.delete() #Essa linha não vai executar ...
 
-@pytest.mark.django.db
+
+@pytest.mark.django_db
 def test_criar_vereador():
 
     ver = Usuario_saap.busca_username('vereadorteste')
     if ver.count() >= 1:
         ver[1].delete()
-    else:
-        #do nothing
-    #endif
 
     vereador = OrganizadorGabinete()
     vereador.first_name = 'Vereador'
@@ -90,7 +88,7 @@ def test_criar_vereador():
 
     assert verificador.count() == 1
 
-@pytest.mark,django.db
+@pytest.mark.django_db
 def test_deletar_vereador():
 
         ver = Usuario_saap.busca_username('vereadorteste')
@@ -100,12 +98,21 @@ def test_deletar_vereador():
             assert ver.count() == 0
         else:
             vereador = OrganizadorGabinete()
+            vereador.first_name = 'Vereador'
+            vereador.last_name = 'Tal'
             vereador.username = 'vereadorteste'
+            vereador.email = 'email@example.com'
+            vereador.set_password('12345678')
+            vereador.data_de_nascimento = '1990-10-10'
+            vereador.sexo = 'Masculino'
+            vereador.municipio = 'Brasilia'
+            vereador.uf = 'DF'
+            vereador.gabinete = Gabinete_saap()
             vereador.save()
 
             ver = Usuario_saap.busca_username('vereadorteste')
 
-            if ver.count() = 1:
+            if ver.count() == 1:
                 vereador.delete()
                 ver = Usuario_saap.busca_username('vereadorteste')
 
