@@ -190,9 +190,20 @@ class AtualizaContato(View):
 
     def post(self, request):
 
-        campos = capturar_campos(request)
+        campos_validados = checar_campos([request.POST['nome'], \
+            request.POST['data_de_nascimento'], request.POST['telefone'], \
+            request.POST['sexo'], request.POST['celular'], request.POST['cpf'],\
+            request.POST['fax'], request.POST['rg'], request.POST['endereco'], \
+            request.POST['cidade'], request.POST['estado'], \
+            request.POST['cep'], request.POST['email'], request.POST['grupo'], \
+            request.POST['titulo'], request.POST['titulo_de_eleitor'], \
+            request.POST['profissao'], request.POST['zona'], request.POST['cargo'], \
+            request.POST['secao'], request.POST['empresa'], \
+            request.POST['dependente_nome'], request.POST['dependente_aniversario'], \
+            request.POST['dependente_parentesco'], request.POST['dependente_partido'],\
+            request.POST['dependente_data_filiacao'], request.POST['busca_email']])
 
-        if checar_vazio(campos) :
+        if campos_validados is True:
 
             nome = request.POST['nome']
             data_de_nascimento = request.POST['data_de_nascimento']
@@ -255,8 +266,13 @@ class AtualizaContato(View):
             lista_contatos = list(contatos)
             response = render(request,'contato.html',locals())
         else:
-            messages.error(request,'Preencha todos os campos!')
-            response = render(request,'atualiza_contato.html')
+            organizador = OrganizadorContatos.objects.get(username=request.\
+                user.username)
+            contatos = organizador.contatos.all()
+            lista_contatos = list(contatos)
+            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+                preenchido!' % campos_cadastrar_contato[campos_validados], \
+                'atualiza_contato.html', {'data':data})
 
         return response
 

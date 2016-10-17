@@ -6,6 +6,13 @@
 
     <div class="row">
         <div class="col s12 offset-m2 m8 offset-l1 l10">
+          {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
           <form action="{% url 'atualiza_contato' %}" method='POST'>
             {% csrf_token %}
                 <input type="hidden" name="next_url" value="{{next_url}}">
@@ -25,7 +32,7 @@
 
         <div class="input-field col s7">
           <i class="material-icons prefix" style="color:green">account_circle</i>
-          <input placeholder="Carla Rocha" id="nome" name="" type="text" class="validate">
+          <input placeholder="Carla Rocha" id="nome" name="nome" type="text" class="validate">
           <label for="nome">Nome</label>
         </div>
 
@@ -189,13 +196,6 @@
                       <button class="btn waves-effect waves-light saap-dark-green " type="submit">Confirmar</button>
                     </div>
             </form>
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
         </div>
     </div>
 </div>
