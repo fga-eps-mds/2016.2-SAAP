@@ -86,18 +86,18 @@ filiacao']
 
                     else:
                         return render_mensagem_erro(request, 'Formato de data \
-                            inválido (AAAA-MM-DD) no campo "Data de Filiação do \
-                            Dependente"!', 'cadastro_contato.html', {'data':data})
+                            inválido (AAAA-MM-DD) no campo Data de Filiação do \
+                            Dependente!', 'cadastro_contato.html', {'data':data})
                 else:
                     return render_mensagem_erro(request, 'Formato de data \
-                        inválido (AAAA-MM-DD) no campo "Aniversário do \
-                        Dependente"!', 'cadastro_contato.html', {'data':data})
+                        inválido (AAAA-MM-DD) no campo Aniversário do \
+                        Dependente!', 'cadastro_contato.html', {'data':data})
             else:
                 return render_mensagem_erro(request, 'Formato de data \
-                    inválido (AAAA-MM-DD) no campo "Data de Nascimento"!',\
+                    inválido (AAAA-MM-DD) no campo Data de Nascimento!',\
                     'cadastro_contato.html', {'data':data})
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+            response = render_mensagem_erro(request, 'O campo %s não foi \
                 preenchido!' % campos_cadastrar_contato[campos_validados], \
                 'cadastro_contato.html', {'data':data})
 
@@ -155,7 +155,7 @@ class AtualizaContato(View):
 
             response = render_contatos_tickets(request)
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+            response = render_mensagem_erro(request, 'O campo %s não foi \
                 preenchido!' % campos_cadastrar_contato[campos_validados], \
                 'atualiza_contato.html', {'data':data})
 
@@ -237,7 +237,7 @@ class TicketView(View):
                 response = render(request, 'perfil.html')
 
         else:
-            messages.error(request, 'O campo "%s" não foi preenchido!' \
+            messages.error(request, 'O campo %s não foi preenchido!' \
                 % campos_ticket[campos_validados])
             organizadores = OrganizadorContatos.objects.all()
             lista_organizadores = list(organizadores)
@@ -393,6 +393,7 @@ class EnviarCartaView(View):
         return enviar_carta_email(request, carta)
 
 
+
 class BuscaContatosView(ListView):
     http_method_names = [u'post']
 
@@ -546,3 +547,96 @@ class AdicionarContatoAoGrupo(View):
             grupo.contatos.add(contato)
 
         return redirect('/')
+
+class GerarOficioView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
+            user.username)
+
+        if tipo_usuario.count():
+            response = render(request, 'gerar_oficio.html')
+
+        else:
+            response = redirect('/')
+
+        return response
+
+    def post(self, request):
+
+        data = {}
+        data['remetente'] = request.POST['remetente']
+        data['forma_tratamento'] = request.POST['forma_tratamento']
+        data['destinatario'] = request.POST['destinatario']
+        data['corpo_texto_doc'] = request.POST['corpo_texto_doc']
+        data['campos_forma_tratamento'] = ['Senhor(a)', 'Doutor(a)']
+
+        campos_validados = checar_campos([request.POST['remetente'], \
+            request.POST['forma_tratamento'], request.POST['destinatario'], \
+            request.POST['corpo_texto_doc']])
+
+        if campos_validados is True:
+
+            oficio = Oficio()
+            oficio.remetente = request.POST['remetente']
+            oficio.destinatario = request.POST['destinatario']
+            oficio.corpo_texto_doc = request.POST['corpo_texto_doc']
+            oficio.forma_tratamento = request.POST['forma_tratamento']
+            oficio.data = datetime.now()
+            oficio.save()
+
+            organizador = OrganizadorContatos.objects.get(username=request.\
+                user.username)
+            organizador = OrganizadorContatos.objects.get(username=request.user.username)
+            organizador.oficio.add(oficio)
+            response = render(request, 'oficio.html')
+
+        else:
+            messages.error(request, 'O campo "%s" não foi preenchido!'\
+            % campos_enviar_oficio[campos_validados])
+
+            response = render(request, 'gerar_oficio.html', locals())
+
+        return response
+
+
+class OficioView(View):
+     http_method_names = [u'get', u'post']
+
+     def get(self, request):
+        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
+            user.username)
+        if tipo_usuario.count():
+            organizador = OrganizadorContatos.objects.get(username=request.user.username)
+            oficio = organizador.oficio.all()
+            lista_oficio = list(oficio)
+            response = render(request, 'oficio.html', locals())
+        else:
+            response = redirect('/')
+
+        return response
+
+
+class DeletarOficioView(View):
+    http_method_names = [u'get']
+
+    def get(self,request,pk):
+        oficio = Oficio.objects.get(id=pk)
+        oficio.delete()
+        return redirect('/oficio/')
+
+class GerarPDFOficioView(View):
+    http_method_names = [u'get']
+
+    def get(self, request, pk):
+        oficio = Oficio.objects.get(id=pk)
+        return gerar_pdf_oficio(oficio)
+
+class EnviarOficioView(View):
+    http_method_names = [u'post']
+
+    def post(self, request, pk):
+        oficio = Oficio.objects.get(id=pk)
+        return enviar_oficio_email(request, oficio)
+

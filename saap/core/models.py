@@ -91,18 +91,18 @@ class Boletim(models.Model):
 
 class Oficio(models.Model):
 
-    tipo_documento = models.CharField(max_length=100)
     remetente = models.CharField(max_length=100)
     destinatario = models.CharField(max_length=100)
     titulo_documento = models.CharField(max_length=100)
     corpo_texto_doc = models.CharField(max_length=1000000)
     data = models.DateField('data', auto_now=True)
+    forma_tratamento = models.CharField(max_length=30)
 
     @classmethod
     def busca_por_titulo(cls, titulo_doc):
         return Oficio.objects.filter(titulo_documento__startswith=titulo_doc)
 
-class Carta(models.Model):
+class Template(models.Model):
 
     nome_remetente = models.CharField(max_length=30)
     municipio_remetente = models.CharField(max_length=30)
@@ -111,7 +111,7 @@ class Carta(models.Model):
     texto = models.CharField(max_length=1500)
     data = models.DateField('data', auto_now=True)
 
-class Template(models.Model):
+class Carta(models.Model):
 
     nome_remetente = models.CharField(max_length=30)
     municipio_remetente = models.CharField(max_length=30)

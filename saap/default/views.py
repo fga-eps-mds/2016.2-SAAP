@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from autenticacao.models import OrganizadorContatos
 from django.contrib import messages
 from autenticacao.models import *
-from core.models import Carta
+from core.models import *
 
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
@@ -43,6 +43,7 @@ campos_cadastrar_contato = ["Nome", "Data de Nascimento", "Telefone \
     "Partido do Dependente", "Data de Filiação do Dependente", "E-mail do contato"]
 campos_enviar_carta = ["Nome do remetente", "Município do remetente", \
     "Nome do destinatário", "Forma de tratamento", "Mensagem"]
+campos_enviar_oficio = ["Nome do remetente", "Nome do destinatario", "Forma de tratamento", "Mensagem"]
 
 def checar_data(data):
     partes_data = data.split("-")
@@ -237,7 +238,58 @@ def gerar_pdf_carta(carta):
     with fs.open("carta.pdf") as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="carta.pdf"'
+    return response
+
+def gerar_pdf_oficio(oficio):
+
+    doc = SimpleDocTemplate("/tmp/oficio.pdf")
+    styles = getSampleStyleSheet()
+
+    corpo_texto_doc = oficio.corpo_texto_doc
+    corpo_texto_doc = corpo_texto_doc.replace('\n', '<br/>')
+
+    Story=[]
+
+    now = datetime.now()
+
+    styles=getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+
+    Story.append(Spacer(1, 24))
+
+    ptext = '<font size=12>Oficio nº __ , %s </font>' % (now.year)
+    Story.append(Paragraph(ptext, styles["Normal"]))
+
+    Story.append(Spacer(1, 24))
+
+    ptext = '<font size=12>À Gabinete </font>'
+    Story.append(Paragraph(ptext, styles["Normal"]))
+
+    Story.append(Spacer(1, 12))
+
+    ptext = '<font size=12>Prezado %s %s, %s</font>' % (oficio.forma_tratamento, oficio.destinatario,oficio.corpo_texto_doc)
+    Story.append(Paragraph(ptext, styles["Justify"]))
+
+    Story.append(Spacer(1, 36))
+
+    ptext = '<font size=12>Atenciosamente,</font>'
+    Story.append(Paragraph(ptext, styles["Normal"]))
+
+    Story.append(Spacer(1, 12))
+
+    ptext = '<font size=12>%s, %s/%s/%s</font>' % (oficio.remetente, now.day, now.month, now.year)
+    Story.append(Paragraph(ptext, styles["Normal"]))
+
+    Story.append(Spacer(1, 12))
+
+    doc.build(Story)
+
+    fs = FileSystemStorage("/tmp")
+    with fs.open("oficio.pdf") as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="oficio.pdf"'
         return response
+
 
 def enviar_carta_email(request, carta):
 
@@ -251,3 +303,14 @@ def enviar_carta_email(request, carta):
     email.send()
 
     return redirect('/cartas/', messages.success(request, 'Carta enviada por e-mail com sucesso!'))
+
+def enviar_oficio_email(request, oficio):
+    email = EmailMessage('Oficio de ' + oficio.remetente,
+           'Hoje, dia %s/%s/%s\n\n\nPrezado %s %s:\n\n%s\n\n\nAtenciosamente,\
+            \n\n%s' % (oficio.data.day,oficio.data.month,oficio.data.year,\
+            oficio.forma_tratamento, oficio.destinatario, \
+            oficio.corpo_texto_doc, oficio.remetente),
+        to=[request.POST['email_oficio']])
+    email.send()
+
+    return redirect('/oficio/', messages.success(request, 'Oficio enviado por e-mail com sucesso!'))
