@@ -94,9 +94,11 @@ class RegistroCidadaoView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        campos_validados = checar_campos_registro(request)
+        validado = checar_validacoes_usuario(request, request.POST\
+            ['data_de_nascimento'], request.POST['username'], {'data':data},\
+            'cadastro.html')
 
-        if campos_validados:
+        if validado is True:
 
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
@@ -122,32 +124,22 @@ class RegistroCidadaoView(View):
             municipio = request.POST['municipio']
             uf = request.POST['uf']
 
-            if checar_data(data_de_nascimento):
+            user = Cidadao()
+            user.first_name = first_name
+            user.last_name = last_name
+            user.username = username
+            user.email = email
+            user.set_password(password)
+            user.data_de_nascimento = data_de_nascimento
+            user.sexo = sexo
+            user.municipio = municipio
+            user.uf = uf
+            user.save()
+            login(request, user)
+            response = render(request, 'perfil.html')
 
-                if checar_existe_usuario(username):
-                    user = Cidadao()
-                    user.first_name = first_name
-                    user.last_name = last_name
-                    user.username = username
-                    user.email = email
-                    user.set_password(password)
-                    user.data_de_nascimento = data_de_nascimento
-                    user.sexo = sexo
-                    user.municipio = municipio
-                    user.uf = uf
-                    user.save()
-                    login(request, user)
-                    response = render(request, 'perfil.html')
-                else:
-                    response = render_mensagem_erro(request, 'Já existe um \
-                        usuário com esse "Nome de Usuário"!', 'cadastro.html', {'data':data})
-            else:
-                response = render_mensagem_erro(request, 'Formato de data \
-                    inválido (AAAA-MM-DD)!', 'cadastro.html', {'data':data})
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
-                preenchido!' % campos_cadastro[campos_validados], \
-                'cadastro.html', {'data':data})
+            response = validado
 
         return response
 
@@ -170,9 +162,11 @@ class RegistroOrganizadorView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        campos_validados = checar_campos_registro(request)
+        validado = checar_validacoes_usuario(request, request.POST\
+            ['data_de_nascimento'], request.POST['username'], {'data':data},\
+            'criar_organizador.html')
 
-        if campos_validados:
+        if validado is True:
 
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
@@ -198,31 +192,21 @@ class RegistroOrganizadorView(View):
             municipio = request.POST['municipio']
             uf = request.POST['uf']
 
-            if checar_data(data_de_nascimento):
+            user = OrganizadorContatos()
+            user.first_name = first_name
+            user.last_name = last_name
+            user.username = username
+            user.email = email
+            user.set_password(password)
+            user.data_de_nascimento = data_de_nascimento
+            user.sexo = sexo
+            user.municipio = municipio
+            user.uf = uf
+            user.save()
+            response = render(request, 'login.html')
 
-                if checar_existe_usuario(username):
-                    user = OrganizadorContatos()
-                    user.first_name = first_name
-                    user.last_name = last_name
-                    user.username = username
-                    user.email = email
-                    user.set_password(password)
-                    user.data_de_nascimento = data_de_nascimento
-                    user.sexo = sexo
-                    user.municipio = municipio
-                    user.uf = uf
-                    user.save()
-                    response = render(request, 'login.html')
-                else:
-                    response = render_mensagem_erro(request, 'Já existe um \
-                        usuário com esse "Nome de Usuário"!', 'criar_organizador.html', {'data':data})
-            else:
-                response = render_mensagem_erro(request, 'Formato de data \
-                    inválido (AAAA-MM-DD)!', 'criar_organizador.html', {'data':data})
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
-                preenchido!' % campos_cadastro[campos_validados], \
-                'criar_organizador.html', {'data':data})
+            response = validado
 
         return response
 
