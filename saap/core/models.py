@@ -61,6 +61,11 @@ class Oficio(models.Model):
     titulo_documento = models.CharField(max_length=100)
     corpo_texto_doc = models.CharField(max_length=1000000)
 
+    @classmethod
+    def busca_por_titulo(titulo_doc):
+        return Oficio.objects.filter(titulo_documento__startswith=titulo_doc)
+
+
 class Template(models.Model):
 
     titulo_template = models.CharField(max_length=100)
