@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
-from core.models import Contato, Ticket, Documento, Boletim, Template
+from core.models import Contato, Ticket, Oficio, Boletim, Template
 
 
 # Create your models here.
@@ -54,5 +54,5 @@ class OrganizadorGabinete(Usuario_saap):
     gabinete = Gabinete_saap()
     tickets = models.ManyToManyField(Ticket)
     template = models.ManyToManyField(Template)
-    documento = models.ManyToManyField(Documento)
+    documento = models.ManyToManyField(Oficio)
     boletim = models.ManyToManyField(Boletim)
