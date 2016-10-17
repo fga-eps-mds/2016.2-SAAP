@@ -102,19 +102,17 @@ class RegistroCidadaoView(View):
             last_name = request.POST['last_name']
             username = request.POST['username']
             email = checar_confirmacao(request.POST['email'], request.POST['confirmacao_email'])
-            if email is True:
-                email = request.POST['email']
-            else:
+            if email is False:
                 return render_mensagem_erro(request, 'O e-mail informado é \
                     diferente da confirmação de e-mail! Digite novamente.', \
                     'cadastro.html', {'data':data})
+            email = request.POST['email']
             password = checar_confirmacao(request.POST['password'], request.POST['confirmacao_password'])
-            if password is True:
-                password = request.POST['password']
-            else:
+            if password is False:
                 return render_mensagem_erro(request, 'A senha informada é \
                     diferente da confirmação de senha! Digite novamente.', \
                     'cadastro.html', {'data':data})
+            password = request.POST['password']
             data_de_nascimento = request.POST['data_de_nascimento']
             sexo = request.POST['sexo']
             municipio = request.POST['municipio']
@@ -122,8 +120,7 @@ class RegistroCidadaoView(View):
 
             if checar_data(data_de_nascimento) :
 
-                if Cidadao.get_usuario_por_username(username).count() == 0 and \
-                    OrganizadorContatos.get_usuario_por_username(username).count() == 0:
+                if checar_existe_usuario(username):
                     user = Cidadao()
                     user.first_name = first_name
                     user.last_name = last_name
@@ -177,19 +174,17 @@ class RegistroOrganizadorView(View):
             last_name = request.POST['last_name']
             username = request.POST['username']
             email = checar_confirmacao(request.POST['email'], request.POST['confirmacao_email'])
-            if email is True:
-                email = request.POST['email']
-            else:
+            if email is False:
                 return render_mensagem_erro(request, 'O e-mail informado é \
                     diferente da confirmação de e-mail! Digite novamente.', \
-                    'criar_organizador.html', {'data':data})
+                    'cadastro.html', {'data':data})
+            email = request.POST['email']
             password = checar_confirmacao(request.POST['password'], request.POST['confirmacao_password'])
-            if password is True:
-                password = request.POST['password']
-            else:
+            if password is False:
                 return render_mensagem_erro(request, 'A senha informada é \
                     diferente da confirmação de senha! Digite novamente.', \
-                    'criar_organizador.html', {'data':data})
+                    'cadastro.html', {'data':data})
+            password = request.POST['password']
             data_de_nascimento = request.POST['data_de_nascimento']
             sexo = request.POST['sexo']
             municipio = request.POST['municipio']
@@ -197,8 +192,7 @@ class RegistroOrganizadorView(View):
 
             if checar_data(data_de_nascimento) :
 
-                if Cidadao.get_usuario_por_username(username).count() == 0 and \
-                    OrganizadorContatos.get_usuario_por_username(username).count() == 0:
+                if checar_existe_usuario(username):
                     user = OrganizadorContatos()
                     user.first_name = first_name
                     user.last_name = last_name

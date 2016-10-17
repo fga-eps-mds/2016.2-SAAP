@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from autenticacao.models import OrganizadorContatos
 from django.contrib import messages
+from autenticacao.models import *
 
 # Create your views here.
 
@@ -70,3 +71,11 @@ def checar_campos_registro(request):
         request.POST['municipio'], request.POST['uf']])
 
     return campos_validados
+
+def checar_existe_usuario(username):
+
+    if Cidadao.get_usuario_por_username(username).count() == 0 and \
+        OrganizadorContatos.get_usuario_por_username(username).count() == 0:
+        return True
+    else:
+        return False
