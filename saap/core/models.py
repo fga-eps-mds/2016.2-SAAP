@@ -49,10 +49,17 @@ class Ticket(models.Model):
     aprovado = models.BooleanField(default=False)
     #file = models.FileField()
 
-    # @classmethod
-    # def current_date(self):
-    #     return datetime.datetime.now()
+class Boletim(models.Model):
+    titulo_boletim = models.CharField(max_length=100)
+    corpo_texto_boletim = models.CharField(max_length= 5000)
 
+class Oficio(models.Model):
+
+    tipo_documento = models.CharField(max_length=100)
+    remetente = models.CharField(max_length=100)
+    destinatario = models.CharField(max_length=100)
+    titulo_documento = models.CharField(max_length=100)
+    corpo_texto_doc = models.CharField(max_length=1000000)
 
 class Carta(models.Model):
 
