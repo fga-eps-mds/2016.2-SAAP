@@ -36,3 +36,28 @@ def test_cria_oficio():
     busca = Oficio.busca_por_titulo('Titulo Exemplo')
 
     assert busca.count() >= 1
+
+@pytest.mark.django_db
+def test_deleta_oficio():
+
+    busca = Oficio.busca_por_titulo('Titulo Exemplo')
+    if busca.count() < 1:
+        oficio = Oficio()
+        oficio.tipo_documento = 'Carta'
+        oficio.remetente = 'email@email.com'
+        oficio.destinatario = 'exemplo@email.com'
+        oficio.titulo_documento = 'Titulo Exemplo'
+        oficio.corpo_texto_doc = 'Texto enviado para email por exemplos'
+        oficio.save()
+
+        busca = Oficio.busca_por_titulo(oficio.titulo_documento)
+
+        if busca.count() == 1:
+            busca[0].delete()
+            
+    else:
+        busca[0].delete()
+        #endif
+
+    busca = Oficio.busca_por_titulo('Titulo Exemplo')
+    assert busca.count() == 0
