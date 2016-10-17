@@ -64,28 +64,32 @@ filiacao']
 
         if campos_validados is True:
 
-            if not checar_data(request.POST['data_de_nascimento']):
+            if checar_data(request.POST['data_de_nascimento']):
+
+                if checar_data(request.POST['dependente_aniversario']):
+
+                    if checar_data(request.POST['dependente_data_filiacao']):
+
+                        contato = Contato()
+                        contato = atualizar_contato(request, contato)
+
+                        organizador = OrganizadorContatos.objects.get(\
+                            username=request.user.username)
+                        organizador.contatos.add(contato)
+                        response = render_contatos_tickets(request)
+
+                    else:
+                        return render_mensagem_erro(request, 'Formato de data \
+                            inválido (AAAA-MM-DD) no campo "Data de Filiação do \
+                            Dependente"!', 'cadastro_contato.html', {'data':data})
+                else:
+                    return render_mensagem_erro(request, 'Formato de data \
+                        inválido (AAAA-MM-DD) no campo "Aniversário do \
+                        Dependente"!', 'cadastro_contato.html', {'data':data})
+            else:
                 return render_mensagem_erro(request, 'Formato de data \
                     inválido (AAAA-MM-DD) no campo "Data de Nascimento"!',\
                     'cadastro_contato.html', {'data':data})
-
-            if not checar_data(request.POST['dependente_aniversario']):
-                return render_mensagem_erro(request, 'Formato de data \
-                    inválido (AAAA-MM-DD) no campo "Aniversário do \
-                    Dependente"!', 'cadastro_contato.html', {'data':data})
-
-            if not checar_data(request.POST['dependente_data_filiacao']):
-                return render_mensagem_erro(request, 'Formato de data \
-                    inválido (AAAA-MM-DD) no campo "Data de Filiação do \
-                    Dependente"!', 'cadastro_contato.html', {'data':data})
-
-            contato = Contato()
-            contato = atualizar_contato(request, contato)
-
-            organizador = OrganizadorContatos.objects.get(username=request.\
-                user.username)
-            organizador.contatos.add(contato)
-            response = render_contatos_tickets(request)
         else:
             organizador = OrganizadorContatos.objects.get(username=request.\
                 user.username)
