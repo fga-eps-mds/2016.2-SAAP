@@ -22,3 +22,17 @@ def test_deleta_organizador_gabinete():
     # db_before.count() > db_after.count()
     assert db_before is not \
     None and db_after.count() is 0
+
+@pytest.mark.django_db
+def test_cria_oficio():
+    oficio = Oficio()
+    oficio.tipo_documento = 'Carta'
+    oficio.remetente = 'email@email.com'
+    oficio.destinatario = 'exemplo@email.com'
+    oficio.titulo_documento = 'Titulo Exemplo'
+    oficio.corpo_texto_doc = 'Texto enviado para email por exemplos'
+    oficio.save()
+
+    busca = Oficio.busca_por_titulo('Titulo Exemplo')
+
+    assert busca.count() >= 1
