@@ -79,3 +79,62 @@ def checar_existe_usuario(username):
         return True
     else:
         return False
+
+def atualizar_contato(request, contato):
+
+    nome = request.POST['nome']
+    data_de_nascimento = request.POST['data_de_nascimento']
+    sexo = request.POST['sexo']
+    telefone = request.POST['telefone']
+    celular = request.POST['celular']
+    fax = request.POST['fax']
+    cpf = request.POST['cpf']
+    rg= request.POST['rg']
+    endereco = request.POST['endereco']
+    cidade = request.POST['cidade']
+    cep = request.POST['cep']
+    estado = request.POST['estado']
+    email = request.POST['email']
+    grupo = request.POST['grupo']
+    titulo = request.POST['titulo']
+    titulo_de_eleitor = request.POST['titulo_de_eleitor']
+    zona = request.POST['zona']
+    secao = request.POST['secao']
+    profissao = request.POST['profissao']
+    cargo = request.POST['cargo']
+    empresa = request.POST['empresa']
+    dependente_nome = request.POST['dependente_nome']
+    dependente_aniversario = request.POST['dependente_aniversario']
+    dependente_parentesco = request.POST['dependente_parentesco']
+    dependente_partido = request.POST['dependente_partido']
+    dependente_data_filiacao = request.POST['dependente_data_filiacao']
+
+    contato.nome = nome
+    contato.data_de_nascimento = data_de_nascimento
+    contato.sexo = sexo
+    contato.telefone = telefone
+    contato.celular = celular
+    contato.fax = fax
+    contato.cpf = cpf
+    contato.rg= rg
+    contato.endereco = endereco
+    contato.cidade = cidade
+    contato.cep = cep
+    contato.estado = estado
+    contato.email = email
+    contato.grupo = grupo
+    contato.titulo = titulo
+    contato.titulo_de_eleitor = titulo_de_eleitor
+    contato.zona = zona
+    contato.secao = secao
+    contato.profissao = profissao
+    contato.cargo = cargo
+    contato.empresa = empresa
+    contato.dependente_nome = dependente_nome
+    contato.dependente_aniversario = dependente_aniversario
+    contato.dependente_parentesco = dependente_parentesco
+    contato.dependente_partido = dependente_partido
+    contato.dependente_data_filiacao = dependente_data_filiacao
+    contato.save()
+
+    return contato
