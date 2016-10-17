@@ -70,12 +70,13 @@ filiacao']
 
                     if checar_data(request.POST['dependente_data_filiacao']):
 
-                        contato = Contato()
-                        contato = atualizar_contato(request, contato)
-
                         organizador = OrganizadorContatos.objects.get(\
                             username=request.user.username)
+
+                        contato = Contato()
+                        contato = atualizar_contato(request, contato)
                         organizador.contatos.add(contato)
+
                         response = render_contatos_tickets(request)
 
                     else:
@@ -91,10 +92,6 @@ filiacao']
                     inválido (AAAA-MM-DD) no campo "Data de Nascimento"!',\
                     'cadastro_contato.html', {'data':data})
         else:
-            organizador = OrganizadorContatos.objects.get(username=request.\
-                user.username)
-            contatos = organizador.contatos.all()
-            lista_contatos = list(contatos)
             response = render_mensagem_erro(request, 'O campo "%s" não foi \
                 preenchido!' % campos_cadastrar_contato[campos_validados], \
                 'cadastro_contato.html', {'data':data})
@@ -145,20 +142,14 @@ class AtualizaContato(View):
 
         if campos_validados is True:
 
-            busca_email = request.POST['busca_email']
             organizador = OrganizadorContatos.objects.get(username=request.user.username)
-            contato = organizador.contatos.get(email = busca_email)
 
+            busca_email = request.POST['busca_email']
+            contato = organizador.contatos.get(email = busca_email)
             contato = atualizar_contato(request, contato)
 
-            contatos = organizador.contatos.all()
-            lista_contatos = list(contatos)
-            response = render(request,'contato.html',locals())
+            response = render_contatos_tickets(request)
         else:
-            organizador = OrganizadorContatos.objects.get(username=request.\
-                user.username)
-            contatos = organizador.contatos.all()
-            lista_contatos = list(contatos)
             response = render_mensagem_erro(request, 'O campo "%s" não foi \
                 preenchido!' % campos_cadastrar_contato[campos_validados], \
                 'atualiza_contato.html', {'data':data})
