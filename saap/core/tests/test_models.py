@@ -54,7 +54,7 @@ def test_deleta_oficio():
 
         if busca.count() == 1:
             busca[0].delete()
-            
+
     else:
         busca[0].delete()
         #endif
