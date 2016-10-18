@@ -52,3 +52,9 @@ class Ticket(models.Model):
     # @classmethod
     # def current_date(self):
     #     return datetime.datetime.now()
+
+class Carta(models.Model):
+
+    nome_vereador = models.CharField(max_length=30)
+    texto = models.CharField(max_length=1500)
+    data = models.DateField('data', auto_now=True)
