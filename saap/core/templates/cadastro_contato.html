@@ -1,196 +1,232 @@
 {%  extends "base.html" %}
 {% block main_content %}
 <main>
-<br><br><br>
-<div class="container">
+  <br><br><br>
+  <div class="container">
     <div class="row">
-        <div class="col s12 offset-m2 m8 offset-l1 l10">
-          <form action="{% url 'cadastro_contato' %}" method='POST'>
-            {% csrf_token %}
-                <input type="hidden" name="next_url" value="{{next_url}}">
-                <div class="login-card hoverable center-align">
-                    <div class="card-content">
-                        <br>
-<div class="row">
+      <div class="col s12 offset-m2 m8 offset-l1 l10">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form action="{% url 'cadastro_contato' %}" method='POST'>
+          {% csrf_token %}
+          <input type="hidden" name="next_url" value="{{next_url}}">
+          <div class="login-card hoverable center-align">
+            <div class="card-content">
+              <br>
+              <div class="row">
 
-        <div class="input-field col s7">
-          <i class="material-icons prefix" style="color:green">account_circle</i>
-          <input placeholder="Carla Rocha" id="nome" name="nome" type="text" class="validate" required>
-          <label for="nome">Nome</label>
-        </div>
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">account_circle</i>
+                  <input placeholder="Carla Rocha" id="nome" name="nome" type="text" class="validate" value='{{data.nome}}'>
+                  <label for="nome">Nome</label>
+                </div>
 
-        <div class="input-field col s5">
-          <input placeholder="yyyy-mm-dd" id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate" required>
-          <label for="data_de_nascimento">Data de Nascimento</label>
-        </div>
-</div>
+                <div class="input-field col s5">
+                  <input placeholder="AAAA-MM-DD" id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate" value='{{data.data_de_nascimento}}'>
+                  <label for="data_de_nascimento">Data de Nascimento</label>
+                </div>
+              </div>
 
-<div class="row">
-  <p>&nbsp;&nbsp;&nbsp;&nbsp;Telefone</p>
-  <br>
-  <div class="input-field col s5">
-    <i class="material-icons prefix" style="color:green">contact_phone</i>
-    <input placeholder="xx-xxxx-xxxx" id="telefone" name="telefone" type="text" class="validate" required>
-    <label for="telefone">Residencial</label>
-  </div>
-  <div class="input-field col s5">
-   <select id="sexo" name="sexo">
-     <option value="" selected>Selecionar</option>
-     <option value="Masculino">Masculino</option>
-     <option value="Feminino">Feminino</option>
-   </select>
-   <label>Sexo</label>
-</div>
-</div>
-<div class="row">
-  <div class="input-field col s5">
-    <i class="material-icons prefix" style="color:green">contact_phone</i>
-    <input placeholder="xx-xxxxx-xxxx" id="celular" name="celular" type="text" class="validate" required>
-    <label for="celular">Celular</label>
-  </div>
-  <div class="input-field col s5">
-    <input placeholder="0000000" id="cpf" name="cpf" pattern="[0-9]+$" type="text" class="validate" required>
-    <label for="cpf">CPF (Somente números)</label>
-</div>
-</div>
-<div class="row">
-  <div class="input-field col s5">
-    <i class="material-icons prefix" style="color:green">contact_phone</i>
-    <input placeholder="xx-xxxxx-xxxx" id="fax" name="fax" type="text" class="validate" required>
-    <label for="fax">Fax</label>
-  </div>
-  <div class="input-field col s5">
-    <input placeholder="0000000" id="rg" name="rg" pattern="[0-9]+$" type="text" class="validate" required>
-    <label for="rg">RG (Somente números)</label>
-  </div>
-</div>
-<div class="row">
-  <p>&nbsp;&nbsp;&nbsp;&nbsp;Endereço</p>
-  <br>
-  <div class="input-field col s3">
-    <input placeholder="" id="endereco" name="endereco" type="text" class="validate" required>
-    <label for="endereco">Endereço</label>
-  </div>
-  <div class="input-field col s3">
-      <input placeholder="" id="cidade" name="cidade" type="text" class="validate" required>
-        <label for="endereco">Cidade</label>
-  </div>
-  <div class="input-field col s3">
-      <input placeholder="" id="estado" name="estado" type="text" class="validate" required>
-        <label for="estado">Estado</label>
-  </div>
-    <div class="input-field col s3">
-      <input placeholder="0000000" id="cep" name="cep" pattern="[0-9]+$" type="text" class="validate" required>
-      <label for="cep">CEP (Somente números)</label>
-  </div>
-</div>
+              <div class="row">
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;Telefone</p>
+                <br>
+                <div class="input-field col s5">
+                  <i class="material-icons prefix" style="color:green">contact_phone</i>
+                  <input placeholder="xx-xxxx-xxxx" id="telefone" name="telefone" type="text" class="validate" value='{{data.telefone}}'>
+                  <label for="telefone">Residencial</label>
+                </div>
+                <div class="input-field col s5">
+                  <select id="sexo" name="sexo">
+                    {% if data.sexo is None %}
+                      <option value="" selected >Selecionar</option>
+                      <option value="Masculino" >Masculino</option>
+                      <option value="Feminino" >Feminino</option>
+                    {% else %}
+                      <option value="" >Selecionar</option>
+                      {% for campo in data.campos_sexo %}
+                        {% if campo == data.sexo %}
+                          <option value="{{ campo }}" selected>{{ campo }}</option>
+                        {% else %}
+                          <option value="{{ campo }}" >{{ campo }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </select>
+                  <label>Sexo</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s5">
+                  <i class="material-icons prefix" style="color:green">contact_phone</i>
+                  <input placeholder="xx-xxxxx-xxxx" id="celular" name="celular" type="text" class="validate" value='{{data.celular}}'>
+                  <label for="celular">Celular</label>
+                </div>
+                <div class="input-field col s5">
+                  <input placeholder="0000000" id="cpf" name="cpf" pattern="[0-9]+$" type="text" class="validate" value='{{data.cpf}}'>
+                  <label for="cpf">CPF (Somente números)</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s5">
+                  <i class="material-icons prefix" style="color:green">contact_phone</i>
+                  <input placeholder="xx-xxxxx-xxxx" id="fax" name="fax" type="text" class="validate" value='{{data.fax}}'>
+                  <label for="fax">Fax</label>
+                </div>
+                <div class="input-field col s5">
+                  <input placeholder="0000000" id="rg" name="rg" pattern="[0-9]+$" type="text" class="validate" value='{{data.rg}}'>
+                  <label for="rg">RG (Somente números)</label>
+                </div>
+              </div>
+              <div class="row">
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;Endereço</p>
+                <br>
+                <div class="input-field col s3">
+                  <input placeholder="" id="endereco" name="endereco" type="text" class="validate" value='{{data.endereco}}'>
+                  <label for="endereco">Endereço</label>
+                </div>
+                <div class="input-field col s3">
+                  <input placeholder="" id="cidade" name="cidade" type="text" class="validate" value='{{data.cidade}}'>
+                  <label for="endereco">Cidade</label>
+                </div>
+                <div class="input-field col s3">
+                  <input placeholder="" id="estado" name="estado" type="text" class="validate" value='{{data.estado}}'>
+                  <label for="estado">Estado</label>
+                </div>
+                <div class="input-field col s3">
+                  <input placeholder="0000000" id="cep" name="cep" pattern="[0-9]+$" type="text" class="validate" value='{{data.cep}}'>
+                  <label for="cep">CEP (Somente números)</label>
+                </div>
+              </div>
 
-<div class="row">
-<div class="input-field col s7">
-          <i class="material-icons prefix" style="color:green">email</i>
-          <input placeholder="name@email.com" id="email" name="email" type="email" class="validate" required>
-          <label for="email">E-mail</label>
-</div>
-</div>
-<div class="row">
-<div class="input-field col s5">
- <select id="grupo" name="grupo">
-   <option value="" selected>Selecionar</option>
-   <option value="grupo1">Grupo 1</option>
- </select>
- <label>Grupo</label>
-</div>
-<div class="input-field col s5">
- <select id="titulo" name="titulo">
-   <option value="" selected>Selecionar</option>
-   <option value="titulo1">Título 1</option>
- </select>
- <label>Título</label>
-</div>
-</div>
-<div class="row">
-  <div class="input-field col s5">
-      <i class="material-icons prefix" style="color:green">supervisor_account</i>
-      <input placeholder="" id="titulo_de_eleitor" name="titulo_de_eleitor" type="text" class="validate" required>
-        <label for="titulo_de_eleitor">Título de Eleitor</label>
-  </div>
-  <div class="input-field col s5">
-      <input placeholder="" id="profissao" name="profissao" type="text" class="validate" required>
-        <label for="profissao">Profissão</label>
-  </div>
-</div>
-<div class="row">
-  <div class="input-field col s5">
-      <i class="material-icons prefix" style="color:green">supervisor_account</i>
-      <input placeholder="" id="zona" name="zona" type="text" class="validate" required>
-        <label for="zona">Zona</label>
-  </div>
-  <div class="input-field col s5">
-      <input placeholder="" id="cargo" name="cargo" type="text" class="validate" required>
-        <label for="cargo">Cargo</label>
-  </div>
-</div>
-<div class="row">
-  <div class="input-field col s5">
-      <i class="material-icons prefix" style="color:green">supervisor_account</i>
-      <input placeholder="" id="secao" name="secao" type="text" class="validate" required>
-        <label for="secao">Seção</label>
-  </div>
-  <div class="input-field col s5">
-      <input placeholder="" id="empresa" name="empresa" type="text" class="validate" required>
-        <label for="empresa">Empresa</label>
-  </div>
-</div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">email</i>
+                  <input placeholder="name@email.com" id="email" name="email" type="email" class="validate" value='{{data.email}}'>
+                  <label for="email">E-mail</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s5">
+                  <select id="grupo" name="grupo">
+                    {% if data.grupo is None %}
+                      <option value="" selected>Selecionar</option>
+                      <option value="Grupo 1">Grupo 1</option>
+                      <option value="Grupo 2">Grupo 2</option>
+                      <option value="Grupo 3">Grupo 3</option>
+                    {% else %}
+                      <option value="" >Selecionar</option>
+                      {% for campo in data.campos_grupos %}
+                        {% if campo == data.grupo %}
+                          <option value="{{ campo }}" selected>{{ campo }}</option>
+                        {% else %}
+                          <option value="{{ campo }}" >{{ campo }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </select>
+                  <label>Grupo</label>
+                </div>
+                <div class="input-field col s5">
+                  <select id="titulo" name="titulo">
+                    {% if data.titulo is None %}
+                      <option value="" selected>Selecionar</option>
+                      <option value="Senhor">Senhor(a)</option>
+                      <option value="Doutor">Doutor(a)</option>
+                    {% else %}
+                      <option value="" >Selecionar</option>
+                      {% for campo in data.campos_titulos %}
+                        {% if campo == data.titulo %}
+                          <option value="{{ campo }}" selected>{{ campo }}</option>
+                        {% else %}
+                          <option value="{{ campo }}" >{{ campo }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </select>
+                  <label>Título</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s5">
+                  <i class="material-icons prefix" style="color:green">supervisor_account</i>
+                  <input placeholder="" id="titulo_de_eleitor" name="titulo_de_eleitor" type="text" class="validate" value='{{data.titulo_de_eleitor}}'>
+                  <label for="titulo_de_eleitor">Título de Eleitor</label>
+                </div>
+                <div class="input-field col s5">
+                  <input placeholder="" id="profissao" name="profissao" type="text" class="validate" value='{{data.profissao}}'>
+                  <label for="profissao">Profissão</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s5">
+                  <i class="material-icons prefix" style="color:green">supervisor_account</i>
+                  <input placeholder="" id="zona" name="zona" type="text" class="validate" value='{{data.zona}}'>
+                  <label for="zona">Zona Eleitoral</label>
+                </div>
+                <div class="input-field col s5">
+                  <input placeholder="" id="cargo" name="cargo" type="text" class="validate" value='{{data.cargo}}'>
+                  <label for="cargo">Cargo</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s5">
+                  <i class="material-icons prefix" style="color:green">supervisor_account</i>
+                  <input placeholder="" id="secao" name="secao" type="text" class="validate" value='{{data.secao}}'>
+                  <label for="secao">Seção Eleitoral</label>
+                </div>
+                <div class="input-field col s5">
+                  <input placeholder="" id="empresa" name="empresa" type="text" class="validate" value='{{data.empresa}}'>
+                  <label for="empresa">Empresa</label>
+                </div>
+              </div>
 
-<div class="row">
-  <p> &nbsp;&nbsp;&nbsp;&nbsp;Dependente</p>
-  <br>
-  <div class="input-field col s3">
-      <i class="material-icons prefix" style="color:green">account_circle</i>
-      <input placeholder="Carla Rocha" id="dependente_nome" name="dependente_nome" type="text" class="validate" required>
-        <label for="dependente_nome">Nome</label>
-  </div>
-  <div class="input-field col s3">
-      <input placeholder="yyyy-mm-dd" id="dependente_aniversario" name="dependente_aniversario" type="text" class="validate" required>
-        <label for="dependente_aniversario">Aniversário</label>
-  </div>
-  <div class="input-field col s3">
-      <input placeholder="" id="dependente_parentesco" name="dependente_parentesco" type="text" class="validate" required>
-        <label for="dependente_parentesco">Parentesco</label>
-  </div>
-</div>
+              <div class="row">
+                <p> &nbsp;&nbsp;&nbsp;&nbsp;Dependente</p>
+                <br>
+                <div class="input-field col s3">
+                  <i class="material-icons prefix" style="color:green">account_circle</i>
+                  <input placeholder="Carla Rocha" id="dependente_nome" name="dependente_nome" type="text" class="validate" value='{{data.dependente_nome}}'>
+                  <label for="dependente_nome">Nome</label>
+                </div>
+                <div class="input-field col s3">
+                  <input placeholder="AAAA-MM-DD" id="dependente_aniversario" name="dependente_aniversario" type="text" class="validate" value='{{data.dependente_aniversario}}'>
+                  <label for="dependente_aniversario">Aniversário</label>
+                </div>
+                <div class="input-field col s3">
+                  <input placeholder="" id="dependente_parentesco" name="dependente_parentesco" type="text" class="validate" value='{{data.dependente_parentesco}}'>
+                  <label for="dependente_parentesco">Parentesco</label>
+                </div>
+              </div>
 
-<div class="row">
-  <div class="input-field col s5">
-      <i class="material-icons prefix" style="color:green">stars</i>
-      <input placeholder="" id="dependente_partido" name="dependente_partido" type="text" class="validate" required>
-        <label for="dependente_partido">Partido</label>
-  </div>
-</div>
-<div class="row">
-  <div class="input-field col s7">
-      <i class="material-icons prefix" style="color:green">perm_contact_calendar</i>
-      <input placeholder="yyyy-mm-dd" id="dependente_data_filiacao" name="dependente_data_filiacao" type="text" class="validate" required>
-        <label for="dependente_data_filiacao">Data da Filiação</label>
-  </div>
-</div>
+              <div class="row">
+                <div class="input-field col s5">
+                  <i class="material-icons prefix" style="color:green">stars</i>
+                  <input placeholder="" id="dependente_partido" name="dependente_partido" type="text" class="validate" value='{{data.dependente_partido}}'>
+                  <label for="dependente_partido">Partido</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">perm_contact_calendar</i>
+                  <input placeholder="AAAA-MM-DD" id="dependente_data_filiacao" name="dependente_data_filiacao" type="text" class="validate" value='{{data.dependente_data_filiacao}}'>
+                  <label for="dependente_data_filiacao">Data da Filiação</label>
+                </div>
+              </div>
 
-                    <div class="card-action right-align">
-                      <button class="btn waves-effect waves-light saap-dark-green " type="reset">Cancelar</button>
-                      <button class="btn waves-effect waves-light saap-dark-green " type="submit">Confirmar</button>
-                    </div>
+              <div class="card-action right-align">
+                <button class="btn waves-effect waves-light saap-dark-green " type="reset">Cancelar</button>
+                <button class="btn waves-effect waves-light saap-dark-green " type="submit">Confirmar</button>
+              </div>
             </form>
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+          </div>
         </div>
+      </div>
     </div>
-</div>
-</div>
-</div>
+  </div>
 </main>
 {% endblock main_content %}

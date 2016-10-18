@@ -15,11 +15,6 @@
                       <p class="text">{% trans 'Nome completo: ' %} <b>{{request.user.get_full_name}}</b></p>
                       <p class="text">{% trans 'E-mail: ' %} <b>{{request.user.email}}</b></p>
                       <br><br>
-                      <br>
-                      <div class="center-align">
-                        <a href="{% url 'excluir_conta' %}"> <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Excluir Conta</button></a>
-                      </div>
-                      <br><br><br><br>
                 </table>
               </div>
             </div>
