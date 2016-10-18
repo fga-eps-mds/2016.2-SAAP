@@ -1,71 +1,100 @@
-    {%  extends "base.html" %}
+{%  extends "base.html" %}
 {% block main_content %}
 {% load i18n %}
 <main>
-    <div class="container">
-        <div class="row">
-            <div class="col s12 offset-m2 m8 offset-l3 l6">
-                <form action="{% url 'ticket' %}" method='POST'>
-                    {% csrf_token %}
-                    <!---->
-                    <div class="login-card hoverable center-align">
-                        <div class="card-content">
-                            <div class="input-field col s12">
-                                <!--<i class="material-icons prefix">label</i>-->
+  <div class="container">
+    <div class="row">
+      <div class="col s12 offset-m2 m8 offset-l3 l6">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form action="{% url 'ticket' %}" method='POST'>
+          {% csrf_token %}
+          <!---->
+          <div class="login-card hoverable center-align">
+            <div class="card-content">
+              <div class="input-field col s12">
+                <!--<i class="material-icons prefix">label</i>-->
 
 
-<select name="nome_organizador" id="nome_organizador" required>
-<option>Nome do Organizador</option>
-{% for organizador in lista_organizadores %}
-              <option>{{ organizador.first_name }}</option>
-             {% endfor %}
-</select>
+                <select name="nome_organizador" id="nome_organizador">
+                  {% if data.nome_organizador is None %}
+                    <option value="" selected>Nome do Organizador</option>
+                    {% for organizador in lista_organizadores %}
+                      <option value="{{ organizador.first_name }}">{{ organizador.first_name }}</option>
+                    {% endfor %}
+                  {% else %}
+                    <option value="" >Nome do Organizador</option>
+                    {% for organizador in lista_organizadores %}
+                      {% if organizador.first_name == data.nome_organizador %}
+                        <option value="{{ organizador.first_name }}" selected>{{ organizador.first_name }}</option>
+                      {% else %}
+                        <option value="{{ organizador.first_name }}" >{{ organizador.first_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                </select>
 
-                                <select name="tipo_mensagem" id="tipo_mensagem" required>
-                                    <option>Tipo de ticket</option>
-                                    <option>Incidente</option>
-                                    <option>Requisição</option>
-                                    <option>Melhorias</option>
-                                </select>
+                <select name="tipo_mensagem" id="tipo_mensagem">
+                  {% if data.tipo_mensagem is None %}
+                    <option value="" selected>Tipo de Ticket</option>
+                    <option value="Incidente">Incidente</option>
+                    <option value="Requisição">Requisição</option>
+                    <option value="Melhorias">Melhorias</option>
+                  {% else %}
+                    <option value="" >Tipo de Ticket</option>
+                    {% for campo in data.campos_tipo_mensagem %}
+                      {% if campo == data.tipo_mensagem %}
+                        <option value="{{ campo }}" selected>{{ campo }}</option>
+                      {% else %}
+                        <option value="{{ campo }}" >{{ campo }}</option>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                </select>
 
-                                <!--Assunto do Ticket-->
-                                <div class="col s12">
-                                    <div class="row">
-                                        <div class="input-field col s12">
-                                            <i class="material-icons prefix">mode_edit</i>
-                                            <input id="assunto" name='assunto' type="text" class="validate" required>
-                                            <label for="assunto">Assunto</label>
-                                            <label for="assunto">Assunto</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!--Mensagem do Ticket-->
-                            <div class="col s12">
-                                    <div class="input-field col s12">
-                                        <i class="material-icons prefix">textsms</i>
-                                        <textarea id="descricao" name="descricao" class="materialize-textarea" required></textarea>
-                                        <label for="descricao">Mensagem </label>
-                                    </div>
-                            </div>
-                        </div>
-                        <!--Radio para anonimo-->
-                        <div class="input-field col s12">
-                            <p>
-                                <input name="enviar_anonimamente" type="checkbox" id="enviar_anonimamente" />
-                                <label for="enviar_anonimamente">Deseja enviar anonimamente ?</label>
-                            </p>
-                            <br>
-                            <div>
-                                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
-                            </div>
-                            <br>
-                        </div>
-                    </form>
+                <!--Assunto do Ticket-->
+                <div class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">mode_edit</i>
+                      <input id="assunto" name='assunto' type="text" class="validate" value='{{data.assunto}}'>
+                      <label for="assunto">Assunto</label>
+                      <label for="assunto">Assunto</label>
+                    </div>
+                  </div>
                 </div>
+              </div>
+
+              <!--Mensagem do Ticket-->
+              <div class="col s12">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">textsms</i>
+                  <textarea id="descricao" name="descricao" class="materialize-textarea" value='{{data.descricao}}'></textarea>
+                  <label for="descricao">Mensagem </label>
+                </div>
+              </div>
             </div>
+            <!--Radio para anonimo-->
+            <div class="input-field col s12">
+              <p>
+                <input name="enviar_anonimamente" type="checkbox" id="enviar_anonimamente" />
+                <label for="enviar_anonimamente">Deseja enviar anonimamente ?</label>
+              </p>
+              <br>
+              <div>
+                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
+              </div>
+              <br>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 </main>
 {% endblock main_content %}

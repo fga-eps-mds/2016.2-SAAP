@@ -17,10 +17,13 @@
 
 <!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
-  <li><a href="{% url 'ticket' %}"> Ticket </a></li>
-  <li><a href="{% url 'mudar_senha' %}">Mudar Senha</a></li>
-  <li class="divider"></li>
-  <li><a href="{% url 'logout' %}"> Logout </a></li>
+  {% if user.is_authenticated %}
+    <li><a href="{% url 'ticket' %}"> Ticket </a></li>
+    <li><a href="{% url 'mudar_senha' %}">Mudar Senha</a></li>
+    <li><a href="{% url 'excluir_conta' %}">Excluir Conta</a></li>
+    <li class="divider"></li>
+    <li><a href="{% url 'logout' %}"> Logout </a></li>
+  {% endif %}
 </ul>
 
 <nav>
