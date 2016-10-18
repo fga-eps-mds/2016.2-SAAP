@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from autenticacao.models import OrganizadorContatos
 from django.contrib import messages
