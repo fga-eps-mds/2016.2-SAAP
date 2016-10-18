@@ -55,6 +55,8 @@ class Ticket(models.Model):
 
 class Carta(models.Model):
 
-    nome_vereador = models.CharField(max_length=30)
+    nome_remetente = models.CharField(max_length=30)
+    nome_destinatario = models.CharField(max_length=30)
+    local = models.CharField(max_length=60)
     texto = models.CharField(max_length=1500)
     data = models.DateField('data', auto_now=True)
