@@ -3,8 +3,6 @@ from autenticacao.models import Usuario_saap
 import pytest
 # Create your tests here.
 
-
-
 @pytest.mark.django_db
 def test_busca_nome():
     u = Usuario_saap()
@@ -43,10 +41,10 @@ def test_deleta_usuario():
     # db_before.count() > db_after.count()
     assert db_before is not \
     None and db_after.count() is 0
-    
+
 @pytest.mark.django_db
 def test_busca_username():
-    
+
     u = Usuario_saap()
     u.first_name = 'test_name'
     u.last_name = 'test_last'

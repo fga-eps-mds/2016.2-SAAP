@@ -1,4 +1,4 @@
-from core.models import Ticket
+from core.models import Ticket, Carta
 import pytest
 from django.test import Client
 from autenticacao.models import OrganizadorContatos
@@ -36,4 +36,22 @@ def test_public_view_ticket():
 
     retorno = c.post('/publicar_ticket/', response,follow=True)
 
-    assert retorno.status_code == 200 
+    assert retorno.status_code == 200
+
+@pytest.mark.django_db
+def test_model_carta():
+
+    carta = Carta()
+
+    carta.nome_remetente = 'nome_teste1'
+    carta.nome_destinatario = 'nome_teste2'
+    carta.data = '2016-10-23'
+    carta.local = 'local_teste'
+    carta.assunto = 'assunto_teste'
+    carta.texto = 'texto_teste'
+
+    carta.save()
+    cartas = Carta.objects.all().count()
+
+    assert cartas >= 1
+    carta.delete()
