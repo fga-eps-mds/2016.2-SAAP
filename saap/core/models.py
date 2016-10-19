@@ -53,10 +53,12 @@ class Ticket(models.Model):
     # def current_date(self):
     #     return datetime.datetime.now()
 
+
 class Carta(models.Model):
 
     nome_remetente = models.CharField(max_length=30)
     nome_destinatario = models.CharField(max_length=30)
-    local = models.CharField(max_length=60)
-    texto = models.CharField(max_length=1500)
     data = models.DateField('data', auto_now=True)
+    local = models.CharField(max_length=60)
+    assunto = models.CharField(max_length=50)
+    texto = models.CharField(max_length=1500)
