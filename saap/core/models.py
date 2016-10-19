@@ -15,9 +15,15 @@ class Grupo(models.Model):
     def __str__(self):
         return self.nome
 
+
     @classmethod
     def filtro_data_aniversario(cls,mes_do_ano):
         return  cls.objects.filter(contatos__data_de_nascimento__month=mes_do_ano)
+
+    @classmethod
+    def filtro_nascimento(cls,mes_do_ano):
+        return  cls.objects.filter(contatos__data_de_nascimento__contains=mes_do_ano)
+
 
     @classmethod
     def filtro_cidade(cls,cidade):
@@ -27,6 +33,7 @@ class Grupo(models.Model):
     def filtro_genero(cls,sexo):
         return cls.objects.filter(contatos__sexo=sexo)
 
+
     @classmethod
     def filtro_estado(cls,estado):
         return  cls.objects.filter(contatos__estado__contains=estado)
@@ -34,6 +41,9 @@ class Grupo(models.Model):
     @classmethod
     def filtro_nome(cls,nome):
         return  cls.objects.filter(contatos__nome__contains=nome)
+
+
+
 
 class Contato(models.Model):
 
@@ -63,6 +73,7 @@ class Contato(models.Model):
     dependente_partido = models.CharField(max_length=30,default='',blank=True,null=True)
     dependente_data_filiacao = models.DateField('',blank=True,null=True)
     grupo_contato = models.CharField(max_length=30,default='',blank=True,null=True)
+
 
 class Ticket(models.Model):
 
