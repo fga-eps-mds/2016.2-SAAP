@@ -4,7 +4,7 @@
 <main>
   <div class="container">
     <div class="row">
-      <div class="col s12 offset-m2 m8 offset-l3 l6">
+      <div class="col s12 offset-m2 m8 offset-l1 l10">
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -17,18 +17,50 @@
           <div class="login-card hoverable center-align">
             <div class="card-content">
               <div class="input-field col s12">
-
                 <div class="col s12">
                   <div class="row">
+
                     <div class="input-field col s12">
                       <i class="material-icons prefix">mode_edit</i>
-                      <input id="assunto" name='assunto' type="text" class="validate" value='{{data.assunto}}'>
-                      <label for="assunto">Assunto</label>
-                      <label for="assunto">Assunto</label>
+                      <input id="nome_remetente" name='nome_remetente' type="text" class="validate" value='{{data.nome_remetente}}'>
+                      <label for="nome_remetente">Nome do remetente</label>
                     </div>
+
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">mode_edit</i>
+                      <input id="municipio_remetente" name='municipio_remetente' type="text" class="validate" value='{{data.municipio_remetente}}'>
+                      <label for="municipio_remetente">Município do remetente</label>
+                    </div>
+
+                    <div class="input-field col s8">
+                      <i class="material-icons prefix">mode_edit</i>
+                      <input id="nome_destinatario" name='nome_destinatario' type="text" class="validate" value='{{data.nome_destinatario}}'>
+                      <label for="nome_destinatario">Nome do destinatáro</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                      <select id="forma_tratamento" name="forma_tratamento">
+                        {% if data.titulo is None %}
+                          <option value="" selected>Forma de tratamento</option>
+                          <option value="Senhor(a)">Senhor(a)</option>
+                          <option value="Doutor(a)">Doutor(a)</option>
+                        {% else %}
+                          <option value="" >Selecionar</option>
+                          {% for campo in data.campos_titulos %}
+                            {% if campo == data.titulo %}
+                              <option value="{{ campo }}" selected>{{ campo }}</option>
+                            {% else %}
+                              <option value="{{ campo }}" >{{ campo }}</option>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                      </select>
+                    </div>
+
                   </div>
                 </div>
               </div>
+
 
               <div class="col s12">
                 <div class="input-field col s12">
@@ -41,7 +73,7 @@
             <div class="input-field col s12">
               <br>
               <div>
-                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
+                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Gerar carta</button>
               </div>
               <br>
             </div>
