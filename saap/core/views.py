@@ -7,6 +7,8 @@ from django.utils.translation import ugettext
 from core.models import Contato, Ticket
 from autenticacao.models import OrganizadorContatos
 from default.views import *
+from autenticacao.views import *
+from autenticacao.models import *
 
 class CadastroView(View):
     http_method_names = [u'get', u'post']
@@ -298,3 +300,16 @@ POST['nome_organizador'])
             resposta = render(request, 'vereadores.html', locals())
 
         return resposta
+
+class EnviarCartaView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
+            user.username)
+        if tipo_usuario.count():
+            response = render(request, 'enviar_carta.html')
+        else:
+            response = redirect('/')
+
+        return response

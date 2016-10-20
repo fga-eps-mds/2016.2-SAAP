@@ -1,0 +1,54 @@
+{%  extends "base.html" %}
+{% block main_content %}
+{% load i18n %}
+<main>
+  <div class="container">
+    <div class="row">
+      <div class="col s12 offset-m2 m8 offset-l3 l6">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form action="{% url 'enviar_carta' %}" method='POST'>
+          {% csrf_token %}
+          <div class="login-card hoverable center-align">
+            <div class="card-content">
+              <div class="input-field col s12">
+
+                <div class="col s12">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">mode_edit</i>
+                      <input id="assunto" name='assunto' type="text" class="validate" value='{{data.assunto}}'>
+                      <label for="assunto">Assunto</label>
+                      <label for="assunto">Assunto</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col s12">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">textsms</i>
+                  <textarea id="mensagem" name="mensagem" class="materialize-textarea" value='{{data.mensagem}}'></textarea>
+                  <label for="mensagem">Mensagem </label>
+                </div>
+              </div>
+            </div>
+            <div class="input-field col s12">
+              <br>
+              <div>
+                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
+              </div>
+              <br>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock main_content %}
