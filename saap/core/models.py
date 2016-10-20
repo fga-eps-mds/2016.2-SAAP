@@ -63,7 +63,7 @@ class Oficio(models.Model):
 
 class Carta(models.Model):
     @classmethod
-    def busca_por_titulo(titulo_doc):
+    def busca_por_titulo(cls, titulo_doc):
         return Oficio.objects.filter(titulo_documento__startswith=titulo_doc)
 
 
