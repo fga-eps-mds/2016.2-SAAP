@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.template import RequestContext
 from django.utils.translation import ugettext
 from core.models import Contato, Ticket
-from autenticacao.models import OrganizadorContatos
 from default.views import *
 from autenticacao.views import *
 from autenticacao.models import *
@@ -332,6 +331,7 @@ POST['nome_gabinete'])
 
         return resposta
 
+
 class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
@@ -657,6 +657,7 @@ class GrupoDeContatos(ListView):
     http_method_names = [u'get', u'post']
 
 
+
 class BuscaContatosView(ListView):
     http_method_names = [u'post']
 
@@ -741,3 +742,7 @@ class AdicionarContatoAoGrupo(View):
             grupo.contatos.add(contato)
 
         return redirect('/')
+
+class GrupoDeContatos(ListView):
+    http_method_names = [u'get', u'post']
+
