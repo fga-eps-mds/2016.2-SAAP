@@ -10,7 +10,7 @@ from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView,
                     GabineteView, TicketsView,
                     DeletarCartaView, GerarPDFCartaView, EnviarCartaView,
                     BuscaContatosView, CriarGrupoDeContatosView, 
-                    AdicionarContatoAoGrupo)
+                    AdicionarContatoAoGrupo,GrupoDeContatosView)
 
 urlpatterns = [
     url(r'^cadastro_contato/$', login_required(CadastroView.as_view()),
@@ -66,4 +66,6 @@ urlpatterns = [
         name='busca_contatos'),
      url(r'^adicionar_contatos/$', AdicionarContatoAoGrupo.as_view(),
         name='adicionar_contatos'),
+    url(r'^grupo_contatos/$', GrupoDeContatosView.as_view(),
+        name='grupo_contatos'),
 ]
