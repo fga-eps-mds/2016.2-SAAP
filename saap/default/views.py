@@ -25,6 +25,8 @@ campos_cadastrar_contato = ["Nome", "Data de Nascimento", "Telefone \
     "Profissão", "Zona Eleitoral", "Cargo", "Seção Eleitoral", "Empresa", \
     "Nome do Dependente", "Aniversário do Dependente", "Parentesco do Dependente", \
     "Partido do Dependente", "Data de Filiação do Dependente", "E-mail do contato"]
+campos_enviar_carta = ["Nome do remetente", "Município do remetente", \
+    "Nome do destinatário", "Forma de tratamento", "Mensagem"]
 
 def checar_data(data):
     partes_data = data.split("-")

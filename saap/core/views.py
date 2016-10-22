@@ -331,57 +331,78 @@ class EnviarCartaView(View):
         return response
 
     def post(self, request):
-        doc = SimpleDocTemplate("/tmp/carta.pdf")
-        styles = getSampleStyleSheet()
 
-        mensagem = request.POST['mensagem']
-        mensagem = mensagem.replace('\n', '<br/>')
+        data = {}
+        data['nome_remetente'] = request.POST['nome_remetente']
+        data['municipio_remetente'] = request.POST['municipio_remetente']
+        data['nome_destinatario'] = request.POST['nome_destinatario']
+        data['forma_tratamento'] = request.POST['forma_tratamento']
+        data['mensagem'] = request.POST['mensagem']
+        data['campos_forma_tratamento'] = ['Senhor(a)', 'Doutor(a)']
 
-        Story=[]
+        campos_validados = checar_campos([request.POST['nome_remetente'], \
+            request.POST['municipio_remetente'], request.POST\
+            ['nome_destinatario'], request.POST['forma_tratamento'], \
+            request.POST['mensagem']])
 
-        formatted_time = time.ctime()
-        now = datetime.now()
+        if campos_validados is True:
 
-        styles=getSampleStyleSheet()
-        styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+            doc = SimpleDocTemplate("/tmp/carta.pdf")
+            styles = getSampleStyleSheet()
 
-        ptext = '<font size=12>%s, %s/%s/%s</font>' % (request.POST['municipio_remetente'], now.day, now.month, now.year)
-        Story.append(Paragraph(ptext, styles["Normal"]))
+            mensagem = request.POST['mensagem']
+            mensagem = mensagem.replace('\n', '<br/>')
 
-        Story.append(Spacer(1, 24))
+            Story=[]
 
-        ptext = '<font size=12>%s %s,</font>' % (request.POST['forma_tratamento'], request.POST['nome_destinatario'])
-        Story.append(Paragraph(ptext, styles["Normal"]))
-        #.split()[0].strip()
+            formatted_time = time.ctime()
+            now = datetime.now()
 
-        Story.append(Spacer(1, 36))
+            styles=getSampleStyleSheet()
+            styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
 
-        ptext = '<font size=12>Prezado %s:</font>' % request.POST['forma_tratamento']
-        Story.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<font size=12>%s, %s/%s/%s</font>' % (request.POST['municipio_remetente'], now.day, now.month, now.year)
+            Story.append(Paragraph(ptext, styles["Normal"]))
 
-        Story.append(Spacer(1, 12))
+            Story.append(Spacer(1, 24))
 
-        ptext = '<font size=12>%s</font>' % mensagem
-        Story.append(Paragraph(ptext, styles["Justify"]))
+            ptext = '<font size=12>%s %s,</font>' % (request.POST['forma_tratamento'], request.POST['nome_destinatario'])
+            Story.append(Paragraph(ptext, styles["Normal"]))
+            #.split()[0].strip()
 
-        Story.append(Spacer(1, 36))
+            Story.append(Spacer(1, 36))
 
-        ptext = '<font size=12>Atenciosamente,</font>'
-        Story.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<font size=12>Prezado %s:</font>' % request.POST['forma_tratamento']
+            Story.append(Paragraph(ptext, styles["Normal"]))
 
-        Story.append(Spacer(1, 12))
+            Story.append(Spacer(1, 12))
 
-        ptext = '<font size=12>%s</font>' % request.POST['nome_remetente']
-        Story.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<font size=12>%s</font>' % mensagem
+            Story.append(Paragraph(ptext, styles["Justify"]))
 
-        Story.append(Spacer(1, 12))
+            Story.append(Spacer(1, 36))
 
-        doc.build(Story)
+            ptext = '<font size=12>Atenciosamente,</font>'
+            Story.append(Paragraph(ptext, styles["Normal"]))
 
-        fs = FileSystemStorage("/tmp")
-        with fs.open("carta.pdf") as pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="carta.pdf"'
-            return response
+            Story.append(Spacer(1, 12))
+
+            ptext = '<font size=12>%s</font>' % request.POST['nome_remetente']
+            Story.append(Paragraph(ptext, styles["Normal"]))
+
+            Story.append(Spacer(1, 12))
+
+            doc.build(Story)
+
+            fs = FileSystemStorage("/tmp")
+            with fs.open("carta.pdf") as pdf:
+                response = HttpResponse(pdf, content_type='application/pdf')
+                response['Content-Disposition'] = 'attachment; filename="carta.pdf"'
+                return response
+
+        else:
+            messages.error(request, 'O campo "%s" não foi preenchido!' \
+                % campos_enviar_carta[campos_validados])
+            response = render(request, 'enviar_carta.html', locals())
 
         return response

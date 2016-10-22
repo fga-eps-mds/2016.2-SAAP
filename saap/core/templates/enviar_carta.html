@@ -40,14 +40,14 @@
 
                     <div class="input-field col s4">
                       <select id="forma_tratamento" name="forma_tratamento">
-                        {% if data.titulo is None %}
+                        {% if data.forma_tratamento is None %}
                           <option value="" selected>Forma de tratamento</option>
                           <option value="Senhor(a)">Senhor(a)</option>
                           <option value="Doutor(a)">Doutor(a)</option>
                         {% else %}
-                          <option value="" >Selecionar</option>
-                          {% for campo in data.campos_titulos %}
-                            {% if campo == data.titulo %}
+                          <option value="" >Forma de tratamento</option>
+                          {% for campo in data.campos_forma_tratamento %}
+                            {% if campo == data.forma_tratamento %}
                               <option value="{{ campo }}" selected>{{ campo }}</option>
                             {% else %}
                               <option value="{{ campo }}" >{{ campo }}</option>
