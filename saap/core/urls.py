@@ -4,14 +4,12 @@ from django.contrib.auth.decorators import login_required
 from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView,
                     AtualizaContato, GabinetesView, PublicarTicketView,
                     DeletarTicketView, GerarCartaView, CartasView,
+                    BuscaContatosView, CriarGrupoDeContatosView,
+                    AdicionarContatoAoGrupo, OficioView,DeletarOficioView, 
+                    GerarOficioView, GerarPDFOficioView, EnviarOficioView,
+                    GabineteView, TicketsView,
                     DeletarCartaView, GerarPDFCartaView, EnviarCartaView,
-                    BuscaContatosView, CriarGrupoDeContatosView, 
-                    AdicionarContatoAoGrupo,GrupoDeContatosView,
-                    GrupoDeContatosView, CriarGrupoDeContatosView,
-                    BuscaContatosView, CriarGrupoDeContatosView)
-                    AdicionarContatoAoGrupo,
-                    DeletarCartaView, GerarPDFCartaView, OficioView,
-                    GabineteView, TicketsView)
+                    GrupoDeContatosView)
 
 urlpatterns = [
     url(r'^cadastro_contato/$', login_required(CadastroView.as_view()),
@@ -65,4 +63,6 @@ urlpatterns = [
         name='gabinete'),
     url(r'^gabinete/tickets/$', login_required(TicketsView.as_view()),
         name='tickets'),
+    url(r'^grupo_contatos/$', GrupoDeContatosView.as_view(),
+        name='grupo_contatos'),
 ]
