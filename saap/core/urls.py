@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView,
                     AtualizaContato, VereadoresView, PublicarTicketView,
                     DeletarTicketView, GerarCartaView, CartasView,
-                    DeletarCartaView, GerarPDFCartaView, EnviarCartaView)
+                    DeletarCartaView, GerarPDFCartaView, EnviarCartaView, OficioView)
 
 urlpatterns = [
     url(r'^cadastro_contato/$', login_required(CadastroView.as_view()),
@@ -33,4 +33,6 @@ urlpatterns = [
         name='gerar_pdf'),
     url(r'^enviar_carta/(?P<pk>[0-9]+)/$', login_required(EnviarCartaView.as_view()),
         name='enviar_carta'),
+    url(r'^oficio/$', OficioView.as_view(),
+        name = 'oficio')
 ]
