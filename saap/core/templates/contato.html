@@ -7,7 +7,7 @@
     <div class="col s6 m6 l6">
       <div class="row">
         <br>
-        <div class="col s5 m5 l5"
+        <div class="col s4 m4 l4"
           <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Cadastrar contato</button></a>
         </div>
         <div class="col s7 m7 l7"
@@ -97,20 +97,15 @@
 
     <div class="col s6 m6 l6 ">
       <ul class="collection">
-        <p>Tickets Recebidos</p>
-        {% for ticket in lista_tickets %}
+        <p>Grupos de contatos</p>
+        {% for grupo in lista_grupos %}
         <li class="collection-item avatar">
           <img src="../static/images/contato.png" alt="" class="circle"></img>
-          <span class="title">{{ ticket.remetente }}</span>
-          <form action="/publicar_ticket/" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="ticket_id" value="{{ticket.id}}">
-            <a href="/deletar_ticket/{{ticket.id}}"class="btn-floating btn-large waves-effect waves-light saap-dark-green right"><i class="material-icons">delete</i></a>
-            {% if ticket.aprovado == False%}<button class="btn-floating btn-large waves-effect waves-light saap-dark-green right" type="submit"><i class="material-icons">done</i></button>{% endif %}
-          </form>
-          <p> {{ ticket.titulo }}<br>
-            {{ ticket.tipo_ticket }}<br>
-            {{ ticket.corpo_texto}}<br>
+          <span class="title">{{ grupo.nome }}</span>
+          <p>
+            {% for contato in lista_contatos_grupo %}
+              {{ contato.nome }}<br>
+            {% endfor %}
           </p>
           <i class="material-icons">grade</i>
         </li>
