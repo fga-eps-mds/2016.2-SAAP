@@ -415,7 +415,7 @@ class OficioView(View):
         campos_validados = checar_campos(request.POST['remetente'], \
             request.POST['destinatario'], request.POST['tipo_documento'], \
             request.POST['titulo_documento'], request.POST['corpo_texto_doc'],\
-            )
+        )
 
         if campos_validados == True:
             novo_oficio = Oficio()
