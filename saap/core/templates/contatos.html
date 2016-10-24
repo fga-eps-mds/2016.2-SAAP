@@ -422,6 +422,7 @@
       </ul>
     </div>
 
+
     <div class="col s6 m6 l6">
 
      {% for grupo in lista_grupo %}
@@ -481,6 +482,19 @@
  
             
           </li>
+
+
+        {% for grupo in lista_grupos %}
+        <li class="collection-item avatar">
+          <img src="../static/images/contato.png" alt="" class="circle"></img>
+          <span class="title">{{ grupo.nome }}</span>
+          <p>
+            {% for contato in lista_contatos_grupo %}
+              {{ contato.nome }}<br>
+            {% endfor %}
+          </p>
+          <i class="material-icons">grade</i>
+        </li>
 
         {% endfor %}
 
