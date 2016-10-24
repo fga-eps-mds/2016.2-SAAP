@@ -745,12 +745,12 @@ class AdicionarContatoAoGrupo(View):
 class GrupoDeContatos(ListView):
     http_method_names = [u'get', u'post']
 
-=======
+
 class GrupoDeContatosView(ListView):
     http_method_names = [u'get', u'post']
 
     model = Contato #grupo
-    template_name = 'grupo_de_contatos.html'
+    template_name = 'contato.html'
 
     def getGrupo (self, **kwargs):
         return Contato.objects(grupo)
@@ -769,4 +769,43 @@ class GrupoDeContatosView(ListView):
 
     def getUF (self, **kwargs):
         return Contato.objects.filter(UF)
+
+
+    def post(self, request):
+        busca = str(request.POST['contato']).lower()
+        query = request.POST['pesquisa']
+
+        if busca == 'cidade':
+            resposta = Grupo.filtro_cidade(query)
+        elif busca == 'genero':
+            resposta = Grupo.filtro_genero(query)
+        elif busca == 'estado':
+            resposta = Grupo.filtro_estado(query)
+        elif busca == 'data_aniversario':
+            resposta = Grupo.filtro_data_aniversario(query)
+        elif busca == 'nome':
+            resposta = Grupo.filtro_nome(query)
+        else:
+            resposta = Grupo.objects.filter(
+            Q(contatos__nome__contains=query) |
+            Q(contatos__sexo = query) |
+            Q(contatos__estado__contains=query) |
+            Q(contatos__cidade__contains=query) |
+            Q(contatos__data_de_nascimento__contains=query)
+            )
+
+        return render(request, 'contato.html', resposta)
+
+class CriarGrupoDeContatosView(View):
+
+    http_method_names = [u'get', u'post']
+
+    def post(self,request):
+
+        nome_grupo = request.POST['nome_grupo']
+        novo_grupo = Grupo()
+        novo_grupo.nome = nome_grupo
+        novo_grupo.save()
+
+        return render(request,'contato.html')
 
