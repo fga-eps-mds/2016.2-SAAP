@@ -10,6 +10,7 @@ from default.views import *
 from autenticacao.views import *
 from autenticacao.models import *
 from django.views.generic.list import ListView
+from django.db.models import Q
 
 class CadastroView(View):
     http_method_names = [u'get', u'post']
@@ -302,6 +303,7 @@ POST['nome_organizador'])
 
         return resposta
 
+<<<<<<< dfea3b1d71e98e1f2bf9c850655c564fda863e51
 class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
@@ -391,26 +393,33 @@ class EnviarCartaView(View):
         return enviar_carta_email(request, carta)
 
 
-class GrupoDeContatosView(ListView):
+class CriarGrupoDeContatosView(ListView):
     http_method_names = [u'get', u'post']
 
     model = Contato #grupo
     template_name = 'grupo_de_contatos.html'
 
-    def getGrupo (self, **kwargs):
-        return Contato.objects(grupo)
+    def post(self, request):
+        busca = str(request.POST['grupo_contatos']).lower()
+        query = request.POST['pesquisa']
 
-    def getData (self, **kwargs):
-        return Contato.objects.filter(data_de_nascimento)
-
-    def getBairro (self, **kwargs):
-        return Contato.objects.filter(bairro)
-
-    def getCidade(self, **kwargs):
-        return Contato.objects.filter(cidade)
-
-    def getCEP(self, **kwargs):
-        return Contato.objects.filter(CEP)
-
-    def getUF (self, **kwargs):
-        return Contato.objects.filter(UF)
+        if busca == 'cidade':
+            resposta = Grupo.filtro_cidade(query)
+        elif busca == 'genero':
+            resposta = Grupo.filtro_genero(query)
+        elif busca == 'estado':
+            resposta = Grupo.filtro_estado(query)
+        elif busca == 'data_aniversario':
+            resposta = Grupo.filtro_data_aniversario(query)
+        elif busca == 'nome':
+            resposta = Grupo.filtro_nome(query)
+        else:
+            resposta = Grupo.objects.filter(
+            Q(contatos__nome__contains=query) |
+            Q(contatos__sexo = query) |
+            Q(contatos__estado__contains=query) |
+            Q(contatos__cidade__contains=query) |
+            Q(contatos__data_de_nascimento__contains=query)
+            )
+                
+        return render(request, 'grupo_contatos.html', resposta)
