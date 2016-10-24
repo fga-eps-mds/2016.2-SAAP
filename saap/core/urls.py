@@ -1,9 +1,9 @@
 # coding=utf-8
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView, 
-                    AtualizaContato, VereadoresView, PublicarTicketView, 
-                    DeletarTicketView)
+from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView,
+                    AtualizaContato, VereadoresView, PublicarTicketView,
+                    DeletarTicketView, EnviarCartaView)
 
 urlpatterns = [
     url(r'^cadastro_contato/$', login_required(CadastroView.as_view()),
@@ -22,4 +22,6 @@ urlpatterns = [
         name='deletar_ticket'),
     url(r'^vereadores/$', VereadoresView.as_view(),
         name='vereadores'),
+    url(r'^enviar_carta/$', login_required(EnviarCartaView.as_view()),
+        name='enviar_carta'),
 ]
