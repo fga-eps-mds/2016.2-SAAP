@@ -16,14 +16,17 @@
 
           <!-- Modal Structure -->
           <div id="modal1" class="modal">
+            <form action="{% url 'criar_grupo' %}" method="POST">
             <div class="modal-content">
               <h4>Criar grupo de contatos</h4>
               <p>Digite aqui o nome do grupo de contatos:</p>
               <input  id="nome_grupo" name="nome_grupo" type="text" class="validate">
             </div>
             <div class="modal-footer">
-              <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirmar</a>
+                {% csrf_token %}
+              <button href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" type="submit">Confirmar</button>
             </div>
+          </form>
           </div>
         </div>
       </div>
