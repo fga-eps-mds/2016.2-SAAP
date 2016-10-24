@@ -1,5 +1,7 @@
+from core.models import Ticket, Carta
 from autenticacao.models import *
 from core.models import *
+from django.test import Client
 import pytest
 
 @pytest.mark.django_db
@@ -98,3 +100,21 @@ def test_deleta_oficio():
 
     busca = Oficio.busca_por_titulo('Titulo Exemplo')
     assert busca.count() == 0
+    
+@pytest.mark.django_db
+def test_model_carta():
+
+    carta = Carta()
+
+    carta.nome_remetente = 'nome_teste1'
+    carta.nome_destinatario = 'nome_teste2'
+    carta.data = '2016-10-23'
+    carta.local = 'local_teste'
+    carta.assunto = 'assunto_teste'
+    carta.texto = 'texto_teste'
+
+    carta.save()
+    cartas = Carta.objects.all().count()
+
+    assert cartas >= 1
+    carta.delete()
