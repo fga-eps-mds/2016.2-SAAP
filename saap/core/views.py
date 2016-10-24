@@ -347,6 +347,18 @@ class EnviarCartaView(View):
 
         if campos_validados is True:
 
+            carta = Carta()
+            carta.nome_remetente = request.POST['nome_remetente']
+            carta.municipio_remetente = request.POST['municipio_remetente']
+            carta.nome_destinatario = request.POST['nome_destinatario']
+            carta.forma_tratamento = request.POST['forma_tratamento']
+            carta.texto = request.POST['mensagem']
+            carta.data = datetime.now()
+            carta.save()
+            organizador = OrganizadorContatos.objects.get(username=request.\
+                user.username)
+            organizador.cartas.add(carta)
+
             doc = SimpleDocTemplate("/tmp/carta.pdf")
             styles = getSampleStyleSheet()
 
@@ -355,7 +367,6 @@ class EnviarCartaView(View):
 
             Story=[]
 
-            formatted_time = time.ctime()
             now = datetime.now()
 
             styles=getSampleStyleSheet()
