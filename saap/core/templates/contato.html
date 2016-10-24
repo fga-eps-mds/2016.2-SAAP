@@ -1,107 +1,107 @@
 {%  extends "base.html" %}
 {% block main_content %}
-<main>
-  <div class="container">
-    <div class="row">
-       <div class="col s6 m6 l6">
-         <ul class="collection">
-           <div>
-             <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit">Novo Contato</button></a>
-           </div>
-           <div class="col s4">
-           <select name="grupo_contatos" id="grupo_contatos">
-           <option value="" selected>Pesquisar por</option>
-           <option value="Bairro">Bairro</option>
-           <option value="Cidade">Cidade</option>
-           <option value="CPF">CPF</option>
-           <option value="data_de_nascimento">Data de Nascimento</option>
-           <option value="UF">UF</option>
-         </select>
-       </div>
-       <!--<form action = "/cadastro_contato" method = "POST"-->
-       <div class= "col s5"
-           <div class="input-field">
-             <input  id="username" name="username" type="text" class="validate" value='{{data.username}}'>
 
-             <button class="btn waves-effect waves-light saap-dark-green" type="submit"><i class="material-icons">search</i></button>
-         </div>
-       <!--</form>-->
-      <br><br><br>
-        <div>
-           <p>Lista de Contatos</p>
-           {% for contato in lista_contatos %}
-             <li class="collection-item avatar">
-               <img src="../static/images/contato.png" alt="" class="circle"></img>
-                <span class="title">{{ contato.nome }}</span>
-                <p>
-                  Email : {{ contato.email }}<br>
-                  Telefone : {{ contato.telefone}}<br>
-                  Celular : {{ contato.celular}}<br>
-                  Fax : {{ contato.fax}}<br>
-                  Data de Nascimento: {{ contato.data_de_nascimento}}<br>
-                  Sexo: {{ contato.sexo}}<br>
-                  CPF: {{ contato.cpf }}<br>
-                  RG: {{ contato.rg}}<br>
-                  Endereço: {{ contato.endereco}}<br>
-                  Cidade : {{ contato.cidade}}<br>
-                  Estado : {{ contato.estado}}<br>
-                  CEP : {{ contato.cep}}<br>
-                  Grupo : {{ contato.grupo}}<br>
-                  Título : {{ contato.titlo}}<br>
-                  Título de Eleitor : {{ contato.titulo_de_eleitor}}<br>
-                  Zona : {{ contato.zona}}<br>
-                  Seção : {{ contato.secao}}<br>
-                  Profissão : {{ contato.profissao}}<br>
-                  Cargo : {{ contato.cargo}}<br>
-                  Empresa : {{ contato.empresa}}<br>
-                  <br>
-                  Dependente<br>
-                  Nome : {{ contato.dependente_nome}}<br>
-                  Aniversário : {{ contato.dependente_aniversario}}<br>
-                  Partido : {{ contato.dependente_partido}}<br>
-                  Parentesco : {{ contato.dependente_parentesco}}<br>
-                  Data da filiação : {{ contato.dependente_data_filiacao}}<br>
-                </p>
-                <i class="material-icons">grade</i>
-              </li>
-            {% endfor %}
-            <br>
-            <a href="/exclui_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Excluir</button></a>
-            <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Cadastrar</button></a>
-            <a href="/atualiza_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Atualizar</button></a>
-          </ul>
-        </div>
-</div>
-        <div class="col s6 m6 l6 ">
-          <ul class="collection">
-            <p>Tickets Recebidos</p>
+<div class="container">
+  <div class="row s12 m12 l12">
 
-            {% for ticket in lista_tickets %}
-              <li class="collection-item avatar">
-                <img src="../static/images/contato.png" alt="" class="circle"></img>
-                 <span class="title">{{ ticket.remetente }}</span>
-                  <form action="/publicar_ticket/" method="POST">
-                  {% csrf_token %}
-                  <input type="hidden" name="ticket_id" value="{{ticket.id}}">
-                  <a href="/deletar_ticket/{{ticket.id}}"class="btn-floating btn-large waves-effect waves-light saap-dark-green right"><i class="material-icons">delete</i></a>
-                  {% if ticket.aprovado == False%}<button class="btn-floating btn-large waves-effect waves-light saap-dark-green right" type="submit"><i class="material-icons">done</i></button>{% endif %}
-                  </form>
-                 <p> {{ ticket.titulo }}<br>
-                   {{ ticket.tipo_ticket }}<br>
-                   {{ ticket.corpo_texto}}<br>
-                 </p>
-                 <i class="material-icons">grade</i>
-               </li>
-             {% endfor %}
-             <br>
-           </ul>
-         </div>
-
+    <div class="col s6 m6 l6">
+      <div class="row">
+        <br>
+        <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Cadastrar contato</button></a>
       </div>
+      <div class="row">
+        <div class="col s4 m4 l4">
+          <select name="grupo_contatos" id="grupo_contatos">
+            <option value="" selected>Pesquisar por</option>
+            <option value="Bairro">Bairro</option>
+            <option value="Cidade">Cidade</option>
+            <option value="CPF">CPF</option>
+            <option value="Data de Nascimento">Data de Nascimento</option>
+            <option value="UF">UF</option>
+          </select>
+        </div>
+        <div class="col s4 m4 l4">
+          <input  id="username" name="username" type="text" class="validate" value='{{data.username}}'>
+        </div>
+        <div class="col s3 m3 l3">
+          <button class="btn waves-effect waves-light saap-dark-green" type="submit"><i class="material-icons">search</i></button>
+        </div>
+      </div>
+      <ul class="collection">
+        <p>Lista de Contatos</p>
+        <ul class="collapsible popout" data-collapsible="accordion">
+          {% for contato in lista_contatos %}
+          <li>
+            <br>
+            <form action="/atualizar_contato/" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="contato_id" value="{{contato.id}}">
+              <a href="/deletar_contato/{{contato.id}}"class="btn-floating waves-effect waves-light saap-dark-green right"><i class="material-icons">delete</i></a>
+              <button class="btn-floating waves-effect waves-light saap-dark-green right" type="submit"><i class="material-icons">mode_edit</i></button>
+            </form>
+            <div class="collapsible-header"><i class="material-icons">perm_identity</i>{{ contato.nome }}</div>
+            <div class="collapsible-body">
+              <p>
+                Email : {{ contato.email }}<br>
+                Telefone : {{ contato.telefone}}<br>
+                Celular : {{ contato.celular}}<br>
+                Fax : {{ contato.fax}}<br>
+                Data de Nascimento: {{ contato.data_de_nascimento}}<br>
+                Sexo: {{ contato.sexo}}<br>
+                CPF: {{ contato.cpf }}<br>
+                RG: {{ contato.rg}}<br>
+                Endereço: {{ contato.endereco}}<br>
+                Cidade : {{ contato.cidade}}<br>
+                Estado : {{ contato.estado}}<br>
+                CEP : {{ contato.cep}}<br>
+                Grupo : {{ contato.grupo}}<br>
+                Título : {{ contato.titlo}}<br>
+                Título de Eleitor : {{ contato.titulo_de_eleitor}}<br>
+                Zona : {{ contato.zona}}<br>
+                Seção : {{ contato.secao}}<br>
+                Profissão : {{ contato.profissao}}<br>
+                Cargo : {{ contato.cargo}}<br>
+                Empresa : {{ contato.empresa}}<br>
+                <br>
+                Dependente<br>
+                Nome : {{ contato.dependente_nome}}<br>
+                Aniversário : {{ contato.dependente_aniversario}}<br>
+                Partido : {{ contato.dependente_partido}}<br>
+                Parentesco : {{ contato.dependente_parentesco}}<br>
+                Data da filiação : {{ contato.dependente_data_filiacao}}<br>
+              </p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </ul>
+    </div>
+
+    <div class="col s6 m6 l6 ">
+      <ul class="collection">
+        <p>Tickets Recebidos</p>
+        {% for ticket in lista_tickets %}
+        <li class="collection-item avatar">
+          <img src="../static/images/contato.png" alt="" class="circle"></img>
+          <span class="title">{{ ticket.remetente }}</span>
+          <form action="/publicar_ticket/" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="ticket_id" value="{{ticket.id}}">
+            <a href="/deletar_ticket/{{ticket.id}}"class="btn-floating btn-large waves-effect waves-light saap-dark-green right"><i class="material-icons">delete</i></a>
+            {% if ticket.aprovado == False%}<button class="btn-floating btn-large waves-effect waves-light saap-dark-green right" type="submit"><i class="material-icons">done</i></button>{% endif %}
+          </form>
+          <p> {{ ticket.titulo }}<br>
+            {{ ticket.tipo_ticket }}<br>
+            {{ ticket.corpo_texto}}<br>
+          </p>
+          <i class="material-icons">grade</i>
+        </li>
+        {% endfor %}
+        <br>
+      </ul>
+    </div>
+
   </div>
-
-<main>
-
-
+</div>
 
 {% endblock main_content %}
