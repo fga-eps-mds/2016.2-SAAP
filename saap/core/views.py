@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.template import RequestContext
 from django.utils.translation import ugettext
 from core.models import Contato, Ticket
+from autenticacao.models import OrganizadorContatos
 from default.views import *
 from autenticacao.views import *
 from autenticacao.models import *
@@ -301,7 +302,6 @@ POST['nome_organizador'])
 
         return resposta
 
-<<<<<<< 43db940d30bd7afd0218b9957f354cbae03060fc
 class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
@@ -391,5 +391,26 @@ class EnviarCartaView(View):
         return enviar_carta_email(request, carta)
 
 
-class GrupoDeContatos(ListView):
+class GrupoDeContatosView(ListView):
     http_method_names = [u'get', u'post']
+
+    model = Contato #grupo
+    template_name = 'grupo_de_contatos.html'
+
+    def getGrupo (self, **kwargs):
+        return Contato.objects(grupo)
+
+    def getData (self, **kwargs):
+        return Contato.objects.filter(data_de_nascimento)
+
+    def getBairro (self, **kwargs):
+        return Contato.objects.filter(bairro)
+
+    def getCidade(self, **kwargs):
+        return Contato.objects.filter(cidade)
+
+    def getCEP(self, **kwargs):
+        return Contato.objects.filter(CEP)
+
+    def getUF (self, **kwargs):
+        return Contato.objects.filter(UF)
