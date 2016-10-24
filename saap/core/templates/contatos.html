@@ -1,5 +1,6 @@
 {%  extends "base.html" %}
 {% block main_content %}
+
 <div class="container">
   <div class="row s12 m12 l12">
 
@@ -99,6 +100,7 @@
           <!-- Modal Trigger -->
           <a class="waves-effect waves-light btn modal-trigger saap-dark-green" href="#modal1">Criar grupo</a>
 
+
              <button class="btn waves-effect waves-light saap-dark-green" type="submit"><i class="material-icons">search</i></button>
          </div>
        <!--</form>-->
@@ -175,7 +177,33 @@
            </ul>
 
          </div>
+<main>
+  <div class="container">
+    <div class="row">
+       <div class="col s6 m6 l6">
+         <ul class="collection">
+           <div>
+             <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit">Novo Contato</button></a>
+           </div>
+           <div class="col s4">
+           <select name="grupo_contatos" id="grupo_contatos">
+           <option value="" selected>Pesquisar por</option>
+           <option value="Bairro">Bairro</option>
+           <option value="Cidade">Cidade</option>
+           <option value="CPF">CPF</option>
+           <option value="data_de_nascimento">Data de Nascimento</option>
+           <option value="UF">UF</option>
+         </select>
+       </div>
+       <!--<form action = "/cadastro_contato" method = "POST"-->
+       <div class= "col s5"
+           <div class="input-field">
+             <input  id="username" name="username" type="text" class="validate" value='{{data.username}}'>
 
+
+
+<div class="container">
+  <div class="row s12 m12 l12">
 
 
           <!-- Modal Structure -->
@@ -220,6 +248,32 @@
       <ul class="collection">
 
      <ul class="collection">
+=======
+    <div class="col s6 m6 l6">
+      <div class="row">
+        <br>
+        <a href="/cadastro_contato"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Cadastrar contato</button></a>
+      </div>
+      <div class="row">
+        <div class="col s4 m4 l4">
+          <select name="grupo_contatos" id="grupo_contatos">
+            <option value="" selected>Pesquisar por</option>
+            <option value="Bairro">Bairro</option>
+            <option value="Cidade">Cidade</option>
+            <option value="CPF">CPF</option>
+            <option value="Data de Nascimento">Data de Nascimento</option>
+            <option value="UF">UF</option>
+          </select>
+        </div>
+        <div class="col s4 m4 l4">
+          <input  id="username" name="username" type="text" class="validate" value='{{data.username}}'>
+        </div>
+        <div class="col s3 m3 l3">
+          <button class="btn waves-effect waves-light saap-dark-green" type="submit"><i class="material-icons">search</i></button>
+        </div>
+      </div>
+      <ul class="collection">
+
         <p>Lista de Contatos</p>
         <ul class="collapsible popout" data-collapsible="accordion">
           {% for contato in lista_contatos %}
@@ -562,6 +616,32 @@
         {% endfor %}
 
         </form>
+      </ul>
+    </div>
+
+
+
+    <div class="col s6 m6 l6 ">
+      <ul class="collection">
+        <p>Tickets Recebidos</p>
+        {% for ticket in lista_tickets %}
+        <li class="collection-item avatar">
+          <img src="../static/images/contato.png" alt="" class="circle"></img>
+          <span class="title">{{ ticket.remetente }}</span>
+          <form action="/publicar_ticket/" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="ticket_id" value="{{ticket.id}}">
+            <a href="/deletar_ticket/{{ticket.id}}"class="btn-floating btn-large waves-effect waves-light saap-dark-green right"><i class="material-icons">delete</i></a>
+            {% if ticket.aprovado == False%}<button class="btn-floating btn-large waves-effect waves-light saap-dark-green right" type="submit"><i class="material-icons">done</i></button>{% endif %}
+          </form>
+          <p> {{ ticket.titulo }}<br>
+            {{ ticket.tipo_ticket }}<br>
+            {{ ticket.corpo_texto}}<br>
+          </p>
+          <i class="material-icons">grade</i>
+        </li>
+        {% endfor %}
+        <br>
       </ul>
     </div>
 
