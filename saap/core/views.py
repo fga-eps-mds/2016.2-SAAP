@@ -83,18 +83,18 @@ filiacao']
 
                     else:
                         return render_mensagem_erro(request, 'Formato de data \
-                            inválido (AAAA-MM-DD) no campo "Data de Filiação do \
-                            Dependente"!', 'cadastro_contato.html', {'data':data})
+                            inválido (AAAA-MM-DD) no campo Data de Filiação do \
+                            Dependente!', 'cadastro_contato.html', {'data':data})
                 else:
                     return render_mensagem_erro(request, 'Formato de data \
-                        inválido (AAAA-MM-DD) no campo "Aniversário do \
-                        Dependente"!', 'cadastro_contato.html', {'data':data})
+                        inválido (AAAA-MM-DD) no campo Aniversário do \
+                        Dependente!', 'cadastro_contato.html', {'data':data})
             else:
                 return render_mensagem_erro(request, 'Formato de data \
-                    inválido (AAAA-MM-DD) no campo "Data de Nascimento"!',\
+                    inválido (AAAA-MM-DD) no campo Data de Nascimento!',\
                     'cadastro_contato.html', {'data':data})
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+            response = render_mensagem_erro(request, 'O campo %s não foi \
                 preenchido!' % campos_cadastrar_contato[campos_validados], \
                 'cadastro_contato.html', {'data':data})
 
@@ -152,7 +152,7 @@ class AtualizaContato(View):
 
             response = render_contatos_tickets(request)
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+            response = render_mensagem_erro(request, 'O campo %s não foi \
                 preenchido!' % campos_cadastrar_contato[campos_validados], \
                 'atualiza_contato.html', {'data':data})
 
@@ -234,7 +234,7 @@ class TicketView(View):
                 response = render(request, 'perfil.html')
 
         else:
-            messages.error(request, 'O campo "%s" não foi preenchido!' \
+            messages.error(request, 'O campo %s não foi preenchido!' \
                 % campos_ticket[campos_validados])
             organizadores = OrganizadorContatos.objects.all()
             lista_organizadores = list(organizadores)
@@ -384,6 +384,123 @@ class GerarPDFCartaView(View):
 
 class EnviarCartaView(View):
     http_method_names = [u'post']
+        else:
+            messages.error(request, 'O campo %s não foi preenchido!' \
+                % campos_enviar_carta[campos_validados])
+            response = render(request, 'enviar_carta.html', locals())
+
+        return response
+
+class OficioView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        if request.user.is_authenticated():
+            organizadores = OrganizadorContatos.objects.all()
+            lista_organizadores = list(organizadores)
+            response = render(request, 'oficio.html', locals())
+        else:
+            response = render(request, 'login.html')
+        return response
+
+    def post(self, request):
+
+        data = {}
+        data['tipo_documento'] = request.POST['tipo_documento']
+        data['remetente'] = request.user.get_full_name()
+        data['destinatario'] = request.POST['destinatario']
+        data['titulo_documento'] = request.POST['assunto']
+        data['corpo_texto_doc'] = request.POST.get('descricao')
+
+        campos_validados = checar_campos(request.POST['remetente'], \
+            request.POST['destinatario'], request.POST['tipo_documento'], \
+            request.POST['titulo_documento'], request.POST['corpo_texto_doc'],\
+            )
+
+        if campos_validados == True:
+            novo_oficio = Oficio()
+
+
+            tipo_documento = request.POST['tipo_documento']
+            remetente = request.user.get_full_name()
+            destinatario = request.POST['destinatario']
+            titulo_documento = request.POST['assunto']
+            corpo_texto_doc = request.POST.get('descricao')
+            forma_tratamento = request.POST['forma_tratamento']
+            carta.data = datetime.now()
+
+            if request.user.is_authenticated() is False:
+
+                response = render(request, 'login.html')
+            else:
+
+                novo_oficio.titulo_documento = titulo_documento
+                novo_oficio.corpo_texto_doc = corpo_texto_doc
+                novo_oficio.remetente = remetente
+                novo_oficio.forma_tratamento = forma_tratamento
+                novo_oficio.destinatario = destinatario
+                novo_oficio.save()
+
+                organizador = OrganizadorContatos.objects.get(username=request.\
+                    user.username)
+                organizador.oficio.add(oficio)
+
+                doc = SimpleDocTemplate("/tmp/oficio.pdf")
+                styles = getSampleStyleSheet()
+
+                mensagem = request.POST['mensagem']
+                mensagem = mensagem.replace('\n', '<br/>')
+
+                Story=[]
+
+                now = datetime.now()
+
+                styles=getSampleStyleSheet()
+                styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+
+                ptext = '<font size=12>%s, %s/%s/%s</font>' % (request.POST['remetente'], now.day, now.month, now.year)
+                Story.append(Paragraph(ptext, styles["Normal"]))
+
+                Story.append(Spacer(1, 24))
+
+                ptext = '<font size=12>%s %s,</font>' % (request.POST['forma_tratamento'], request.POST['destinatario'])
+                Story.append(Paragraph(ptext, styles["Normal"]))
+                #.split()[0].strip()
+
+                Story.append(Spacer(1, 36))
+
+                ptext = '<font size=12>Prezado %s:</font>' % request.POST['forma_tratamento']
+                Story.append(Paragraph(ptext, styles["Normal"]))
+
+                Story.append(Spacer(1, 12))
+
+                ptext = '<font size=12>%s</font>' % mensagem
+                Story.append(Paragraph(ptext, styles["Justify"]))
+
+                Story.append(Spacer(1, 36))
+
+                ptext = '<font size=12>Atenciosamente,</font>'
+                Story.append(Paragraph(ptext, styles["Normal"]))
+
+                Story.append(Spacer(1, 12))
+
+                ptext = '<font size=12>%s</font>' % request.POST['remetente']
+                Story.append(Paragraph(ptext, styles["Normal"]))
+
+                Story.append(Spacer(1, 12))
+
+                doc.build(Story)
+
+                fs = FileSystemStorage("/tmp")
+                with fs.open("carta.pdf") as pdf:
+                    response = HttpResponse(pdf, content_type='application/pdf')
+                    response['Content-Disposition'] = 'attachment; filename="carta.pdf"'
+                    return response
+
+        else:
+            messages.error(request, 'O campo %s não foi preenchido!' \
+                % campos_enviar_carta[campos_validados])
+            response = render(request, 'enviar_carta.html', locals())
 
     def post(self, request, pk):
         carta = Carta.objects.get(id=pk)
