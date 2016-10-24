@@ -31,6 +31,7 @@ def test_cria_oficio():
     oficio.destinatario = 'exemplo@email.com'
     oficio.titulo_documento = 'Titulo Exemplo'
     oficio.corpo_texto_doc = 'Texto enviado para email por exemplos'
+    oficio.data = '24/10/2016'
     oficio.save()
 
     busca = Oficio.busca_por_titulo('Titulo Exemplo')
@@ -48,6 +49,7 @@ def test_deleta_oficio():
         oficio.destinatario = 'exemplo@email.com'
         oficio.titulo_documento = 'Titulo Exemplo'
         oficio.corpo_texto_doc = 'Texto enviado para email por exemplos'
+        oficio.data = '24/10/2016'
         oficio.save()
 
         busca = Oficio.busca_por_titulo(oficio.titulo_documento)

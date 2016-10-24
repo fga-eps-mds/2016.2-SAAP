@@ -60,7 +60,7 @@ class Oficio(models.Model):
     destinatario = models.CharField(max_length=100)
     titulo_documento = models.CharField(max_length=100)
     corpo_texto_doc = models.CharField(max_length=1000000)
-    
+    data = models.DateField('data', auto_now=True)
 
     @classmethod
     def busca_por_titulo(cls, titulo_doc):
