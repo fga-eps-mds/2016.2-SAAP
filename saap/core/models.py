@@ -17,7 +17,7 @@ class Grupo(models.Model):
 
     @classmethod
     def filtro_data_aniversario(cls,mes_do_ano):
-        return  cls.objects.filter(contatos__data_de_nascimento__contains=mes_do_ano)
+        return  cls.objects.filter(contatos__data_de_nascimento__month=mes_do_ano)
 
     @classmethod
     def filtro_cidade(cls,cidade):
