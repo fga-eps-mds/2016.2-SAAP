@@ -303,6 +303,7 @@ POST['nome_organizador'])
 
         return resposta
 
+<<<<<<< b1975ab42249505dfe06cb25acb1e901a17464d2
 <<<<<<< dfea3b1d71e98e1f2bf9c850655c564fda863e51
 class GerarCartaView(View):
     http_method_names = [u'get', u'post']
@@ -393,7 +394,7 @@ class EnviarCartaView(View):
         return enviar_carta_email(request, carta)
 
 
-class CriarGrupoDeContatosView(ListView):
+class GrupoDeContatosView(ListView):
     http_method_names = [u'get', u'post']
 
     model = Contato #grupo
@@ -421,5 +422,5 @@ class CriarGrupoDeContatosView(ListView):
             Q(contatos__cidade__contains=query) |
             Q(contatos__data_de_nascimento__contains=query)
             )
-                
+
         return render(request, 'grupo_contatos.html', resposta)
