@@ -1,0 +1,80 @@
+{%  extends "base.html" %}
+{% block main_content %}
+{% load i18n %}
+<main>
+  <div class="container">
+  <div class="row">
+    <div class="col s12 offset-m2 m8 offset-l1 l10">
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      <form action="{% url 'oficio' %}" method='POST'>
+        {% csrf_token %}
+        <div class="login-card hoverable center-align">
+          <div class="card-content">
+            <div class="input-field col s12">
+              <div class="col s12">
+                <div class="row">
+
+                  <div class="input-field col s12">
+                    <i class="material-icons prefix">mode_edit</i>
+                    <input id="remetente" name='remetente' type="text" class="validate" value='{{data.remetente}}'>
+                    <label for="remetente">Nome do remetente</label>
+                  </div>
+
+                  <div class="input-field col s8">
+                    <i class="material-icons prefix">mode_edit</i>
+                    <input id="destinatario" name='destinatario' type="text" class="validate" value='{{data.destinatario}}'>
+                    <label for="destinatario">Nome do destinatario</label>
+                  </div>
+
+                  <div class="input-field col s4">
+                    <select id="forma_tratamento" name="forma_tratamento">
+                      {% if data.forma_tratamento is None %}
+                        <option value="" selected>Forma de tratamento</option>
+                        <option value="Senhor(a)">Senhor(a)</option>
+                        <option value="Doutor(a)">Doutor(a)</option>
+                      {% else %}
+                        <option value="" >Forma de tratamento</option>
+                        {% for campo in data.campos_forma_tratamento %}
+                          {% if campo == data.forma_tratamento %}
+                            <option value="{{ campo }}" selected>{{ campo }}</option>
+                          {% else %}
+                            <option value="{{ campo }}" >{{ campo }}</option>
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    </select>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col s12">
+              <div class="input-field col s12">
+                <i class="material-icons prefix">textsms</i>
+                <textarea id="corpo_texto_doc" name="corpo_texto_doc" class="materialize-textarea" value='{{data.corpo_texto_doc}}'></textarea>
+                <label for="corpo_texto_doc">Mensagem </label>
+              </div>
+            </div>
+          </div>
+          <div class="input-field col s12">
+            <br>
+            <div>
+              <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Gerar Oficio</button>
+            </div>
+            <br>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+{% endblock main_content %}
