@@ -66,6 +66,14 @@ class Oficio(models.Model):
     def busca_por_titulo(cls, titulo_doc):
         return Oficio.objects.filter(titulo_documento__startswith=titulo_doc)
 
+class Carta(models.Model):
+
+    nome_remetente = models.CharField(max_length=30)
+    municipio_remetente = models.CharField(max_length=30)
+    nome_destinatario = models.CharField(max_length=30)
+    forma_tratamento = models.CharField(max_length=30)
+    texto = models.CharField(max_length=1500)
+    data = models.DateField('data', auto_now=True)
 
 class Template(models.Model):
 
