@@ -60,8 +60,8 @@ class Oficio(models.Model):
     destinatario = models.CharField(max_length=100)
     titulo_documento = models.CharField(max_length=100)
     corpo_texto_doc = models.CharField(max_length=1000000)
+    
 
-class Carta(models.Model):
     @classmethod
     def busca_por_titulo(cls, titulo_doc):
         return Oficio.objects.filter(titulo_documento__startswith=titulo_doc)
