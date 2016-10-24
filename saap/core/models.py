@@ -15,7 +15,6 @@ class Grupo(models.Model):
     def __str__(self):
         return self.nome
 
-
     @classmethod
     def filtro_data_aniversario(cls,mes_do_ano):
         return  cls.objects.filter(contatos__data_de_nascimento__month=mes_do_ano)
@@ -33,6 +32,9 @@ class Grupo(models.Model):
     def filtro_genero(cls,sexo):
         return cls.objects.filter(contatos__sexo=sexo)
 
+    @classmethod
+    def filtro_estado(cls,estado):
+        return  cls.objects.filter(contatos__estado__contains=estado)
 
     @classmethod
     def filtro_estado(cls,estado):
@@ -41,8 +43,6 @@ class Grupo(models.Model):
     @classmethod
     def filtro_nome(cls,nome):
         return  cls.objects.filter(contatos__nome__contains=nome)
-
-
 
 
 class Contato(models.Model):
