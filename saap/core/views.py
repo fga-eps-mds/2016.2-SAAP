@@ -332,7 +332,6 @@ POST['nome_gabinete'])
 
         return resposta
 
-
 class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
@@ -658,7 +657,7 @@ class GrupoDeContatos(ListView):
     http_method_names = [u'get', u'post']
 
 
-class CriarGrupoDeContatosView(ListView):
+class GrupoDeContatosView(ListView):
     http_method_names = [u'get', u'post']
 
     model = Contato #grupo
@@ -705,6 +704,6 @@ class CriarGrupoDeContatosView(ListView):
             Q(contatos__cidade__contains=query) |
             Q(contatos__data_de_nascimento__contains=query)
             )
-                
+
         return render(request, 'grupo_contatos.html', resposta)
 
