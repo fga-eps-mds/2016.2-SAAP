@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
-from core.models import Contato, Ticket, Oficio, Boletim, Template, Carta
+from core.models import *
 
 
 # Create your models here.
