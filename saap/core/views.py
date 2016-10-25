@@ -395,112 +395,104 @@ class OficioView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        if request.user.is_authenticated():
-            organizadores = OrganizadorContatos.objects.all()
-            lista_organizadores = list(organizadores)
-            response = render(request, 'oficio.html', locals())
+        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
+            user.username)
+        if tipo_usuario.count():
+            response = render(request, 'oficio.html')
         else:
-            response = render(request, 'login.html')
+            response = redirect('/')
+
         return response
+
 
     def post(self, request):
 
         data = {}
+        data['remetente'] = request.POST['remetente']
         data['tipo_documento'] = request.POST['tipo_documento']
-        data['remetente'] = request.user.get_full_name()
+        data['forma_tratamento'] = request.POST['forma_tratamento']
         data['destinatario'] = request.POST['destinatario']
-        data['titulo_documento'] = request.POST['assunto']
-        data['corpo_texto_doc'] = request.POST.get('descricao')
+        data['titulo_documento'] = request.POST['titulo_documento']
+        data['corpo_texto_doc'] = request.POST['corpo_texto_doc']
+        data['campos_forma_tratamento'] = ['Senhor(a)', 'Doutor(a)']
 
-        campos_validados = checar_campos(request.POST['remetente'], \
-            request.POST['destinatario'], request.POST['tipo_documento'], \
-            request.POST['titulo_documento'], request.POST['corpo_texto_doc'],\
-        )
+        campos_validados = checar_campos([request.POST['remetente'], \
+            request.POST['forma_tratamento'], request.POST['destinatario'], \
+            request.POST['tipo_documento'], request.POST['titulo_documento'],\
+            request.POST['corpo_texto_doc']])
 
-        if campos_validados == True:
+        if campos_validados is True:
+
             novo_oficio = Oficio()
 
+            novo_oficio.remetente = request.POST['remetente']
+            novo_oficio.destinatario = request.POST['destinatario']
+            novo_oficio.titulo_documento = request.POST['titulo_documento']
+            novo_oficio.corpo_texto_doc = request.POST['corpo_texto_doc']
+            novo_oficio.forma_tratamento = request.POST['forma_tratamento']
+            novo_oficio.data = datetime.now()
+            novo_oficio.save()
 
-            tipo_documento = request.POST['tipo_documento']
-            remetente = request.user.get_full_name()
-            destinatario = request.POST['destinatario']
-            titulo_documento = request.POST['assunto']
-            corpo_texto_doc = request.POST.get('descricao')
-            forma_tratamento = request.POST['forma_tratamento']
-            carta.data = datetime.now()
+            organizador = OrganizadorContatos.objects.get(username=request.\
+                user.username)
+            organizador.oficio.add(oficio)
 
-            if request.user.is_authenticated() is False:
+            doc = SimpleDocTemplate("/tmp/carta.pdf")
+            styles = getSampleStyleSheet()
 
-                response = render(request, 'login.html')
-            else:
+            descricao = request.POST['descricao']
+            descricao = descricao.replace('\n', '<br/>')
 
-                novo_oficio.titulo_documento = titulo_documento
-                novo_oficio.corpo_texto_doc = corpo_texto_doc
-                novo_oficio.remetente = remetente
-                novo_oficio.forma_tratamento = forma_tratamento
-                novo_oficio.destinatario = destinatario
-                novo_oficio.save()
+            Story=[]
 
-                organizador = OrganizadorContatos.objects.get(username=request.\
-                    user.username)
-                organizador.oficio.add(oficio)
+            now = datetime.now()
 
-                doc = SimpleDocTemplate("/tmp/oficio.pdf")
-                styles = getSampleStyleSheet()
+            styles=getSampleStyleSheet()
+            styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
 
-                mensagem = request.POST['mensagem']
-                mensagem = mensagem.replace('\n', '<br/>')
+            ptext = '<font size=12>%s, %s/%s/%s</font>' % (request.POST['remetente'], now.day, now.month, now.year)
+            Story.append(Paragraph(ptext, styles["Normal"]))
 
-                Story=[]
+            Story.append(Spacer(1, 24))
 
-                now = datetime.now()
+            ptext = '<font size=12>%s %s,</font>' % (request.POST['forma_tratamento'], request.POST['destinatario'])
+            Story.append(Paragraph(ptext, styles["Normal"]))
+            #.split()[0].strip()
 
-                styles=getSampleStyleSheet()
-                styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+            Story.append(Spacer(1, 36))
 
-                ptext = '<font size=12>%s, %s/%s/%s</font>' % (request.POST['remetente'], now.day, now.month, now.year)
-                Story.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<font size=12>Prezado %s:</font>' % request.POST['forma_tratamento']
+            Story.append(Paragraph(ptext, styles["Normal"]))
 
-                Story.append(Spacer(1, 24))
+            Story.append(Spacer(1, 12))
 
-                ptext = '<font size=12>%s %s,</font>' % (request.POST['forma_tratamento'], request.POST['destinatario'])
-                Story.append(Paragraph(ptext, styles["Normal"]))
-                #.split()[0].strip()
+            ptext = '<font size=12>%s</font>' % mensagem
+            Story.append(Paragraph(ptext, styles["Justify"]))
 
-                Story.append(Spacer(1, 36))
+            Story.append(Spacer(1, 36))
 
-                ptext = '<font size=12>Prezado %s:</font>' % request.POST['forma_tratamento']
-                Story.append(Paragraph(ptext, styles["Normal"]))
+            ptext = '<font size=12>Atenciosamente,</font>'
+            Story.append(Paragraph(ptext, styles["Normal"]))
 
-                Story.append(Spacer(1, 12))
+            Story.append(Spacer(1, 12))
 
-                ptext = '<font size=12>%s</font>' % mensagem
-                Story.append(Paragraph(ptext, styles["Justify"]))
+            ptext = '<font size=12>%s</font>' % request.POST['remetente']
+            Story.append(Paragraph(ptext, styles["Normal"]))
 
-                Story.append(Spacer(1, 36))
+            Story.append(Spacer(1, 12))
 
-                ptext = '<font size=12>Atenciosamente,</font>'
-                Story.append(Paragraph(ptext, styles["Normal"]))
+            doc.build(Story)
 
-                Story.append(Spacer(1, 12))
-
-                ptext = '<font size=12>%s</font>' % request.POST['remetente']
-                Story.append(Paragraph(ptext, styles["Normal"]))
-
-                Story.append(Spacer(1, 12))
-
-                doc.build(Story)
-
-                fs = FileSystemStorage("/tmp")
-                with fs.open("carta.pdf") as pdf:
-                    response = HttpResponse(pdf, content_type='application/pdf')
-                    response['Content-Disposition'] = 'attachment; filename="carta.pdf"'
-                    return response
+            fs = FileSystemStorage("/tmp")
+            with fs.open("oficio.pdf") as pdf:
+                response = HttpResponse(pdf, content_type='application/pdf')
+                response['Content-Disposition'] = 'attachment; filename="oficio.pdf"'
+                return response
 
         else:
-            messages.error(request, 'O campo %s não foi preenchido!' \
-                % campos_enviar_carta[campos_validados])
-            response = render(request, 'enviar_carta.html', locals())
+            messages.error(request, 'O campo "%s" não foi preenchido!' \
+                % campos_enviar_oficio[campos_validados])
+            response = render(request, 'oficio.html', locals())
 
     def post(self, request, pk):
         carta = Carta.objects.get(id=pk)
