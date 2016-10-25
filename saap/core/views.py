@@ -409,16 +409,13 @@ class OficioView(View):
 
         data = {}
         data['remetente'] = request.POST['remetente']
-        data['tipo_documento'] = request.POST['tipo_documento']
         data['forma_tratamento'] = request.POST['forma_tratamento']
         data['destinatario'] = request.POST['destinatario']
-        data['titulo_documento'] = request.POST['titulo_documento']
         data['corpo_texto_doc'] = request.POST['corpo_texto_doc']
         data['campos_forma_tratamento'] = ['Senhor(a)', 'Doutor(a)']
 
         campos_validados = checar_campos([request.POST['remetente'], \
             request.POST['forma_tratamento'], request.POST['destinatario'], \
-            request.POST['tipo_documento'], request.POST['titulo_documento'],\
             request.POST['corpo_texto_doc']])
 
         if campos_validados is True:
@@ -427,21 +424,16 @@ class OficioView(View):
 
             novo_oficio.remetente = request.POST['remetente']
             novo_oficio.destinatario = request.POST['destinatario']
-            novo_oficio.titulo_documento = request.POST['titulo_documento']
             novo_oficio.corpo_texto_doc = request.POST['corpo_texto_doc']
             novo_oficio.forma_tratamento = request.POST['forma_tratamento']
             novo_oficio.data = datetime.now()
             novo_oficio.save()
 
-            organizador = OrganizadorContatos.objects.get(username=request.\
-                user.username)
-            organizador.oficio.add(oficio)
-
-            doc = SimpleDocTemplate("/tmp/carta.pdf")
+            doc = SimpleDocTemplate("/tmp/oficio.pdf")
             styles = getSampleStyleSheet()
 
-            descricao = request.POST['descricao']
-            descricao = descricao.replace('\n', '<br/>')
+            corpo_texto_doc = request.POST['corpo_texto_doc']
+            corpo_texto_doc = corpo_texto_doc.replace('\n', '<br/>')
 
             Story=[]
 
@@ -450,23 +442,19 @@ class OficioView(View):
             styles=getSampleStyleSheet()
             styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
 
-            ptext = '<font size=12>%s, %s/%s/%s</font>' % (request.POST['remetente'], now.day, now.month, now.year)
+            Story.append(Spacer(1, 24))
+
+            ptext = '<font size=12>Oficio nº __ , %s </font>' % (now.year)
             Story.append(Paragraph(ptext, styles["Normal"]))
 
             Story.append(Spacer(1, 24))
 
-            ptext = '<font size=12>%s %s,</font>' % (request.POST['forma_tratamento'], request.POST['destinatario'])
-            Story.append(Paragraph(ptext, styles["Normal"]))
-            #.split()[0].strip()
-
-            Story.append(Spacer(1, 36))
-
-            ptext = '<font size=12>Prezado %s:</font>' % request.POST['forma_tratamento']
+            ptext = '<font size=12>À Gabinete </font>'
             Story.append(Paragraph(ptext, styles["Normal"]))
 
             Story.append(Spacer(1, 12))
 
-            ptext = '<font size=12>%s</font>' % mensagem
+            ptext = '<font size=12>Prezado %s %s, %s</font>' % (request.POST['forma_tratamento'], request.POST['destinatario'],corpo_texto_doc)
             Story.append(Paragraph(ptext, styles["Justify"]))
 
             Story.append(Spacer(1, 36))
@@ -476,7 +464,7 @@ class OficioView(View):
 
             Story.append(Spacer(1, 12))
 
-            ptext = '<font size=12>%s</font>' % request.POST['remetente']
+            ptext = '<font size=12>%s, %s/%s/%s</font>' % (request.POST['remetente'], now.day, now.month, now.year)
             Story.append(Paragraph(ptext, styles["Normal"]))
 
             Story.append(Spacer(1, 12))
