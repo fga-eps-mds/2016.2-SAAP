@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^enviar_carta/(?P<pk>[0-9]+)/$', login_required(EnviarCartaView.as_view()),
         name='enviar_carta'),
 <<<<<<< HEAD
+<<<<<<< HEAD
     url(r'^criar_grupo/$', CriarGrupoDeContatosView.as_view(),
         name='criar_grupo'),
     url(r'^busca_contatos/$', BuscaContatosView.as_view(),

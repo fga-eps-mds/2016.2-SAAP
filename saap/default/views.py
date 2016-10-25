@@ -129,7 +129,11 @@ def render_contatos_tickets(request):
     lista_tickets = list(tickets)
     lista_grupo = Grupo.objects.all()
 
+
     return render(request, "gabinete.html", locals())
+
+
+
 
 def checar_campos_registro_cidadao(request):
 
