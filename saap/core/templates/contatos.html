@@ -502,6 +502,27 @@
       </ul>
     </div>
 
+    <div class="col s12 m12 l12">
+      <ul class="collapsible" data-collapsible="accordion">
+        {% for contato in resposta %}
+          <li>
+          <div class="collapsible-header">{{contato.nome.capitalize}}</div>
+          <div class="collapsible-body">
+            <p>{{contato.email}}</p>
+            <p>{{contato.data_de_nascimento}}</p>
+            <p>{{contato.sexo}}</p>
+            <p>{{contato.endereco}}</p>
+          </div>
+            
+          </li>
+
+        {% endfor %}
+        
+
+
+      </ul>
+    </div>
+
   </div>
 </div>
 
