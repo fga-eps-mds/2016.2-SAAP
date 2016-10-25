@@ -494,7 +494,7 @@ class GrupoDeContatosView(ListView):
         if busca == 'cidade':
             resposta = Contato.objects.filter(cidade__startswith=query)
         elif busca == 'genero':
-            resposta = Contato.objects.filter(sexo__contais=query)
+            resposta = Contato.objects.filter(sexo__contains=query)
         elif busca == 'estado':
             resposta = Contato.objects.filter(estado__startswith=query)
         elif busca == 'data_aniversario':
@@ -526,3 +526,5 @@ class CriarGrupoDeContatosView(View):
         novo_grupo.save()
 
         return render(request,'contato.html')
+
+# class AdicionarContatoAoGrupo        

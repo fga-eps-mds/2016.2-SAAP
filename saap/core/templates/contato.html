@@ -116,11 +116,11 @@
       {% csrf_token %} 
           <select name="tipo_busca" id="tipo_busca">
             <option value="" selected>Pesquisar por</option>
-            <option value="Bairro">Bairro</option>
+            <option value="Estado">Estado</option>
             <option value="Cidade">Cidade</option>
             <option value="CPF">CPF</option>
-            <option value="Data de Nascimento">Data de Nascimento</option>
-            <option value="UF">UF</option>
+            <option value="Data_aniversario">Data de Nascimento</option>
+            <option value="Genero">Gênero</option>
           </select>
         </div>
         <div class="col s4 m4 l4">
@@ -256,6 +256,7 @@
     <div class="col s6 m6 l6 ">
       <ul class="collection">
         <p>Grupos de contatos</p>
+
         {% for grupo in lista_grupos %}
         <li class="collection-item avatar">
           <img src="../static/images/contato.png" alt="" class="circle"></img>
@@ -263,6 +264,7 @@
           <p>
             {% for contato in lista_contatos_grupo %}
               {{ contato.nome }}<br>
+              <div class="collapsible-header"><i class="material-icons">perm_identity</i>{{ contato.nome }}</div>
             {% endfor %}
           </p>
           <i class="material-icons">grade</i>
