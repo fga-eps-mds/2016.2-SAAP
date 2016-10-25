@@ -178,6 +178,17 @@ def test_cartas_view_get_logado():
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
     response = client.get('/cartas/')
+
+def test_enviar_oficio_view_get_organizador_logado():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'org'
+    organizador.set_password('123456')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'org', 'password': '123456'})
+    response = client.get('/oficio/')
     assert response.status_code is 200
     organizador.delete()
 
@@ -192,6 +203,17 @@ def test_cartas_view_get_deslogado():
     client = Client()
     client.post('/', {'username': 'cidteste', 'password': '123'})
     response = client.get('/cartas/')
+
+def test_enviar_oficio_view_get_organizador_deslogado():
+
+    cidadao = Cidadao()
+    cidadao.username = 'cidteste'
+    cidadao.set_password('123456')
+    cidadao.data_de_nascimento = '1900-01-01'
+    cidadao.save()
+    client = Client()
+    client.post('/', {'username': 'cidteste', 'password': '123456'})
+    response = client.get('/oficio/')
     assert 300 <= response.status_code < 400
     cidadao.delete()
 
@@ -247,4 +269,35 @@ def test_enviar_carta_email_view():
     response = client.post('/enviar_carta/1/', {'email_carta': 'exemplo@teste.com'})
     assert 300 <= response.status_code < 400
     carta.delete()
+
+@pytest.mark.django_db
+def test_enviar_carta_view_post():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'org'
+    organizador.set_password('123456')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'org', 'password': '123456'})
+    response = client.post('/oficio/', {'remetente': 'Remetente', \
+        'destinatario': 'destinatario',\
+        , 'forma_tratamento': 'Senhor(a)', 'corpo_texto_doc': 'Mensagem'})
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_enviar_carta_view_post_faltando_campo():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'org'
+    organizador.set_password('123456')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'org', 'password': '123456'})
+    response = client.post('/oficio/', {'remetente': 'Remetente', \
+        'destinatario': 'Destinatário'\
+        , 'forma_tratamento': 'Senhor(a)', 'mensagem': ''})
+    assert response.status_code is 200
     organizador.delete()
