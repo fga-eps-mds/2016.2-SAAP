@@ -633,6 +633,7 @@ def test_ticket_view_post_anonimo():
     assert response.status_code is 200
     organizador.delete()
 
+<<<<<<< HEAD
 @pytest.mark.django_db
 def test_busca_contatos_cidade():
 
@@ -836,4 +837,11 @@ def test_adiciona_contato_ao_grupo():
     client.post('/adicionar_contatos/',{'contatos': contato.id,'nome_grupo':teste_nome_grupo})
     
     assert grupo_novo.contatos.all().count() == 1
+
+def test_busca_contatos_cidade():
+
+    client = Client()
+    tipo_busca = "cidade"
+    pesquisa = 'df'
+    response = client.post('busca_contatos/?tipo_busca=%s&pesquisa=%s',tipo_busca,pesquisa)
 
