@@ -101,44 +101,47 @@
       </ul>
     </div>
 
-    <div class="col s6 m6 l6 ">
-      <ul class="collection">
-        <p>Grupos de contatos</p>
+    <div class="col s6 m6 l6">
 
-        {% for grupo in lista_grupos %}
-        <li class="collection-item avatar">
-          <img src="../static/images/contato.png" alt="" class="circle"></img>
-          <span class="title">{{ grupo.nome }}</span>
-          <p>
-            {% for contato in lista_contatos_grupo %}
-              {{ contato.nome }}<br>
-              <div class="collapsible-header"><i class="material-icons">perm_identity</i>{{ contato.nome }}</div>
-            {% endfor %}
-          </p>
-          <i class="material-icons">grade</i>
-        </li>
-        {% endfor %}
-        <br>
+     {% for grupo in lista_grupo %}
+      <ul class="collapsible" data-collapsible="accordion">
+      <li>
+      <div class="collapsible-header">{{grupo.nome.capitalize}}<a class="waves-effect waves-light btn-small btn right green darken-1">Deletar</a></div>
+      <div class="collapsible-body ">
+      {% for contato in grupo.contatos.all %}
+      <div class="card-panel teal">
+        <span class="white-text">
+       {{contato.nome }} 
+       {{contato.email}} 
+        </span>
+      </div>
+
+      {% endfor %}
+      </div>
+      </li>
       </ul>
+     {% endfor %}
     </div>
 
     <div class="col s12 m12 l12">
       <ul class="collapsible" data-collapsible="accordion">
+          <form action="#">
         {% for contato in resposta %}
           <li>
-          <div class="collapsible-header">{{contato.nome.capitalize}}</div>
+
+          <div class="collapsible-header"><input type="checkbox" id="{{contato.id}}" />
+            <label for="{{contato.id}}">{{contato.nome.capitalize}}</label></div>
           <div class="collapsible-body">
             <p>{{contato.email}}</p>
             <p>{{contato.data_de_nascimento}}</p>
             <p>{{contato.sexo}}</p>
             <p>{{contato.endereco}}</p>
           </div>
+        </form>  
             
           </li>
 
         {% endfor %}
-        
-
 
       </ul>
     </div>

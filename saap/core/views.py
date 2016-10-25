@@ -396,7 +396,7 @@ class EnviarCartaView(View):
 class BuscaContatosView(ListView):
     http_method_names = [u'post']
 
-    model = Contato #grupo
+    model = Contato 
     template_name = 'contato.html'
 
     def post(self, request):
