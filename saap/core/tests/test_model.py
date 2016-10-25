@@ -53,7 +53,7 @@ def test_filtro_nascimento():
 	contato.save()
 
 
-	pesquisa = Grupo.filtro_nascimento(mes_do_ano='01')[0]
+	pesquisa = Grupo.filtro_data_aniversario(mes_do_ano='01')[0]
 	c = pesquisa.contatos.get()
 	assert str(c.data_de_nascimento.isoformat()) == contato.data_de_nascimento
 	grupo.delete()
