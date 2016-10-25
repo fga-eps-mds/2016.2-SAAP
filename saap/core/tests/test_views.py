@@ -632,3 +632,10 @@ def test_ticket_view_post_anonimo():
         'descricao': 'Descrição', 'tipo_mensagem': 'Tipo mensagem'})
     assert response.status_code is 200
     organizador.delete()
+
+def test_busca_contatos_cidade():
+
+    client = Client()
+    tipo_busca = "cidade"
+    pesquisa = 'df'
+    response = client.post('busca_contatos/?tipo_busca=%s&pesquisa=%s',tipo_busca,pesquisa)

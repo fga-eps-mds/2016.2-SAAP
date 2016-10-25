@@ -304,8 +304,6 @@ POST['nome_organizador'])
 
         return resposta
 
-<<<<<<< b1975ab42249505dfe06cb25acb1e901a17464d2
-<<<<<<< dfea3b1d71e98e1f2bf9c850655c564fda863e51
 class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
@@ -395,36 +393,38 @@ class EnviarCartaView(View):
         return enviar_carta_email(request, carta)
 
 
-class GrupoDeContatosView(ListView):
-    http_method_names = [u'get', u'post']
+class BuscaContatosView(ListView):
+    http_method_names = [u'post']
 
     model = Contato #grupo
     template_name = 'contato.html'
 
     def post(self, request):
-        busca = str(request.POST['contato']).lower()
+        busca = str(request.POST['tipo_busca']).lower()
         query = request.POST['pesquisa']
 
         if busca == 'cidade':
-            resposta = Grupo.filtro_cidade(query)
+            resposta = Contato.objects.filter(cidade__startswith=query)
         elif busca == 'genero':
-            resposta = Grupo.filtro_genero(query)
+            resposta = Contato.objects.filter(sexo__contais=query)
         elif busca == 'estado':
-            resposta = Grupo.filtro_estado(query)
+            resposta = Contato.objects.filter(estado__startswith=query)
         elif busca == 'data_aniversario':
-            resposta = Grupo.filtro_data_aniversario(query)
+            resposta = Contato.objects.filter(data_de_nascimento__month=query)
         elif busca == 'nome':
-            resposta = Grupo.filtro_nome(query)
+            resposta = Contato.objects.filter(nome__contains=query)
         else:
-            resposta = Grupo.objects.filter(
-            Q(contatos__nome__contains=query) |
-            Q(contatos__sexo = query) |
-            Q(contatos__estado__contains=query) |
-            Q(contatos__cidade__contains=query) |
-            Q(contatos__data_de_nascimento__contains=query)
+            resposta = Contato.objects.filter(
+            Q(nome__contains=query) |
+            Q(sexo = query) |
+            Q(estado__contains=query) |
+            Q(cidade__contains=query) |
+            Q(data_de_nascimento__contains=query)
             )
 
-        return render(request, 'contato.html', resposta)
+        # resposta = list(resposta)
+
+        return render(request, 'contato.html', locals())
 
 class CriarGrupoDeContatosView(View):
 
