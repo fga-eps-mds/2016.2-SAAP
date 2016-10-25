@@ -281,8 +281,8 @@ def test_enviar_carta_view_post():
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
     response = client.post('/oficio/', {'remetente': 'Remetente', \
-        'destinatario': 'destinatario',\
-        , 'forma_tratamento': 'Senhor(a)', 'corpo_texto_doc': 'Mensagem'})
+        'destinatario': 'destinatario','forma_tratamento': 'Senhor(a)', \
+        'corpo_texto_doc': 'Mensagem'})
     assert response.status_code is 200
     organizador.delete()
 
@@ -297,7 +297,7 @@ def test_enviar_carta_view_post_faltando_campo():
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
     response = client.post('/oficio/', {'remetente': 'Remetente', \
-        'destinatario': 'Destinatário'\
-        , 'forma_tratamento': 'Senhor(a)', 'mensagem': ''})
+        'destinatario': 'Destinatário', 'forma_tratamento': 'Senhor(a)',\
+        'mensagem': ''})
     assert response.status_code is 200
     organizador.delete()
