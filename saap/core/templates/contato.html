@@ -153,11 +153,10 @@
       <ul class="collapsible" data-collapsible="accordion">
         {% for contato in resposta %}
           <li>
-          <input id='testCheckHidden' type='hidden' value='{{contato.id}}' name='testName'>
           <div class="collapsible-header"><input type="checkbox" {% if enable %} checked="{{contato.id}}" {% endif %} name='contatos' id="{{contato.id}}" value="{{contato.id}}" />
             <label for="{{contato.id}}">{{contato.nome.capitalize}}</label></div>
           <div class="collapsible-body">
-            <p>{{contato.id}}</p>
+            <p>{{contato.cidade}}</p>
             <p>{{contato.data_de_nascimento}}</p>
             <p>{{contato.sexo}}</p>
             <p>{{contato.endereco}}</p>
