@@ -633,7 +633,6 @@ def test_ticket_view_post_anonimo():
     assert response.status_code is 200
     organizador.delete()
 
-
 @pytest.mark.django_db
 def test_busca_contatos_cidade():
 
@@ -838,6 +837,7 @@ def test_adiciona_contato_ao_grupo():
     
     assert grupo_novo.contatos.all().count() == 1
 
+@pytest.mark.django_db
 def test_busca_contatos_cidade():
 
     contato = Contato() 
@@ -1015,3 +1015,28 @@ def test_criar_grupo_de_contatos():
     Grupo.objects.all().last().delete()
 
 
+@pytest.mark.django_db
+def test_adiciona_contato_ao_grupo():
+
+    client = Client()
+
+    teste_nome_grupo = 'teste_grupo_teste'
+    client.post('/criar_grupo/',{'nome_grupo':teste_nome_grupo})
+    
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+        
+    contato = Contato.objects.all().last()
+    grupo_novo = Grupo.objects.all().last()
+
+    client.post('/adicionar_contatos/',{'contatos': contato.id,'nome_grupo':teste_nome_grupo})
+    
+    assert grupo_novo.contatos.all().count() == 1
