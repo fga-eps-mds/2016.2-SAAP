@@ -526,7 +526,7 @@ class CriarGrupoDeContatosView(View):
         novo_grupo.nome = nome_grupo
         novo_grupo.save()
 
-        return render(request,'contato.html')
+        return redirect("/")
 
 class AdicionarContatoAoGrupo(View):
 
