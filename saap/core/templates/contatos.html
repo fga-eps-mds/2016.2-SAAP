@@ -260,6 +260,7 @@
           <!-- Modal Trigger -->
           <a class="waves-effect waves-light btn modal-trigger saap-dark-green" href="#modal1">Criar grupo</a>
 
+
           <!-- Modal Structure -->
           <div id="modal1" class="modal">
             <form action="{% url 'criar_grupo' %}" method="POST">
@@ -275,6 +276,8 @@
           </form>
           </div>
         </div>
+
+        <div></div>
 
       </div>
       <div class="row">
@@ -297,6 +300,7 @@
       </div>
       <ul class="collection">
 
+     <ul class="collection">
         <p>Lista de Contatos</p>
         <ul class="collapsible popout" data-collapsible="accordion">
           {% for contato in lista_contatos %}
@@ -345,6 +349,7 @@
         </ul>
       </ul>
     </div>    
+
 
     <div class="col s6 m6 l6">
 
@@ -506,7 +511,6 @@
       <div class="collapsible-header s6 m6 l6">{{grupo.nome.capitalize}}  - ({{grupo.contatos.all.count}})</div>
 
     <div class="col s6 m6 l6">
-      
 
      {% for grupo in lista_grupo %}
       <ul class="collapsible" data-collapsible="accordion">
@@ -645,7 +649,7 @@
 
     <div class="col s6 m6 l6 ">
       <ul class="collection">
-<<<<<<< HEAD:saap/core/templates/contatos.html
+
         <p>Tickets Recebidos</p>
         {% for ticket in lista_tickets %}
         <li class="collection-item avatar">
@@ -665,14 +669,14 @@
         </li>
         {% endfor %}
         <br>
-=======
+
         <p>Grupos de contatos</p>
 
     <div class="col s6 m6 l6">
 
-
      {% for grupo in lista_grupo %}
       <ul class="collapsible" data-collapsible="accordion">
+
       <li>
       <div class="collapsible-header">{{grupo.nome.capitalize}}<a class="waves-effect waves-light btn-small btn right green darken-1">Deletar</a></div>
       <div class="collapsible-body ">
@@ -693,27 +697,47 @@
     </div>
 
 
+
   </div>
 </div>
 
+    <!-- Modal para adiconar contatos em um grupo -->
+          
+          
+
+
+
     <div class="col s12 m12 l12">
+    {% if resposta.count > 1%}
+    <div class="row">
+      <form action="/adicionar_contatos/" method="POST">
+          <a><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Cadastrar contato</button></a>
+          <div class="input-field col s6">
+            <i class="material-icons prefix">contacts</i>
+            
+            <input id="icon_prefix" type="text" class="validate" name="nome_grupo" id="nome_grupo">
+            <label for="icon_prefix" >Nome do Grupo</label>
+          </div>
+
+          {% csrf_token %}
+      </div>
+      {%endif%}
       <ul class="collapsible" data-collapsible="accordion">
-          <form action="#">
         {% for contato in resposta %}
           <li>
-
-          <div class="collapsible-header"><input type="checkbox" id="{{contato.id}}" />
+          <input id='testCheckHidden' type='hidden' value='{{contato.id}}' name='testName'>
+          <div class="collapsible-header"><input type="checkbox" {% if enable %} checked="{{contato.id}}" {% endif %} name='contatos' id="{{contato.id}}" value="{{contato.id}}" />
             <label for="{{contato.id}}">{{contato.nome.capitalize}}</label></div>
           <div class="collapsible-body">
-            <p>{{contato.email}}</p>
+            <p>{{contato.id}}</p>
             <p>{{contato.data_de_nascimento}}</p>
             <p>{{contato.sexo}}</p>
             <p>{{contato.endereco}}</p>
           </div>
-        </form>  
+ 
             
           </li>
->>>>>>> Checklist para adicionar contatos no grupo:saap/core/templates/contato.html
+
 
     div class="col s6 m6 l6 ">
       <ul class="collection">
@@ -735,11 +759,15 @@
           <i class="material-icons">grade</i>
         </li>
         {% endfor %}
-<<<<<<< HEAD:saap/core/templates/contatos.html
-        <br>
-=======
 
->>>>>>> Checklist para adicionar contatos no grupo:saap/core/templates/contato.html
+        <br>
+
+
+
+
+
+        </form>
+
       </ul>
     </div>
 
