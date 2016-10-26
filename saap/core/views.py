@@ -534,15 +534,14 @@ class AdicionarContatoAoGrupo(View):
 
     def post(self,request):
 
-        contatos = request.POST['checks']
+        contatos = request.POST.getlist('contatos')
+
         nome_grupo = request.POST['nome_grupo']
 
         s_grupo = Grupo.objects.filter(nome__contains=nome_grupo)
 
         grupo = s_grupo[0]
 
-        print contatos
-        
         for contato in contatos:
             grupo.contatos.add(contato)
 
