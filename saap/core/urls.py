@@ -9,8 +9,6 @@ from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView,
                     GerarOficioView, GerarPDFOficioView, EnviarOficioView,
                     GabineteView, TicketsView,
                     DeletarCartaView, GerarPDFCartaView, EnviarCartaView,
-                    BuscaContatosView, CriarGrupoDeContatosView, 
-                    AdicionarContatoAoGrupo,GrupoDeContatosView,
                     GrupoDeContatosView, CriarGrupoDeContatosView)
 
 urlpatterns = [
