@@ -6,6 +6,14 @@
             <form action="{% url 'mudar_senha' %}"  method="post">
               {% csrf_token %}
               <div class="col s12 offset-m2 m8 offset-l3 l6">
+                {% if messages %}
+                <br><br>
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
                 <div class="login-card hoverable center-align">
                   <div class="col s12">
                       <div class="row">
@@ -41,18 +49,10 @@
                       <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
                     </div>
                     <br><br><br>
-                    {% if messages %}
-                      <ul class="messages">
-                      {% for message in messages %}
-                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                      </ul>
-                    {% endif %}
                   </div>
                 </div>
             </form>
       </div>
     </div>
->>>>>>> fa95c4f67479bea0c78d53a50314ff797808eff5
 </main>
 {% endblock main_content %}

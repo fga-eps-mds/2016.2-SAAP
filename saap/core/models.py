@@ -46,8 +46,19 @@ class Ticket(models.Model):
     # gabinete_destino = Gabinete_saap()
     data_publicacao = models.DateField('data_de_publicacao', auto_now=True)
     tipo_ticket = models.CharField(max_length=30)
+    aprovado = models.BooleanField(default=False)
     #file = models.FileField()
 
     # @classmethod
     # def current_date(self):
     #     return datetime.datetime.now()
+
+
+class Carta(models.Model):
+
+    nome_remetente = models.CharField(max_length=30)
+    municipio_remetente = models.CharField(max_length=30)
+    nome_destinatario = models.CharField(max_length=30)
+    forma_tratamento = models.CharField(max_length=30)
+    texto = models.CharField(max_length=1500)
+    data = models.DateField('data', auto_now=True)
