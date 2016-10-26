@@ -39,18 +39,10 @@ urlpatterns = [
         name='gerar_pdf'),
     url(r'^enviar_carta/(?P<pk>[0-9]+)/$', login_required(EnviarCartaView.as_view()),
         name='enviar_carta'),
-<<<<<<< HEAD
-<<<<<<< HEAD
-    url(r'^criar_grupo/$', CriarGrupoDeContatosView.as_view(),
-        name='criar_grupo'),
     url(r'^busca_contatos/$', BuscaContatosView.as_view(),
         name='busca_contatos'),
     url(r'^adicionar_contatos/$', AdicionarContatoAoGrupo.as_view(),
         name='adicionar_contatos'),
-    url(r'^grupo_contatos/$', GrupoDeContatosView.as_view(),
-        name='grupo_contatos'),
-    url(r'^criar_grupo/$', CriarGrupoDeContatosView.as_view(),
-        name='criar_grupo'),
     url(r'^gerar_oficio/$', GerarOficioView.as_view()),
     url(r'^gabinete/oficios/gerar_oficio/$', GerarOficioView.as_view(),
         name = 'gerar_oficio'),
