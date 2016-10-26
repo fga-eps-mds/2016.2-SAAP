@@ -528,4 +528,22 @@ class CriarGrupoDeContatosView(View):
 
         return render(request,'contato.html')
 
-# class AdicionarContatoAoGrupo        
+class AdicionarContatoAoGrupo(View):
+
+    http_method_names = [u'post']
+
+    def post(self,request):
+
+        contatos = request.POST['checks']
+        nome_grupo = request.POST['nome_grupo']
+
+        s_grupo = Grupo.objects.filter(nome__contains=nome_grupo)
+
+        grupo = s_grupo[0]
+
+        print contatos
+        
+        for contato in contatos:
+            grupo.contatos.add(contato)
+
+        return redirect('/')

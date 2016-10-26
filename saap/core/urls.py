@@ -6,9 +6,13 @@ from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView,
                     DeletarTicketView, GerarCartaView, CartasView,
                     DeletarCartaView, GerarPDFCartaView, EnviarCartaView,
                     BuscaContatosView, CriarGrupoDeContatosView, 
+<<<<<<< HEAD
                     AdicionarContatoAoGrupo,GrupoDeContatosView,
                     GrupoDeContatosView, CriarGrupoDeContatosView,
                     BuscaContatosView, CriarGrupoDeContatosView)
+=======
+                    AdicionarContatoAoGrupo)
+>>>>>>> Metodo para adicionar contatos a um grupo
 
 urlpatterns = [
     url(r'^cadastro_contato/$', login_required(CadastroView.as_view()),
@@ -47,8 +51,4 @@ urlpatterns = [
         name='grupo_contatos'),
     url(r'^criar_grupo/$', CriarGrupoDeContatosView.as_view(),
         name='criar_grupo'),
-    url(r'^criar_grupo/$', CriarGrupoDeContatosView.as_view(),
-        name='criar_grupo'),
-     url(r'^busca_contatos/$', BuscaContatosView.as_view(),
-        name='busca_contatos'),
 ]
