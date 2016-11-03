@@ -62,6 +62,10 @@ class Oficio(models.Model):
     data = models.DateField('data', auto_now=True)
     forma_tratamento = models.CharField(max_length=30)
 
+    @classmethod
+        def busca_por_titulo(cls, titulo_doc):
+            return Oficio.objects.filter(titulo_documento__startswith=titulo_doc)
+
 class Template(models.Model):
 
     nome_remetente = models.CharField(max_length=30)
