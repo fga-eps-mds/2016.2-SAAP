@@ -485,3 +485,11 @@ class OficioView(View):
     def post(self, request, pk):
         carta = Carta.objects.get(id=pk)
         return enviar_carta_email(request, carta)
+
+class DeletarOficioView(View):
+    http_method_names = [u'get']
+
+    def get(self,request,pk):
+        novo_oficio = Oficio.objects.get(id=pk)
+        novo_oficio.delete()
+        return redirect('/')
