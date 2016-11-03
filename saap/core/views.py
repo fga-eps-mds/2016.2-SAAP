@@ -391,19 +391,20 @@ class EnviarCartaView(View):
 
         return response
 
-class OficioView(View):
+class GerarOficioView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
         tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
             user.username)
+
         if tipo_usuario.count():
-            response = render(request, 'oficio.html')
+            response = render(request, 'gerar_oficio.html')
+
         else:
             response = redirect('/')
 
         return response
-
 
     def post(self, request):
 
@@ -420,67 +421,42 @@ class OficioView(View):
 
         if campos_validados is True:
 
-            novo_oficio = Oficio()
+            oficio = Oficio()
+            oficio.remetente = request.POST['remetente']
+            oficio.destinatario = request.POST['destinatario']
+            oficio.corpo_texto_doc = request.POST['corpo_texto_doc']
+            oficio.forma_tratamento = request.POST['forma_tratamento']
+            oficio.data = datetime.now()
+            oficio.save()
 
-            novo_oficio.remetente = request.POST['remetente']
-            novo_oficio.destinatario = request.POST['destinatario']
-            novo_oficio.corpo_texto_doc = request.POST['corpo_texto_doc']
-            novo_oficio.forma_tratamento = request.POST['forma_tratamento']
-            novo_oficio.data = datetime.now()
-            novo_oficio.save()
-
-            doc = SimpleDocTemplate("/tmp/oficio.pdf")
-            styles = getSampleStyleSheet()
-
-            corpo_texto_doc = request.POST['corpo_texto_doc']
-            corpo_texto_doc = corpo_texto_doc.replace('\n', '<br/>')
-
-            Story=[]
-
-            now = datetime.now()
-
-            styles=getSampleStyleSheet()
-            styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
-
-            Story.append(Spacer(1, 24))
-
-            ptext = '<font size=12>Oficio nº __ , %s </font>' % (now.year)
-            Story.append(Paragraph(ptext, styles["Normal"]))
-
-            Story.append(Spacer(1, 24))
-
-            ptext = '<font size=12>À Gabinete </font>'
-            Story.append(Paragraph(ptext, styles["Normal"]))
-
-            Story.append(Spacer(1, 12))
-
-            ptext = '<font size=12>Prezado %s %s, %s</font>' % (request.POST['forma_tratamento'], request.POST['destinatario'],corpo_texto_doc)
-            Story.append(Paragraph(ptext, styles["Justify"]))
-
-            Story.append(Spacer(1, 36))
-
-            ptext = '<font size=12>Atenciosamente,</font>'
-            Story.append(Paragraph(ptext, styles["Normal"]))
-
-            Story.append(Spacer(1, 12))
-
-            ptext = '<font size=12>%s, %s/%s/%s</font>' % (request.POST['remetente'], now.day, now.month, now.year)
-            Story.append(Paragraph(ptext, styles["Normal"]))
-
-            Story.append(Spacer(1, 12))
-
-            doc.build(Story)
-
-            fs = FileSystemStorage("/tmp")
-            with fs.open("oficio.pdf") as pdf:
-                response = HttpResponse(pdf, content_type='application/pdf')
-                response['Content-Disposition'] = 'attachment; filename="oficio.pdf"'
-                return response
+            organizador = OrganizadorContatos.objects.get(username=request.\
+                user.username)
+            organizador = OrganizadorContatos.objects.get(username=request.user.username)
+            organizador.oficio.add(oficio)
+            response = render(request, 'oficio.html')
 
         else:
-            messages.error(request, 'O campo "%s" não foi preenchido!' \
-                % campos_enviar_oficio[campos_validados])
+            messages.error(request, 'O campo "%s" não foi preenchido!'\
+            % campos_enviar_oficio[campos_validados])
+
+            response = render(request, 'gerar_oficio.html', locals())
+
+        return response
+
+
+class OficioView(View):
+     http_method_names = [u'get', u'post']
+
+     def get(self, request):
+        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
+            user.username)
+        if tipo_usuario.count():
+            organizador = OrganizadorContatos.objects.get(username=request.user.username)
+            oficio = organizador.oficio.all()
+            lista_oficio = list(oficio)
             response = render(request, 'oficio.html', locals())
+        else:
+            response = redirect('/')
 
     def post(self, request, pk):
         carta = Carta.objects.get(id=pk)
@@ -490,6 +466,20 @@ class DeletarOficioView(View):
     http_method_names = [u'get']
 
     def get(self,request,pk):
-        novo_oficio = Oficio.objects.get(id=pk)
-        novo_oficio.delete()
-        return redirect('/')
+        oficio = Oficio.objects.get(id=pk)
+        oficio.delete()
+        return redirect('/oficio/')
+
+class GerarPDFOficioView(View):
+    http_method_names = [u'get']
+
+    def get(self, request, pk):
+        oficio = Oficio.objects.get(id=pk)
+        return gerar_pdf_oficio(oficio)
+
+class EnviarOficioView(View):
+    http_method_names = [u'post']
+
+    def post(self, request, pk):
+        oficio = Oficio.objects.get(id=pk)
+        return enviar_oficio_email(request, oficio)
