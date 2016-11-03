@@ -48,6 +48,7 @@ class OrganizadorContatos(Usuario_saap):
     contatos = models.ManyToManyField(Contato)
     tickets = models.ManyToManyField(Ticket)
     cartas = models.ManyToManyField(Carta)
+    oficio = models.ManyToManyField(Oficio)
 
 class OrganizadorGabinete(Usuario_saap):
 
@@ -55,5 +56,4 @@ class OrganizadorGabinete(Usuario_saap):
     gabinete = Gabinete_saap()
     tickets = models.ManyToManyField(Ticket)
     template = models.ManyToManyField(Template)
-    documento = models.ManyToManyField(Oficio)
     boletim = models.ManyToManyField(Boletim)
