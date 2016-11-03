@@ -216,6 +216,7 @@ def test_enviar_oficio_view_get_organizador_deslogado():
     response = client.get('/oficio/')
     assert 300 <= response.status_code < 400
     cidadao.delete()
+<<<<<<< e50a8f1b62ba088a9b0d5036205c5c62535f45f7
 
 @pytest.mark.django_db
 def test_deletar_carta_view():

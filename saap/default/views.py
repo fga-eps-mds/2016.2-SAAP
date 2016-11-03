@@ -265,7 +265,6 @@ def enviar_carta_email(request, carta):
     email.send()
 
     return redirect('/cartas/', messages.success(request, 'Carta enviada por e-mail com sucesso!'))
-=======
     with fs.open("oficio.pdf") as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="oficio.pdf"'
@@ -282,4 +281,3 @@ def enviar_oficio_email(request, oficio):
     email.send()
 
     return redirect('/oficio/', messages.success(request, 'Oficio enviado por e-mail com sucesso!'))
->>>>>>> Criando novas views
