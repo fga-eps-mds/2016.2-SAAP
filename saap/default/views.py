@@ -271,11 +271,10 @@ def enviar_carta_email(request, carta):
         return response
 
 def enviar_oficio_email(request, oficio):
-    email = EmailMessage('Carta de ' + oficio.remetente,
-           '%s, %s/%s/%s\n\n%s %s,\n\n\nPrezado %s:\n\n%s\n\n\nAtenciosamente,\
-            \n\n%s' % (oficio.data.day,oficio.data.month, \
-            oficio.data.year, oficio.forma_tratamento, \
-            oficio.destinatario, oficio.forma_tratamento, \
+    email = EmailMessage('Oficio de ' + oficio.remetente,
+           'Hoje, dia %s/%s/%s\n\n\nPrezado %s %s:\n\n%s\n\n\nAtenciosamente,\
+            \n\n%s' % (oficio.data.day,oficio.data.month,oficio.data.year,\
+            oficio.forma_tratamento, oficio.destinatario, \
             oficio.corpo_texto_doc, oficio.remetente),
         to=[request.POST['email_oficio']])
     email.send()
