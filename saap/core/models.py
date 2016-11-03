@@ -55,16 +55,12 @@ class Boletim(models.Model):
 
 class Oficio(models.Model):
 
-    tipo_documento = models.CharField(max_length=100)
     remetente = models.CharField(max_length=100)
     destinatario = models.CharField(max_length=100)
     titulo_documento = models.CharField(max_length=100)
     corpo_texto_doc = models.CharField(max_length=1000000)
     data = models.DateField('data', auto_now=True)
-
-    @classmethod
-    def busca_por_titulo(cls, titulo_doc):
-        return Oficio.objects.filter(titulo_documento__startswith=titulo_doc)
+    forma_tratamento = models.CharField(max_length=30)
 
 class Template(models.Model):
 
