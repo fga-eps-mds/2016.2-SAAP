@@ -13,6 +13,11 @@ def test_checar_campos():
     response = checar_campos(campos)
     assert response is True
 
+def test_checar_campos_vazio():
+    campos = ['teste','']
+    response = checar_campos(campos)
+    assert response == 1
+
 def test_checar_vazio():
 	campos = ['']
 	assert checar_vazio(campos) is False
