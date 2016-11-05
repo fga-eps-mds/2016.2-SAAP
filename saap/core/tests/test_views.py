@@ -1,5 +1,6 @@
 # coding=utf-8
 from core.views import *
+from autenticacao.views import *
 from autenticacao.models import OrganizadorContatos
 import pytest
 from django.test import Client
@@ -216,7 +217,6 @@ def test_enviar_oficio_view_get_organizador_deslogado():
     response = client.get('/oficio/')
     assert 300 <= response.status_code < 400
     cidadao.delete()
-<<<<<<< e50a8f1b62ba088a9b0d5036205c5c62535f45f7
 
 @pytest.mark.django_db
 def test_deletar_carta_view():
@@ -274,6 +274,69 @@ def test_enviar_carta_email_view():
 @pytest.mark.django_db
 def test_enviar_carta_view_post():
 
+@pytest.mark.django_db
+def test_enviar_oficio_view_post():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'org'
+    organizador.set_password('123456')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'org', 'password': '123456'})
+    response = client.post('/gerar_oficio/', {'remetente': 'Remetente', \
+        'destinatario': 'Destinatário', 'forma_tratamento': 'Senhor(a)',\
+        'corpo_texto_doc': 'Mensagem'})
+    assert 300 <= response.status_code < 400
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_enviar_oficio_view_post_faltando_campo():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'org'
+    organizador.set_password('123456')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'org', 'password': '123456'})
+    response = client.post('/gerar_oficio/', {'remetente': 'Remetente', \
+        'destinatario': 'Destinatário', 'forma_tratamento': 'Senhor(a)',\
+        'corpo_texto_doc': ''})
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_oficio_view_get_logado():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'org'
+    organizador.set_password('123456')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'org', 'password': '123456'})
+    response = client.get('/oficio/')
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_oficio_view_get_deslogado():
+
+    cidadao = Cidadao()
+    cidadao.username = 'cidteste'
+    cidadao.set_password('123456')
+    cidadao.data_de_nascimento = '1900-01-01'
+    cidadao.save()
+    client = Client()
+    client.post('/', {'username': 'cidteste', 'password': '123456'})
+    response = client.get('/oficio/')
+    assert 300 <= response.status_code < 400
+    cidadao.delete()
+
+@pytest.mark.django_db
+def test_deletar_oficio_view():
+
     organizador = OrganizadorContatos()
     organizador.username = 'org'
     organizador.set_password('123456')
@@ -289,6 +352,18 @@ def test_enviar_carta_view_post():
 
 @pytest.mark.django_db
 def test_enviar_carta_view_post_faltando_campo():
+    oficio = Oficio()
+    oficio.save()
+    organizador.oficio.add(oficio)
+    client = Client()
+    client.post('/', {'username': 'org', 'password': '123456'})
+    response = client.get('/deletar_oficio/1/')
+    procurar_oficio = organizador.oficio.filter(id='1')
+    assert procurar_oficio.count() == 0
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_gerar_pdf_oficio_view():
 
     organizador = OrganizadorContatos()
     organizador.username = 'org'
@@ -301,4 +376,30 @@ def test_enviar_carta_view_post_faltando_campo():
         'destinatario': 'Destinatário', 'forma_tratamento': 'Senhor(a)',\
         'corpo_texto_doc': ''})
     assert response.status_code is 200
+    oficio = Oficio()
+    oficio.save()
+    organizador.oficio.add(oficio)
+    client = Client()
+    client.post('/', {'username': 'org', 'password': '123456'})
+    response = client.get('/gerar_pdf/1/')
+    assert response.status_code is 200
+    oficio.delete()
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_enviar_oficio_email_view():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'org'
+    organizador.set_password('123456')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    oficio = Oficio()
+    oficio.save()
+    organizador.oficio.add(oficio)
+    client = Client()
+    client.post('/', {'username': 'org', 'password': '123456'})
+    response = client.post('/enviar_oficio/1/', {'email_oficio': 'exemplo@teste.com'})
+    assert 300 <= response.status_code < 400
+    oficio.delete()
     organizador.delete()
