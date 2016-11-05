@@ -39,7 +39,7 @@
               <!--<input type="hidden" name="oficio_id" value="{{oficio.id}}"> -->
               <!--<a href="/deletar_oficio/{{oficio.id}}"class="btn-floating waves-effect waves-light saap-dark-green right"><i class="material-icons">delete</i></a> -->
 
-              <a href="/gerar_pdf/{{oficio.id}}/"class="btn-floating waves-effect waves-light saap-dark-green right"><i class="material-icons">input</i></a>
+              <a href="/gerar_oficio_pdf/{{oficio.id}}/"class="btn-floating waves-effect waves-light saap-dark-green right"><i class="material-icons">input</i></a>
 
               <form action="/enviar_oficio/{{oficio.id}}/" method="POST">
                 <!-- Modal Trigger -->
@@ -53,7 +53,7 @@
                     <input  id="email_oficio" name="email_oficio" type="text" class="validate" placeholder="exemplo@email.com">
                   </div>
                   <div class="modal-footer">
-                    <a href="/oficios/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                    <a href="/oficio/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
                     <button class=" modal-action modal-close waves-effect waves-green btn-flat" type="submit">Confirmar</button>
                   </div>
                 </div>

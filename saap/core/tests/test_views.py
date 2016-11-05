@@ -287,7 +287,7 @@ def test_enviar_oficio_view_post():
     response = client.post('/gerar_oficio/', {'remetente': 'Remetente', \
         'destinatario': 'Destinatário', 'forma_tratamento': 'Senhor(a)',\
         'corpo_texto_doc': 'Mensagem'})
-    assert 300 <= response.status_code < 400
+    assert response.status_code is 200
     organizador.delete()
 
 @pytest.mark.django_db
@@ -381,7 +381,7 @@ def test_gerar_pdf_oficio_view():
     organizador.oficio.add(oficio)
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
-    response = client.get('/gerar_pdf/1/')
+    response = client.get('/gerar_oficio_pdf/1/')
     assert response.status_code is 200
     oficio.delete()
     organizador.delete()

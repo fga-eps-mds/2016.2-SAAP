@@ -205,18 +205,6 @@ def gerar_pdf_oficio(oficio):
     styles=getSampleStyleSheet()
     styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
 
-    ptext = '<font size=12>%s, %s/%s/%s</font>' % (carta.municipio_remetente, now.day, now.month, now.year)
-    Story.append(Paragraph(ptext, styles["Normal"]))
-
-    Story.append(Spacer(1, 24))
-
-    ptext = '<font size=12>%s %s,</font>' % (carta.forma_tratamento, carta.nome_destinatario)
-    Story.append(Paragraph(ptext, styles["Normal"]))
-    #.split()[0].strip()
-
-    Story.append(Spacer(1, 36))
-
-    ptext = '<font size=12>Prezado %s:</font>' % carta.forma_tratamento
     Story.append(Spacer(1, 24))
 
     ptext = '<font size=12>Oficio nº __ , %s </font>' % (now.year)
@@ -229,7 +217,6 @@ def gerar_pdf_oficio(oficio):
 
     Story.append(Spacer(1, 12))
 
-    ptext = '<font size=12>%s</font>' % mensagem
     ptext = '<font size=12>Prezado %s %s, %s</font>' % (oficio.forma_tratamento, oficio.destinatario,oficio.corpo_texto_doc)
     Story.append(Paragraph(ptext, styles["Justify"]))
 
@@ -239,7 +226,7 @@ def gerar_pdf_oficio(oficio):
     Story.append(Paragraph(ptext, styles["Normal"]))
 
     Story.append(Spacer(1, 12))
-    ptext = '<font size=12>%s</font>' % oficio.remetente
+
     ptext = '<font size=12>%s, %s/%s/%s</font>' % (oficio.remetente, now.day, now.month, now.year)
     Story.append(Paragraph(ptext, styles["Normal"]))
 
@@ -250,8 +237,9 @@ def gerar_pdf_oficio(oficio):
     fs = FileSystemStorage("/tmp")
     with fs.open("oficio.pdf") as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="carta.pdf"'
+        response['Content-Disposition'] = 'attachment; filename="oficio.pdf"'
         return response
+
 
 def enviar_carta_email(request, carta):
 
@@ -265,10 +253,6 @@ def enviar_carta_email(request, carta):
     email.send()
 
     return redirect('/cartas/', messages.success(request, 'Carta enviada por e-mail com sucesso!'))
-    with fs.open("oficio.pdf") as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="oficio.pdf"'
-        return response
 
 def enviar_oficio_email(request, oficio):
     email = EmailMessage('Oficio de ' + oficio.remetente,

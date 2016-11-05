@@ -384,12 +384,10 @@ class GerarPDFCartaView(View):
 
 class EnviarCartaView(View):
     http_method_names = [u'post']
-        else:
-            messages.error(request, 'O campo %s não foi preenchido!' \
-                % campos_enviar_carta[campos_validados])
-            response = render(request, 'enviar_carta.html', locals())
 
-        return response
+    def post(self, request, pk):
+        carta = Carta.objects.get(id=pk)
+        return enviar_carta_email(request, carta)
 
 class GerarOficioView(View):
     http_method_names = [u'get', u'post']
@@ -458,9 +456,8 @@ class OficioView(View):
         else:
             response = redirect('/')
 
-    def post(self, request, pk):
-        carta = Carta.objects.get(id=pk)
-        return enviar_carta_email(request, carta)
+        return response
+
 
 class DeletarOficioView(View):
     http_method_names = [u'get']
