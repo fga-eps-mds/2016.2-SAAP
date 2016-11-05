@@ -49,12 +49,33 @@ class Ticket(models.Model):
     aprovado = models.BooleanField(default=False)
     #file = models.FileField()
 
-    # @classmethod
-    # def current_date(self):
-    #     return datetime.datetime.now()
+class Boletim(models.Model):
+    titulo_boletim = models.CharField(max_length=100)
+    corpo_texto_boletim = models.CharField(max_length= 5000)
 
+class Oficio(models.Model):
+
+    tipo_documento = models.CharField(max_length=100)
+    remetente = models.CharField(max_length=100)
+    destinatario = models.CharField(max_length=100)
+    titulo_documento = models.CharField(max_length=100)
+    corpo_texto_doc = models.CharField(max_length=1000000)
+    data = models.DateField('data', auto_now=True)
+
+    @classmethod
+    def busca_por_titulo(cls, titulo_doc):
+        return Oficio.objects.filter(titulo_documento__startswith=titulo_doc)
 
 class Carta(models.Model):
+
+    nome_remetente = models.CharField(max_length=30)
+    municipio_remetente = models.CharField(max_length=30)
+    nome_destinatario = models.CharField(max_length=30)
+    forma_tratamento = models.CharField(max_length=30)
+    texto = models.CharField(max_length=1500)
+    data = models.DateField('data', auto_now=True)
+
+class Template(models.Model):
 
     nome_remetente = models.CharField(max_length=30)
     municipio_remetente = models.CharField(max_length=30)
