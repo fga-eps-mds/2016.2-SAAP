@@ -117,7 +117,7 @@ def test_enviar_carta_view_get_organizador_logado():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
-    response = client.get('/enviar_carta/')
+    response = client.get('/gerar_carta/')
     assert response.status_code is 200
     organizador.delete()
 
@@ -131,7 +131,7 @@ def test_enviar_carta_view_get_organizador_deslogado():
     cidadao.save()
     client = Client()
     client.post('/', {'username': 'cidteste', 'password': '123'})
-    response = client.get('/enviar_carta/')
+    response = client.get('/gerar_carta/')
     assert 300 <= response.status_code < 400
     cidadao.delete()
 
@@ -145,10 +145,10 @@ def test_enviar_carta_view_post():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
-    response = client.post('/enviar_carta/', {'nome_remetente': 'Remetente', \
+    response = client.post('/gerar_carta/', {'nome_remetente': 'Remetente', \
         'municipio_remetente': 'Município', 'nome_destinatario': 'Destinatário'\
         , 'forma_tratamento': 'Senhor(a)', 'mensagem': 'Mensagem'})
-    assert response.status_code is 200
+    assert 300 <= response.status_code < 400
     organizador.delete()
 
 @pytest.mark.django_db
@@ -161,8 +161,90 @@ def test_enviar_carta_view_post_faltando_campo():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
-    response = client.post('/enviar_carta/', {'nome_remetente': 'Remetente', \
+    response = client.post('/gerar_carta/', {'nome_remetente': 'Remetente', \
         'municipio_remetente': 'Município', 'nome_destinatario': 'Destinatário'\
         , 'forma_tratamento': 'Senhor(a)', 'mensagem': ''})
     assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_cartas_view_get_logado():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'orgteste'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'orgteste', 'password': '123'})
+    response = client.get('/cartas/')
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_cartas_view_get_deslogado():
+
+    cidadao = Cidadao()
+    cidadao.username = 'cidteste'
+    cidadao.set_password('123')
+    cidadao.data_de_nascimento = '1900-01-01'
+    cidadao.save()
+    client = Client()
+    client.post('/', {'username': 'cidteste', 'password': '123'})
+    response = client.get('/cartas/')
+    assert 300 <= response.status_code < 400
+    cidadao.delete()
+
+@pytest.mark.django_db
+def test_deletar_carta_view():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'orgteste'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    carta = Carta()
+    carta.save()
+    organizador.cartas.add(carta)
+    client = Client()
+    client.post('/', {'username': 'orgteste', 'password': '123'})
+    response = client.get('/deletar_carta/1/')
+    procurar_carta = organizador.cartas.filter(id='1')
+    assert procurar_carta.count() == 0
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_gerar_pdf_carta_view():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'orgteste'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    carta = Carta()
+    carta.save()
+    organizador.cartas.add(carta)
+    client = Client()
+    client.post('/', {'username': 'orgteste', 'password': '123'})
+    response = client.get('/gerar_pdf/1/')
+    assert response.status_code is 200
+    carta.delete()
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_enviar_carta_email_view():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'orgteste'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    carta = Carta()
+    carta.save()
+    organizador.cartas.add(carta)
+    client = Client()
+    client.post('/', {'username': 'orgteste', 'password': '123'})
+    response = client.post('/enviar_carta/1/', {'email_carta': 'exemplo@teste.com'})
+    assert 300 <= response.status_code < 400
+    carta.delete()
     organizador.delete()

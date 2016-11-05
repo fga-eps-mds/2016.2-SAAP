@@ -10,22 +10,6 @@ from default.views import *
 from autenticacao.views import *
 from autenticacao.models import *
 
-from reportlab.pdfgen import canvas
-from django.http import HttpResponse
-
-import time
-from reportlab.lib.enums import TA_JUSTIFY
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-
-from io import StringIO
-
-from django.core.files.storage import FileSystemStorage
-
-from datetime import datetime
-
 class CadastroView(View):
     http_method_names = [u'get', u'post']
 
@@ -317,14 +301,14 @@ POST['nome_organizador'])
 
         return resposta
 
-class EnviarCartaView(View):
+class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
         tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
             user.username)
         if tipo_usuario.count():
-            response = render(request, 'enviar_carta.html')
+            response = render(request, 'gerar_carta.html')
         else:
             response = redirect('/')
 
@@ -358,62 +342,49 @@ class EnviarCartaView(View):
             organizador = OrganizadorContatos.objects.get(username=request.\
                 user.username)
             organizador.cartas.add(carta)
-
-            doc = SimpleDocTemplate("/tmp/carta.pdf")
-            styles = getSampleStyleSheet()
-
-            mensagem = request.POST['mensagem']
-            mensagem = mensagem.replace('\n', '<br/>')
-
-            Story=[]
-
-            now = datetime.now()
-
-            styles=getSampleStyleSheet()
-            styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
-
-            ptext = '<font size=12>%s, %s/%s/%s</font>' % (request.POST['municipio_remetente'], now.day, now.month, now.year)
-            Story.append(Paragraph(ptext, styles["Normal"]))
-
-            Story.append(Spacer(1, 24))
-
-            ptext = '<font size=12>%s %s,</font>' % (request.POST['forma_tratamento'], request.POST['nome_destinatario'])
-            Story.append(Paragraph(ptext, styles["Normal"]))
-            #.split()[0].strip()
-
-            Story.append(Spacer(1, 36))
-
-            ptext = '<font size=12>Prezado %s:</font>' % request.POST['forma_tratamento']
-            Story.append(Paragraph(ptext, styles["Normal"]))
-
-            Story.append(Spacer(1, 12))
-
-            ptext = '<font size=12>%s</font>' % mensagem
-            Story.append(Paragraph(ptext, styles["Justify"]))
-
-            Story.append(Spacer(1, 36))
-
-            ptext = '<font size=12>Atenciosamente,</font>'
-            Story.append(Paragraph(ptext, styles["Normal"]))
-
-            Story.append(Spacer(1, 12))
-
-            ptext = '<font size=12>%s</font>' % request.POST['nome_remetente']
-            Story.append(Paragraph(ptext, styles["Normal"]))
-
-            Story.append(Spacer(1, 12))
-
-            doc.build(Story)
-
-            fs = FileSystemStorage("/tmp")
-            with fs.open("carta.pdf") as pdf:
-                response = HttpResponse(pdf, content_type='application/pdf')
-                response['Content-Disposition'] = 'attachment; filename="carta.pdf"'
-                return response
+            response = redirect('/cartas/')
 
         else:
             messages.error(request, 'O campo "%s" não foi preenchido!' \
                 % campos_enviar_carta[campos_validados])
-            response = render(request, 'enviar_carta.html', locals())
+            response = render(request, 'gerar_carta.html', locals())
 
         return response
+
+class CartasView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
+            user.username)
+        if tipo_usuario.count():
+            organizador = OrganizadorContatos.objects.get(username=request.user.username)
+            cartas = organizador.cartas.all()
+            lista_cartas = list(cartas)
+            response = render(request, 'cartas.html', locals())
+        else:
+            response = redirect('/')
+
+        return response
+
+class DeletarCartaView(View):
+    http_method_names = [u'get']
+
+    def get(self,request,pk):
+        carta = Carta.objects.get(id=pk)
+        carta.delete()
+        return redirect('/cartas/')
+
+class GerarPDFCartaView(View):
+    http_method_names = [u'get']
+
+    def get(self, request, pk):
+        carta = Carta.objects.get(id=pk)
+        return gerar_pdf_carta(carta)
+
+class EnviarCartaView(View):
+    http_method_names = [u'post']
+
+    def post(self, request, pk):
+        carta = Carta.objects.get(id=pk)
+        return enviar_carta_email(request, carta)

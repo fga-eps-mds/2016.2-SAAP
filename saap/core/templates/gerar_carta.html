@@ -12,7 +12,7 @@
             {% endfor %}
         </ul>
         {% endif %}
-        <form action="{% url 'enviar_carta' %}" method='POST'>
+        <form action="{% url 'gerar_carta' %}" method='POST'>
           {% csrf_token %}
           <div class="login-card hoverable center-align">
             <div class="card-content">
