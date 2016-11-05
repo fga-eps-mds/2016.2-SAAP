@@ -179,7 +179,10 @@ def test_cartas_view_get_logado():
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
     response = client.get('/cartas/')
+    assert response.status_code is 200
+    organizador.delete()
 
+@pytest.mark.django_db
 def test_enviar_oficio_view_get_organizador_logado():
 
     organizador = OrganizadorContatos()
@@ -204,7 +207,10 @@ def test_cartas_view_get_deslogado():
     client = Client()
     client.post('/', {'username': 'cidteste', 'password': '123'})
     response = client.get('/cartas/')
+    assert 300 <= response.status_code < 400
+    cidadao.delete()
 
+@pytest.mark.django_db
 def test_enviar_oficio_view_get_organizador_deslogado():
 
     cidadao = Cidadao()
@@ -270,9 +276,6 @@ def test_enviar_carta_email_view():
     response = client.post('/enviar_carta/1/', {'email_carta': 'exemplo@teste.com'})
     assert 300 <= response.status_code < 400
     carta.delete()
-
-@pytest.mark.django_db
-def test_enviar_carta_view_post():
 
 @pytest.mark.django_db
 def test_enviar_oficio_view_post():
@@ -342,16 +345,6 @@ def test_deletar_oficio_view():
     organizador.set_password('123456')
     organizador.data_de_nascimento = '1900-01-01'
     organizador.save()
-    client = Client()
-    client.post('/', {'username': 'org', 'password': '123456'})
-    response = client.post('/oficio/', {'remetente': 'Remetente', \
-        'destinatario': 'destinatario','forma_tratamento': 'Senhor(a)', \
-        'corpo_texto_doc': 'Mensagem'})
-    assert response.status_code is 200
-    organizador.delete()
-
-@pytest.mark.django_db
-def test_enviar_carta_view_post_faltando_campo():
     oficio = Oficio()
     oficio.save()
     organizador.oficio.add(oficio)
@@ -365,17 +358,12 @@ def test_enviar_carta_view_post_faltando_campo():
 @pytest.mark.django_db
 def test_gerar_pdf_oficio_view():
 
+
     organizador = OrganizadorContatos()
     organizador.username = 'org'
     organizador.set_password('123456')
     organizador.data_de_nascimento = '1900-01-01'
     organizador.save()
-    client = Client()
-    client.post('/', {'username': 'org', 'password': '123456'})
-    response = client.post('/oficio/', {'remetente': 'Remetente', \
-        'destinatario': 'Destinatário', 'forma_tratamento': 'Senhor(a)',\
-        'corpo_texto_doc': ''})
-    assert response.status_code is 200
     oficio = Oficio()
     oficio.save()
     organizador.oficio.add(oficio)
