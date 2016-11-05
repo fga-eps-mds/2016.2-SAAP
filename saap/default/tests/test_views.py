@@ -23,7 +23,7 @@ def test_checar_vazio():
 	assert checar_vazio(campos) is False
 
 @pytest.mark.django_db
-def test_checar_existe_usuario():
+def test_checar_existe_usuario_existente():
     client = Client()
     response = client.post('/cadastro/', {'first_name': 'teste', \
         'last_name': 'teste', 'username': 'teste', \
@@ -31,9 +31,24 @@ def test_checar_existe_usuario():
         'password': '123', 'confirmacao_password': '123', 'sexo': 'Masculino', \
         'municipio': 'Brasilia', 'uf': 'DF', 'data_de_nascimento': \
         '1900-01-01'})
-    usuario = Cidadao.objects.filter(username='teste')
-    response = usuario.count() == 0
-    assert response is False
+    cidadao = Cidadao.objects.filter(username='teste').count() > 0
+    organizador = OrganizadorContatos.objects.filter(username='teste').count() == 0
+    assert organizador is True
+    assert cidadao is True
+
+@pytest.mark.django_db
+def test_checar_existe_usuario_nao_existente():
+    client = Client()
+    response1 = client.post('/cadastro/', {'first_name': 'teste', \
+        'last_name': 'teste', 'username': 'teste', \
+        'email': 'teste@email.com', 'confirmacao_email': 'teste@email.com',\
+        'password': '123', 'confirmacao_password': '123', 'sexo': 'Masculino', \
+        'municipio': 'Brasilia', 'uf': 'DF', 'data_de_nascimento': \
+        '1900-01-01'})
+    cidadao = Cidadao.objects.filter(username='teste').count() == 0
+    organizador = OrganizadorContatos.objects.filter(username='teste').count() > 0
+    assert organizador is False
+    assert cidadao is False
 
 @pytest.mark.django_db
 def test_checar_campos_registro():
