@@ -851,6 +851,7 @@ def test_atualizar_contato_post_campo_em_branco():
     assert gabinete.contatos.get(nome='Contato1') is not None
     organizador.delete()
 
+
 @pytest.mark.django_db
 def test_contato_view_get():
 
@@ -1319,6 +1320,7 @@ def test_adiciona_contato_ao_grupo():
     client.post('/adicionar_contatos/',{'contatos': contato.id,'nome_grupo':teste_nome_grupo})
     
     assert grupo_novo.contatos.all().count() == 1
+
 
 def test_busca_contatos_cidade():
 

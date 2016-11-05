@@ -741,4 +741,3 @@ class AdicionarContatoAoGrupo(View):
             grupo.contatos.add(contato)
 
         return redirect('/')
-
