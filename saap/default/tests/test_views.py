@@ -29,3 +29,19 @@ def test_checar_existe_usuario():
     usuario = Cidadao.objects.filter(username='teste')
     response = usuario.count() == 0
     assert response is False
+
+@pytest.mark.django_db
+def test_checar_campos_registro():
+    cidadao = Cidadao()
+    cidadao.username = 'cidadao'
+    cidadao.set_password('123')
+    cidadao.data_de_nascimento = '1900-01-01'
+    cidadao.save()
+    campos = ['cidadao','123','1990-01-01']
+    campos_validados = checar_campos(campos)
+    assert campos_validados is True
+    cidadao.delete()
+
+def test_checar_data():
+    teste_data = checar_data('1990-1-01')
+    assert teste_data is False
