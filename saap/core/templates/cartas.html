@@ -1,0 +1,86 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<main>
+  <div class="container">
+    <div class="row">
+
+      <div class="col s2 m2 l2"><br><br></div>
+      <div class="col s8 m8 l8">
+        {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br><center>
+          <a href="/gerar_carta"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Gerar nova carta</button></a>
+        </center><br>
+        <ul class="collection">
+          <p>Cartas geradas</p>
+          <ul class="collapsible popout" data-collapsible="accordion">
+            {% for carta in lista_cartas %}
+            <li>
+              <br>
+              <input type="hidden" name="carta_id" value="{{carta.id}}">
+              <!-- Modal Trigger -->
+              <a href="#modal_deletar{{carta.id}}" class="btn-floating waves-effect waves-light saap-dark-green right modal-trigger"><i class="material-icons">delete</i></a>
+              <!-- Modal Structure -->
+              <div id="modal_deletar{{carta.id}}" class="modal">
+                <div class="modal-content">
+                  <h4>Deletar carta</h4>
+                  <p>Você tem certeza que deseja excluir a carta selecionada?</p>
+                </div>
+                <div class="modal-footer">
+                  <a href="/cartas/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                  <a href="/deletar_carta/{{carta.id}}/" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirmar</a>
+                </div>
+              </div>
+              <!--<input type="hidden" name="carta_id" value="{{carta.id}}"> -->
+              <!--<a href="/deletar_carta/{{carta.id}}"class="btn-floating waves-effect waves-light saap-dark-green right"><i class="material-icons">delete</i></a> -->
+
+              <a href="/gerar_pdf/{{carta.id}}/"class="btn-floating waves-effect waves-light saap-dark-green right"><i class="material-icons">input</i></a>
+
+              <form action="/enviar_carta/{{carta.id}}/" method="POST">
+                <!-- Modal Trigger -->
+                <a href="#modal_enviar{{carta.id}}" class="btn-floating waves-effect waves-light saap-dark-green right modal-trigger"><i class="material-icons">email</i></a>
+                <!-- Modal Structure -->
+                <div id="modal_enviar{{carta.id}}" class="modal">
+                  <div class="modal-content">
+                    <h4>Enviar carta por e-mail</h4>
+                    <p>Digite um e-mail para encaminhar a carta:</p>
+                    {% csrf_token %}
+                    <input  id="email_carta" name="email_carta" type="text" class="validate" placeholder="exemplo@email.com">
+                  </div>
+                  <div class="modal-footer">
+                    <a href="/cartas/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                    <button class=" modal-action modal-close waves-effect waves-green btn-flat" type="submit">Confirmar</button>
+                  </div>
+                </div>
+              </form>
+
+              <div class="collapsible-header"><i class="material-icons">perm_identity</i>Data: {{ carta.data }}</div>
+              <div class="collapsible-body">
+                <p>
+                  Remetente: {{ carta.nome_remetente }}<br>
+                  Município: {{ carta.municipio_remetente }}<br>
+                  Destinatário: {{ carta.forma_tratamento }} {{ carta.nome_destinatario }}<br>
+                  <br>
+                  {{ carta.texto }}
+                </p>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </ul>
+      </div>
+      <div class="col s2 m2 l2"><br><br></div>
+
+    </div>
+  </div>
+
+  <main>
+
+
+
+    {% endblock main_content %}

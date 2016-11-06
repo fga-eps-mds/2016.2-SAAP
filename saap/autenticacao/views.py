@@ -69,7 +69,7 @@ class LoginView(View):
             else:
                 messages.error(request, 'Nome de usuário e/ou senha inválido(s)!')
         else:
-            messages.error(request, 'O campo "%s" não foi preenchido!' % \
+            messages.error(request, 'O campo %s não foi preenchido!' % \
                 campos_login[campos_validados])
 
         return render(request, 'login.html', {'data':data})
@@ -256,7 +256,7 @@ class MudarSenhaView(View):
                 response = render(request, 'mudar_senha.html')
 
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+            response = render_mensagem_erro(request, 'O campo %s não foi \
                 preenchido!' % campos_mudar_senha[campos_validados], \
                 'mudar_senha.html', {'data':data})
 
@@ -290,7 +290,7 @@ class ExcluirContaView(View):
                 response = render_mensagem_erro(request, 'Senha incorreta! \
                     Digite novamente.', 'excluir_conta.html', {'data':data})
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+            response = render_mensagem_erro(request, 'O campo %s não foi \
                 preenchido!' % campos_excluir_conta[campos_validados], \
                 'excluir_conta.html', {'data':data})
 
