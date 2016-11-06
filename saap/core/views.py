@@ -258,9 +258,9 @@ class PublicarTicketView(View):
             response = render (request, 'vereadores.html',locals()) #pagina do vereador
             return response
 
-        else:
-            messages.error(request, 'Erro ao tentar publicar Ticket')
-            return render (request, 'redirect/')
+        # else:
+        #     messages.error(request, 'Erro ao tentar publicar Ticket')
+        #     return render (request, 'redirect/')
 
 
 class DeletarTicketView(View):

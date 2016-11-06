@@ -23,8 +23,6 @@ def test_enviar_ticket():
 
     organizador.save()
 
-
-
     user = client.login(username='sabino', password='eusoueu0')
 
     request = {
@@ -42,6 +40,67 @@ def test_enviar_ticket():
     assert tickets == 1
     Ticket.objects.all()[0].delete()
 
+@pytest.mark.django_db
+def test_enviar_ticket_campo_em_branco():
+    client = Client()
+
+    organizador = OrganizadorContatos()
+
+    organizador.username = 'sabino'
+    organizador.first_name = 'sabino'
+    organizador.data_de_nascimento = '1990-01-01'
+    organizador.sexo = 'masculino'
+    organizador.municipio = 'ceilandia'
+    organizador.uf = 'df'
+    organizador.set_password('eusoueu0')
+
+    organizador.save()
+
+    user = client.login(username='sabino', password='eusoueu0')
+
+    request = {
+    "nome_organizador":"sabino",
+    "enviar_anonimamente":"False",
+    "assunto" : "blablabla",
+    "descricao" : "",
+    "envio_anonimo": "anonimo",
+    "tipo_mensagem": "blablabla"
+    }
+
+    response = client.post('/ticket/',request)
+    tickets = Ticket.objects.all().count()
+
+    assert tickets == 0
+
+@pytest.mark.django_db
+def test_enviar_ticket_sem_autenticacao():
+    client = Client()
+
+    organizador = OrganizadorContatos()
+
+    organizador.username = 'sabino'
+    organizador.first_name = 'sabino'
+    organizador.data_de_nascimento = '1990-01-01'
+    organizador.sexo = 'masculino'
+    organizador.municipio = 'ceilandia'
+    organizador.uf = 'df'
+    organizador.set_password('eusoueu0')
+
+    organizador.save()
+
+    request = {
+    "nome_organizador":"sabino",
+    "enviar_anonimamente":"False",
+    "assunto" : "blablabla",
+    "descricao" : "corpo_texto",
+    "envio_anonimo": "anonimo",
+    "tipo_mensagem": "blablabla"
+    }
+
+    response = client.post('/ticket/',request)
+    tickets = Ticket.objects.all().count()
+
+    assert tickets == 0
 
 @pytest.mark.django_db
 def test_deletar_ticket():
@@ -520,4 +579,56 @@ def test_atualizar_contato_post_campo_em_branco():
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01', \
         'busca_email': 'teste@teste.com'})
     assert organizador.contatos.get(nome='Contato1') is not None
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_contato_view_get():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    response = client.get('/contato/')
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_ticket_view_get():
+
+    cidadao = Cidadao()
+    cidadao.username = 'cidadao'
+    cidadao.set_password('123')
+    cidadao.data_de_nascimento = '1900-01-01'
+    cidadao.save()
+    client = Client()
+    client.post('/', {'username': 'cidadao', 'password': '123'})
+    response = client.get('/ticket/')
+    assert response.status_code is 200
+    cidadao.delete()
+
+@pytest.mark.django_db
+def test_ticket_view_get_nao_autenticado():
+
+    client = Client()
+    response = client.get('/ticket/')
+    assert response.status_code is 200
+
+@pytest.mark.django_db
+def test_ticket_view_post_anonimo():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.first_name = 'Organizador'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    response = client.post('/ticket/', {'nome_organizador': 'Organizador', \
+        'enviar_anonimamente': '', 'assunto': 'Assunto', \
+        'descricao': 'Descrição', 'tipo_mensagem': 'Tipo mensagem'})
+    assert response.status_code is 200
     organizador.delete()
