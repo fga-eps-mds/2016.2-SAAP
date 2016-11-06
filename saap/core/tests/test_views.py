@@ -581,7 +581,6 @@ def test_atualizar_contato_post_campo_em_branco():
     assert organizador.contatos.get(nome='Contato1') is not None
     organizador.delete()
 
-
 @pytest.mark.django_db
 def test_contato_view_get():
 
