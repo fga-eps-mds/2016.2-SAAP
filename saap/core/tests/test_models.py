@@ -149,6 +149,6 @@ def test_model_adminGabinete():
     adminGabinete.enderecoCasa = 'enderecoCasa_teste'
     adminGabinete.enderecoGabinete = 'enderecoGabinete_teste'
     adminGabinete.emailCorporativo = 'emailCorporativo@teste.com'
-    adminGabinete.logoCasa =
+    adminGabinete.logoCasa = SimpleUploadedFile(name='test_image.jpg', content=open(image_path, 'rb').read(), content_type='image/jpeg')
 
     adminGabinete.save()
