@@ -4,7 +4,7 @@ from core.models import *
 from django.test import Client
 import pytest
 from django.test import Client
-from django.core.files.uploadedfile import SimpleUploadedFile
+import tempfile
 
 
 @pytest.mark.django_db
@@ -149,8 +149,7 @@ def test_model_adminGabinete():
     adminGabinete.enderecoCasa = 'enderecoCasa_teste'
     adminGabinete.enderecoGabinete = 'enderecoGabinete_teste'
     adminGabinete.emailCorporativo = 'emailCorporativo@teste.com'
-    adminGabinete.logoCasa = SimpleUploadedFile(name='test_image.jpg', content=open(image_path, 'rb').read(), content_type='image/jpeg')
-
+    adminGabinete.logoCasa = tempfile.NamedTemporaryFile(suffix=".jpg").name
     adminGabinete.save()
 
     assert adminGabinete >= 1
