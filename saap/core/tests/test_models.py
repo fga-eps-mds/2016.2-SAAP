@@ -152,3 +152,6 @@ def test_model_adminGabinete():
     adminGabinete.logoCasa = SimpleUploadedFile(name='test_image.jpg', content=open(image_path, 'rb').read(), content_type='image/jpeg')
 
     adminGabinete.save()
+
+    assert adminGabinete >= 1
+    adminGabinete.delete()
