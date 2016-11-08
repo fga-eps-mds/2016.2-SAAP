@@ -152,5 +152,7 @@ def test_model_adminGabinete():
     adminGabinete.logoCasa = tempfile.NamedTemporaryFile(suffix=".jpg").name
     adminGabinete.save()
 
-    assert adminGabinete >= 1
+    admins = AdminGabinete.objects.all().count()
+    assert admins >= 1
+
     adminGabinete.delete()
