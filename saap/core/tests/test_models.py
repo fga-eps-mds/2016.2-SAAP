@@ -4,6 +4,7 @@ from core.models import *
 from django.test import Client
 import pytest
 from django.test import Client
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 @pytest.mark.django_db
@@ -151,4 +152,3 @@ def test_model_adminGabinete():
     adminGabinete.logoCasa =
 
     adminGabinete.save()
-    
