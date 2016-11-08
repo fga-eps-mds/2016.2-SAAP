@@ -119,7 +119,7 @@ def test_deleta_oficio():
 
     busca = Oficio.busca_por_titulo('Titulo Exemplo')
     assert busca.count() == 0
-    
+
 @pytest.mark.django_db
 def test_model_carta():
 
@@ -137,3 +137,8 @@ def test_model_carta():
 
     assert cartas >= 1
     carta.delete()
+
+@pytest.mark.django_db
+def test_model_adminGabinete():
+
+    
