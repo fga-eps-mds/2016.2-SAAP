@@ -108,7 +108,8 @@ class Template(models.Model):
 class AdminGabinete(models.Model):
     #gabinetes = models.ManyToManyField(Gabinete)
     nome_admin = models.CharField(max_length=100)
-    endereco = models.CharField(max_length=300)
+    enderecoCasa = models.CharField(max_length=300)
+    enderecoGabinete = models.CharField(max_length=300)
     emailCorporativo = models.EmailField(max_length=30,default='')
     logoCasa = models.ImageField()  # Para models.ImageField funcionar deve-se fazer o seguinte em url.py:
     # urlpatterns = [ # ... the rest of your URLconf goes here ... ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)"""
