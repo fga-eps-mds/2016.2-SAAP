@@ -110,8 +110,8 @@ class AdminGabinete(models.Model):
     nome_admin = models.CharField(max_length=100)
     endereco = models.CharField(max_length=300)
     emailCorporativo = models.EmailField(max_length=30,default='')
-    logoCasa = models.ImageField(max_lenght=300) """ Para models.ImageField funcionar deve-se fazer o seguinte em url.py:
-    urlpatterns = [ # ... the rest of your URLconf goes here ... ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) """
+    logoCasa = models.ImageField()  # Para models.ImageField funcionar deve-se fazer o seguinte em url.py:
+    # urlpatterns = [ # ... the rest of your URLconf goes here ... ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)"""
 
     class Meta:
         permissions = (
