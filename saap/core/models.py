@@ -112,3 +112,10 @@ class AdminGabinete(models.Model):
     emailCorporativo = models.EmailField(max_length=30,default='')
     logoCasa = models.ImageField(max_lenght=300) """ Para models.ImageField funcionar deve-se fazer o seguinte em url.py:
     urlpatterns = [ # ... the rest of your URLconf goes here ... ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) """
+
+    class Meta:
+        permissions = (
+                ("organizar_contatos", "Organizador de contatos"),
+                ("enviar_documentos", ""),
+                ("responder_ticket", "Administrador de Gabinete"),
+                )
