@@ -57,3 +57,11 @@ class OrganizadorGabinete(Usuario_saap):
     template = models.ManyToManyField(Template)
     documento = models.ManyToManyField(Oficio)
     boletim = models.ManyToManyField(Boletim)
+
+class AdministradorGabinete(Usuario_saap):
+    
+    endereco = models.CharField(max_length=60,default='')
+    cidade = models.CharField(max_length=20,default='')
+    cep = models.CharField(max_length=8,default='')
+    telefone_pessoal = models.CharField(max_length=7,default='',blank=True,null=True)
+    telefone_gabinete = models.CharField(max_length=7,default='',blank=True,null=True)
