@@ -110,7 +110,7 @@ class DeletarContatoView(View):
     def post(self, request):
         busca_email = request.POST['busca_email']
 
-        if Contato.objects.get(email = busca_email).count() == 0:
+        if Contato.objects.filter(email = busca_email).count() == 0:
             messages.error(request,'Contato nao existe!')
             response = render(request,'exclui_contato.html')
         else:
@@ -258,9 +258,9 @@ class PublicarTicketView(View):
             response = render (request, 'vereadores.html',locals()) #pagina do vereador
             return response
 
-        else:
-            messages.error(request, 'Erro ao tentar publicar Ticket')
-            return render (request, 'redirect/')
+        # else:
+        #     messages.error(request, 'Erro ao tentar publicar Ticket')
+        #     return render (request, 'redirect/')
 
 
 class DeletarTicketView(View):

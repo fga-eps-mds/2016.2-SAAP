@@ -140,7 +140,7 @@ def atualizar_contato(request, contato):
     contato.cep = cep
     contato.estado = estado
     contato.email = email
-    contato.grupo = grupo
+    contato.grupo_contato = grupo
     contato.titulo = titulo
     contato.titulo_de_eleitor = titulo_de_eleitor
     contato.zona = zona

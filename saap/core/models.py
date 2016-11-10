@@ -57,6 +57,7 @@ class Contato(models.Model):
     dependente_parentesco = models.CharField(max_length=30,default='',blank=True,null=True)
     dependente_partido = models.CharField(max_length=30,default='',blank=True,null=True)
     dependente_data_filiacao = models.DateField('',blank=True,null=True)
+    grupo_contato = models.CharField(max_length=30,default='',blank=True,null=True)
 
 class Ticket(models.Model):
 

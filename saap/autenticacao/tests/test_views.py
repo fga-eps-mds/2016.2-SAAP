@@ -157,6 +157,19 @@ def test_registro_view_post_cidadao():
 	cidadao.delete()
 
 @pytest.mark.django_db
+def test_registro_view_post_cidadao_data_invalida():
+
+	client = Client()
+	response = client.post('/cadastro/', {'first_name': 'Cidadão', \
+		'last_name': 'Teste', 'username': 'cidadao', \
+		'email': 'cidadao@teste.com', 'confirmacao_email': 'cidadao@teste.com',\
+		'password': '123', 'confirmacao_password': '123', 'sexo': 'Masculino', \
+		'municipio': 'Brasilia', 'uf': 'DF', 'data_de_nascimento': \
+		'1900-01-011'})
+	cidadao_count = Cidadao.objects.filter(username='cidadao').count()
+	assert cidadao_count == 0
+
+@pytest.mark.django_db
 def test_registro_view_post_organizador_contatos():
 
 	client = Client()

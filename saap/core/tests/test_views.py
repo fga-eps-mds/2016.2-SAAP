@@ -23,8 +23,6 @@ def test_enviar_ticket():
 
     organizador.save()
 
-
-
     user = client.login(username='sabino', password='eusoueu0')
 
     request = {
@@ -42,6 +40,67 @@ def test_enviar_ticket():
     assert tickets == 1
     Ticket.objects.all()[0].delete()
 
+@pytest.mark.django_db
+def test_enviar_ticket_campo_em_branco():
+    client = Client()
+
+    organizador = OrganizadorContatos()
+
+    organizador.username = 'sabino'
+    organizador.first_name = 'sabino'
+    organizador.data_de_nascimento = '1990-01-01'
+    organizador.sexo = 'masculino'
+    organizador.municipio = 'ceilandia'
+    organizador.uf = 'df'
+    organizador.set_password('eusoueu0')
+
+    organizador.save()
+
+    user = client.login(username='sabino', password='eusoueu0')
+
+    request = {
+    "nome_organizador":"sabino",
+    "enviar_anonimamente":"False",
+    "assunto" : "blablabla",
+    "descricao" : "",
+    "envio_anonimo": "anonimo",
+    "tipo_mensagem": "blablabla"
+    }
+
+    response = client.post('/ticket/',request)
+    tickets = Ticket.objects.all().count()
+
+    assert tickets == 0
+
+@pytest.mark.django_db
+def test_enviar_ticket_sem_autenticacao():
+    client = Client()
+
+    organizador = OrganizadorContatos()
+
+    organizador.username = 'sabino'
+    organizador.first_name = 'sabino'
+    organizador.data_de_nascimento = '1990-01-01'
+    organizador.sexo = 'masculino'
+    organizador.municipio = 'ceilandia'
+    organizador.uf = 'df'
+    organizador.set_password('eusoueu0')
+
+    organizador.save()
+
+    request = {
+    "nome_organizador":"sabino",
+    "enviar_anonimamente":"False",
+    "assunto" : "blablabla",
+    "descricao" : "corpo_texto",
+    "envio_anonimo": "anonimo",
+    "tipo_mensagem": "blablabla"
+    }
+
+    response = client.post('/ticket/',request)
+    tickets = Ticket.objects.all().count()
+
+    assert tickets == 0
 
 @pytest.mark.django_db
 def test_deletar_ticket():
@@ -247,4 +306,329 @@ def test_enviar_carta_email_view():
     response = client.post('/enviar_carta/1/', {'email_carta': 'exemplo@teste.com'})
     assert 300 <= response.status_code < 400
     carta.delete()
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_cadastro_contato_get():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    response = client.get('/cadastro_contato/')
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_cadastro_contato_post():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    client.post('/cadastro_contato/', {'nome': 'Contato', \
+        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
+    assert organizador.contatos.get(nome='Contato') is not None
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_cadastro_contato_post_data_invalida1():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    client.post('/cadastro_contato/', {'nome': 'Contato', \
+        'data_de_nascimento': '1900-01-011', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
+    assert organizador.contatos.filter(nome='Contato').count() == 0
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_cadastro_contato_post_data_invalida2():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    client.post('/cadastro_contato/', {'nome': 'Contato', \
+        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-012', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
+    assert organizador.contatos.filter(nome='Contato').count() == 0
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_cadastro_contato_post_data_invalida3():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    client.post('/cadastro_contato/', {'nome': 'Contato', \
+        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-011'})
+    assert organizador.contatos.filter(nome='Contato').count() == 0
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_cadastro_contato_post_campo_em_branco():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    client.post('/cadastro_contato/', {'nome': 'Contato', \
+        'data_de_nascimento': '1900-01-011', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
+    assert organizador.contatos.filter(nome='Contato').count() == 0
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_excluir_contato_get():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    response = client.get('/exclui_contato/')
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_excluir_contato_post():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    client.post('/cadastro_contato/', {'nome': 'Contato', \
+        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
+    client.post('/exclui_contato/', {'busca_email': 'teste@teste.com'})
+    assert organizador.contatos.filter(nome='Contato').count() == 0
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_excluir_contato_post_contato_inexistente():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    response = client.post('/exclui_contato/', {'busca_email': 'teste@teste.com'})
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_atualizar_contato_get():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    response = client.get('/atualiza_contato/')
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_atualizar_contato_post():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    client.post('/cadastro_contato/', {'nome': 'Contato1', \
+        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
+    client.post('/atualiza_contato/', {'nome': 'Contato2', \
+        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01', \
+        'busca_email': 'teste@teste.com'})
+    assert organizador.contatos.get(nome='Contato2') is not None
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_atualizar_contato_post_campo_em_branco():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    client.post('/cadastro_contato/', {'nome': 'Contato1', \
+        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
+    client.post('/atualiza_contato/', {'nome': 'Contato2', \
+        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01', \
+        'busca_email': 'teste@teste.com'})
+    assert organizador.contatos.get(nome='Contato1') is not None
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_contato_view_get():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    response = client.get('/contato/')
+    assert response.status_code is 200
+    organizador.delete()
+
+@pytest.mark.django_db
+def test_ticket_view_get():
+
+    cidadao = Cidadao()
+    cidadao.username = 'cidadao'
+    cidadao.set_password('123')
+    cidadao.data_de_nascimento = '1900-01-01'
+    cidadao.save()
+    client = Client()
+    client.post('/', {'username': 'cidadao', 'password': '123'})
+    response = client.get('/ticket/')
+    assert response.status_code is 200
+    cidadao.delete()
+
+@pytest.mark.django_db
+def test_ticket_view_get_nao_autenticado():
+
+    client = Client()
+    response = client.get('/ticket/')
+    assert response.status_code is 200
+
+@pytest.mark.django_db
+def test_ticket_view_post_anonimo():
+
+    organizador = OrganizadorContatos()
+    organizador.username = 'organizador'
+    organizador.set_password('123')
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.first_name = 'Organizador'
+    organizador.save()
+    client = Client()
+    client.post('/', {'username': 'organizador', 'password': '123'})
+    response = client.post('/ticket/', {'nome_organizador': 'Organizador', \
+        'enviar_anonimamente': '', 'assunto': 'Assunto', \
+        'descricao': 'Descrição', 'tipo_mensagem': 'Tipo mensagem'})
+    assert response.status_code is 200
     organizador.delete()
