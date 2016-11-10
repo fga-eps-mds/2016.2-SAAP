@@ -305,3 +305,25 @@ def test_logout_view_get():
 	response = client.get('/logout/')
 	assert response.status_code is 200
 	cidadao.delete()
+
+def test_criar_administrador_get():
+
+	client = Client()
+	response = client.get('/criar_administrador/')
+	assert response.status_code is 200
+
+@pytest.mark.django_db
+def test_registro_view_post_administrador_gabinete():
+
+	client = Client()
+	response = client.post('/criar_administrador/', {'first_name': 'Administrador',\
+		'last_name': 'Teste', 'username': 'adminGabinete', \
+		'email': 'administrador@teste.com', 'confirmacao_email': \
+		'administrador@teste.com', 'password': '123', 'confirmacao_password': \
+		'123', 'sexo': 'Masculino', 'municipio': 'Brasilia', 'uf': 'DF', \
+		'data_de_nascimento': '1900-01-01', 'cidade':'Brasilia', \
+		'endereco':'endereco', 'cep': '111111111','telefone_pessoal':'61988888888',\
+		'telefone_gabinete':'619222222' })
+	admin = AdministradorGabinete.objects.get(username='adminGabinete')
+	assert admin is not None
+	admin.delete()
