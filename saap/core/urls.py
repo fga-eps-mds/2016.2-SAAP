@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView,
                     AtualizaContato, VereadoresView, PublicarTicketView,
                     DeletarTicketView, GerarCartaView, CartasView,
-                    DeletarCartaView, GerarPDFCartaView, EnviarCartaView)
+                    DeletarCartaView, GerarPDFCartaView, EnviarCartaView, OficioView,
+                    DeletarOficioView, GerarOficioView, GerarPDFOficioView, EnviarOficioView)
 
 urlpatterns = [
     url(r'^cadastro_contato/$', login_required(CadastroView.as_view()),
@@ -33,4 +34,14 @@ urlpatterns = [
         name='gerar_pdf'),
     url(r'^enviar_carta/(?P<pk>[0-9]+)/$', login_required(EnviarCartaView.as_view()),
         name='enviar_carta'),
+    url(r'^gerar_oficio/$', GerarOficioView.as_view(),
+        name = 'gerar_oficio'),
+    url(r'^deletar_oficio/(?P<pk>[0-9]+)/$', DeletarOficioView.as_view(),
+        name='deletar_oficio'),
+        url(r'^gerar_oficio_pdf/(?P<pk>[0-9]+)/$', login_required(GerarPDFOficioView.as_view()),
+        name='gerar_oficio_pdf'),
+    url(r'^enviar_oficio/(?P<pk>[0-9]+)/$', login_required(EnviarOficioView.as_view()),
+        name='enviar_oficio'),
+    url(r'^oficio/$', OficioView.as_view(),
+    name='oficio')
 ]
