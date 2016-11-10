@@ -1,0 +1,187 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<main>
+  <br><br><br>
+  <div class="container">
+    <div class="row">
+      <div class="col s12 offset-m2 m8 offset-l1 l10">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form action="{% url 'criar_administrador' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="next_url" value="{{next_url}}">
+          <div class="login-card hoverable center-align">
+            <div class="card-content">
+              <br>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">account_circle</i>
+                  <input placeholder='John Doe' id="first_name" name="first_name" type="text" class="validate" value='{{data.first_name}}'>
+                  <label for="first_name">Nome</label>
+                </div>
+                <div class="input-field col s3">
+                  <input placeholder="Guarulhos" id="municipio" name="municipio" type="text" class="validate" value='{{data.municipio}}'>
+                  <label for="municipio">Município</label>
+                </div>
+                <div class="input-field col s2">
+                  <td>
+                    <div style="width: 50px;">
+                      <select id="uf" name="uf">
+                        {% if data.uf is None %}
+                          <option value="" selected >UF</option>
+                          <option value="AC">AC</option>
+                          <option value="AL">AL</option>
+                          <option value="AM">AM</option>
+                          <option value="AP">AP</option>
+                          <option value="BA">BA</option>
+                          <option value="CE">CE</option>
+                          <option value="DF">DF</option>
+                          <option value="ES">ES</option>
+                          <option value="GO">GO</option>
+                          <option value="MA">MA</option>
+                          <option value="MG">MG</option>
+                          <option value="MS">MS</option>
+                          <option value="MT">MT</option>
+                          <option value="PA">PA</option>
+                          <option value="PB">PB</option>
+                          <option value="PE">PE</option>
+                          <option value="PI">PI</option>
+                          <option value="PR">PR</option>
+                          <option value="RJ">RJ</option>
+                          <option value="RN">RN</option>
+                          <option value="RS">RS</option>
+                          <option value="RO">RO</option>
+                          <option value="RR">RR</option>
+                          <option value="SC">SC</option>
+                          <option value="SE">SE</option>
+                          <option value="SP">SP</option>
+                          <option value="TO">TO</option>
+                        {% else %}
+                          <option value="" >UF</option>
+                          {% for campo in data.campos_uf %}
+                            {% if campo == data.uf %}
+                              <option value="{{ campo }}" selected>{{ campo }}</option>
+                            {% else %}
+                              <option value="{{ campo }}" >{{ campo }}</option>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                      </select>
+                    </div>
+                  </td>
+                  <label for="municipio">UF</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">account_circle</i>
+                  <input placeholder="Smith" id="last_name" name="last_name" type="text" class="validate" value='{{data.last_name}}'>
+                  <label for="last_name">Sobrenome</label>
+                </div>
+                <div class="input-field col s5  ">
+                  <input placeholder="" id="cidade" name="cidade" type="text" class="validate" value='{{data.cidade}}'>
+                  <label for="endereco">Cidade</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">account_circle</i>
+                  <input placeholder="johnsmith" id="username" name="username" type="text" class="validate" value='{{data.username}}'>
+                  <label for="username">Nome de usuário</label>
+                </div>
+                <div class="input-field col s5">
+                  <input placeholder="" id="endereco" name="endereco" type="text" class="validate" value='{{data.endereco}}'>
+                  <label for="endereco">Endereço</label>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">email</i>
+                  <input placeholder="name@email.com" id="email" name="email" type="email" class="validate" value='{{data.email}}'>
+                  <label for="email">E-mail</label>
+                </div>
+                <div class="input-field col s5">
+                  <input placeholder="0000000" id="cep" name="cep" pattern="[0-9]+$" type="text" class="validate" value='{{data.cep}}'>
+                  <label for="cep">CEP (Somente números)</label>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">email</i>
+                  <input placeholder="name@email.com" id="confirmacao_email" name="confirmacao_email" type="email" class="validate" value='{{data.confirmacao_email}}'>
+                  <label for="confirmacao_email">Confirmar E-mail</label>
+                </div>
+                <div class="input-field col s5">
+                  <i class="material-icons prefix" style="color:green">contact_phone</i>
+                  <input placeholder="xx-xxxxx-xxxx" id="telefone_pessoal" name="telefone_pessoal" type="text" class="validate" value='{{data.telefone_pessoal}}'>
+                  <label for="telefone_pessoal">Telefone</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">lock</i>
+                  <input placeholder="********" id="password" name="password" type="password" class="validate">
+                  <label for="password">Senha</label>
+                </div>
+                <div class="input-field col s5">
+                  <i class="material-icons prefix" style="color:green">contact_phone</i>
+                  <input placeholder="xx-xxxxx-xxxx" id="fax" name="telefone_gabinete" type="text" class="validate" value='{{data.telefone_gabinete}}'>
+                  <label for="telefone_gabinete">Telefone do Gabinete</label>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">lock</i>
+                  <input placeholder="********" id="confirmacao_password" name="confirmacao_password" type="password" class="validate">
+                  <label for="confirmacao_password">Confirmar Senha</label>
+                </div>
+
+
+              </div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">today</i>
+                  <input placeholder="yyyy-mm-dd" id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate" value='{{data.data_de_nascimento}}'>
+                  <label for="data_de_nascimento">Data de Nascimento</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s5">
+                  <select id="sexo" name="sexo">
+                    {% if data.sexo is None %}
+                      <option value="" selected >Selecionar</option>
+                      <option value="Masculino" >Masculino</option>
+                      <option value="Feminino" >Feminino</option>
+                    {% else %}
+                      <option value="" >Selecionar</option>
+                      {% for campo in data.campos_sexo %}
+                        {% if campo == data.sexo %}
+                          <option value="{{ campo }}" selected>{{ campo }}</option>
+                        {% else %}
+                          <option value="{{ campo }}" >{{ campo }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </select>
+                  <label>Sexo</label>
+                </div>
+              </div>
+              <div>
+                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Criar Administrador</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock main_content %}
