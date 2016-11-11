@@ -1,6 +1,7 @@
 # coding=utf-8
-from autenticacao.models import Usuario_saap
+from autenticacao.models import Usuario_saap, AdministradorGabinete, Gabinete_saap
 import pytest
+import tempfile
 # Create your tests here.
 
 @pytest.mark.django_db
