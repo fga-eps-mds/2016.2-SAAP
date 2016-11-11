@@ -12,6 +12,10 @@ from autenticacao.models import OrganizadorContatos
 def test_enviar_ticket():
     client = Client()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+
     organizador = OrganizadorContatos()
 
     organizador.username = 'sabino'
@@ -21,13 +25,14 @@ def test_enviar_ticket():
     organizador.municipio = 'ceilandia'
     organizador.uf = 'df'
     organizador.set_password('eusoueu0')
+    organizador.gabinete = gabinete
 
     organizador.save()
 
     user = client.login(username='sabino', password='eusoueu0')
 
     request = {
-    "nome_organizador":"sabino",
+    "nome_gabinete":"Gabinete",
     "enviar_anonimamente":"False",
     "assunto" : "blablabla",
     "descricao" : "corpo_texto",
@@ -45,6 +50,10 @@ def test_enviar_ticket():
 def test_enviar_ticket_campo_em_branco():
     client = Client()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+
     organizador = OrganizadorContatos()
 
     organizador.username = 'sabino'
@@ -54,13 +63,14 @@ def test_enviar_ticket_campo_em_branco():
     organizador.municipio = 'ceilandia'
     organizador.uf = 'df'
     organizador.set_password('eusoueu0')
+    organizador.gabinete = gabinete
 
     organizador.save()
 
     user = client.login(username='sabino', password='eusoueu0')
 
     request = {
-    "nome_organizador":"sabino",
+    "nome_gabinete":"Gabinete",
     "enviar_anonimamente":"False",
     "assunto" : "blablabla",
     "descricao" : "",
@@ -77,6 +87,10 @@ def test_enviar_ticket_campo_em_branco():
 def test_enviar_ticket_sem_autenticacao():
     client = Client()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+
     organizador = OrganizadorContatos()
 
     organizador.username = 'sabino'
@@ -86,11 +100,12 @@ def test_enviar_ticket_sem_autenticacao():
     organizador.municipio = 'ceilandia'
     organizador.uf = 'df'
     organizador.set_password('eusoueu0')
+    organizador.gabinete = gabinete
 
     organizador.save()
 
     request = {
-    "nome_organizador":"sabino",
+    "nome_gabinete":"Gabinete",
     "enviar_anonimamente":"False",
     "assunto" : "blablabla",
     "descricao" : "corpo_texto",
@@ -107,6 +122,10 @@ def test_enviar_ticket_sem_autenticacao():
 def test_deletar_ticket():
     client = Client()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+
     organizador = OrganizadorContatos()
 
     organizador.username = 'sabino'
@@ -116,13 +135,14 @@ def test_deletar_ticket():
     organizador.municipio = 'ceilandia'
     organizador.uf = 'df'
     organizador.set_password('eusoueu0')
+    organizador.gabinete = gabinete
 
     organizador.save()
 
     client.login(username='sabino', password='eusoueu0')
 
     request = {
-    "nome_organizador":"sabino",
+    "nome_gabinete":"Gabinete",
     "enviar_anonimamente":"False",
     "assunto" : "blablabla",
     "descricao" : "corpo_texto",
@@ -145,40 +165,48 @@ def test_deletar_ticket():
 def test_vereadores_view_get():
 
 	client = Client()
-	response = client.get('/vereadores/')
+	response = client.get('/gabinetes/')
 	assert response.status_code is 200
 
 @pytest.mark.django_db
 def test_vereadores_view_post_nao_existe():
 
 	client = Client()
-	response = client.post('/vereadores/', {'nome_organizador': ''})
+	response = client.post('/gabinetes/', {'nome_gabinete': ''})
 	assert response.status_code is 200
 
 @pytest.mark.django_db
 def test_vereadores_view_post_existe():
 
-	organizador = OrganizadorContatos()
-	organizador.first_name = 'Organizador'
-	organizador.data_de_nascimento = '1900-01-01'
-	organizador.save()
-	client = Client()
-	response = client.post('/vereadores/', {'nome_organizador': 'Organizador'})
-	assert response.status_code is 200
-	organizador.delete()
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+    organizador = OrganizadorContatos()
+    organizador.first_name = 'Organizador'
+    organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
+    organizador.save()
+    client = Client()
+    response = client.post('/gabinetes/', {'nome_gabinete': 'Gabinete'})
+    assert response.status_code is 200
+    organizador.delete()
 
 @pytest.mark.django_db
 def test_enviar_carta_view_get_organizador_logado():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'orgteste'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
-    response = client.get('/gerar_carta/')
-    assert response.status_code is 200
+    response = client.get('/gabinete/cartas/gerar_carta/')
+    assert 300 <= response.status_code < 400
     organizador.delete()
 
 @pytest.mark.django_db
@@ -192,20 +220,24 @@ def test_enviar_carta_view_get_organizador_deslogado():
     client = Client()
     client.post('/', {'username': 'cidteste', 'password': '123'})
     response = client.get('/gerar_carta/')
-    assert 300 <= response.status_code < 400
+    assert response.status_code > 400
     cidadao.delete()
 
 @pytest.mark.django_db
 def test_enviar_carta_view_post():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'orgteste'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
-    response = client.post('/gerar_carta/', {'nome_remetente': 'Remetente', \
+    response = client.post('/gabinete/cartas/gerar_carta/', {'nome_remetente': 'Remetente', \
         'municipio_remetente': 'Município', 'nome_destinatario': 'Destinatário'\
         , 'forma_tratamento': 'Senhor(a)', 'mensagem': 'Mensagem'})
     assert 300 <= response.status_code < 400
@@ -214,14 +246,18 @@ def test_enviar_carta_view_post():
 @pytest.mark.django_db
 def test_enviar_carta_view_post_faltando_campo():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'orgteste'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
-    response = client.post('/gerar_carta/', {'nome_remetente': 'Remetente', \
+    response = client.post('/gabinete/cartas/gerar_carta/', {'nome_remetente': 'Remetente', \
         'municipio_remetente': 'Município', 'nome_destinatario': 'Destinatário'\
         , 'forma_tratamento': 'Senhor(a)', 'mensagem': ''})
     assert response.status_code is 200
@@ -230,29 +266,37 @@ def test_enviar_carta_view_post_faltando_campo():
 @pytest.mark.django_db
 def test_cartas_view_get_logado():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'orgteste'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
-    response = client.get('/cartas/')
-    assert response.status_code is 200
+    response = client.get('/gabinete/cartas/')
+    assert 300 <= response.status_code < 400
     organizador.delete()
 
 @pytest.mark.django_db
 def test_enviar_oficio_view_get_organizador_logado():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'org'
     organizador.set_password('123456')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
-    response = client.get('/oficio/')
-    assert response.status_code is 200
+    response = client.get('/gabinete/oficio/')
+    assert response.status_code > 400
     organizador.delete()
 
 @pytest.mark.django_db
@@ -265,7 +309,7 @@ def test_cartas_view_get_deslogado():
     cidadao.save()
     client = Client()
     client.post('/', {'username': 'cidteste', 'password': '123'})
-    response = client.get('/cartas/')
+    response = client.get('/gabinete/cartas/')
     assert 300 <= response.status_code < 400
     cidadao.delete()
 
@@ -279,39 +323,47 @@ def test_enviar_oficio_view_get_organizador_deslogado():
     cidadao.save()
     client = Client()
     client.post('/', {'username': 'cidteste', 'password': '123456'})
-    response = client.get('/oficio/')
-    assert 300 <= response.status_code < 400
+    response = client.get('/gabinete/oficio/')
+    assert response.status_code > 400
     cidadao.delete()
 
 @pytest.mark.django_db
 def test_deletar_carta_view():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'orgteste'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     carta = Carta()
     carta.save()
-    organizador.cartas.add(carta)
+    gabinete.cartas.add(carta)
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
     response = client.get('/deletar_carta/1/')
-    procurar_carta = organizador.cartas.filter(id='1')
+    procurar_carta = gabinete.cartas.filter(id='1')
     assert procurar_carta.count() == 0
     organizador.delete()
 
 @pytest.mark.django_db
 def test_gerar_pdf_carta_view():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'orgteste'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     carta = Carta()
     carta.save()
-    organizador.cartas.add(carta)
+    gabinete.cartas.add(carta)
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
     response = client.get('/gerar_pdf/1/')
@@ -322,14 +374,18 @@ def test_gerar_pdf_carta_view():
 @pytest.mark.django_db
 def test_enviar_carta_email_view():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'orgteste'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     carta = Carta()
     carta.save()
-    organizador.cartas.add(carta)
+    gabinete.cartas.add(carta)
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
     response = client.post('/enviar_carta/1/', {'email_carta': 'exemplo@teste.com'})
@@ -339,30 +395,38 @@ def test_enviar_carta_email_view():
 @pytest.mark.django_db
 def test_enviar_oficio_view_post():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'org'
     organizador.set_password('123456')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
-    response = client.post('/gerar_oficio/', {'remetente': 'Remetente', \
+    response = client.post('/gabinete/oficios/gerar_oficio/', {'remetente': 'Remetente', \
         'destinatario': 'Destinatário', 'forma_tratamento': 'Senhor(a)',\
         'corpo_texto_doc': 'Mensagem'})
-    assert response.status_code is 200
+    assert 300 <= response.status_code < 400
     organizador.delete()
 
 @pytest.mark.django_db
 def test_enviar_oficio_view_post_faltando_campo():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'org'
     organizador.set_password('123456')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
-    response = client.post('/gerar_oficio/', {'remetente': 'Remetente', \
+    response = client.post('/gabinete/oficios/gerar_oficio/', {'remetente': 'Remetente', \
         'destinatario': 'Destinatário', 'forma_tratamento': 'Senhor(a)',\
         'corpo_texto_doc': ''})
     assert response.status_code is 200
@@ -371,15 +435,19 @@ def test_enviar_oficio_view_post_faltando_campo():
 @pytest.mark.django_db
 def test_oficio_view_get_logado():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'org'
     organizador.set_password('123456')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
-    response = client.get('/oficio/')
-    assert response.status_code is 200
+    response = client.get('/gabinete/oficios/')
+    assert 300 <= response.status_code < 400
     organizador.delete()
 
 @pytest.mark.django_db
@@ -392,40 +460,47 @@ def test_oficio_view_get_deslogado():
     cidadao.save()
     client = Client()
     client.post('/', {'username': 'cidteste', 'password': '123456'})
-    response = client.get('/oficio/')
+    response = client.get('/gabinete/oficios/')
     assert 300 <= response.status_code < 400
     cidadao.delete()
 
 @pytest.mark.django_db
 def test_deletar_oficio_view():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'org'
     organizador.set_password('123456')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     oficio = Oficio()
     oficio.save()
-    organizador.oficio.add(oficio)
+    gabinete.oficios.add(oficio)
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
     response = client.get('/deletar_oficio/1/')
-    procurar_oficio = organizador.oficio.filter(id='1')
+    procurar_oficio = gabinete.oficios.filter(id='1')
     assert procurar_oficio.count() == 0
     organizador.delete()
 
 @pytest.mark.django_db
 def test_gerar_pdf_oficio_view():
 
-
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'org'
     organizador.set_password('123456')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     oficio = Oficio()
     oficio.save()
-    organizador.oficio.add(oficio)
+    gabinete.oficios.add(oficio)
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
     response = client.get('/gerar_oficio_pdf/1/')
@@ -436,14 +511,18 @@ def test_gerar_pdf_oficio_view():
 @pytest.mark.django_db
 def test_enviar_oficio_email_view():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'org'
     organizador.set_password('123456')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     oficio = Oficio()
     oficio.save()
-    organizador.oficio.add(oficio)
+    gabinete.oficios.add(oficio)
     client = Client()
     client.post('/', {'username': 'org', 'password': '123456'})
     response = client.post('/enviar_oficio/1/', {'email_oficio': 'exemplo@teste.com'})
@@ -454,10 +533,14 @@ def test_enviar_oficio_email_view():
 @pytest.mark.django_db
 def test_cadastro_contato_get():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -468,10 +551,14 @@ def test_cadastro_contato_get():
 @pytest.mark.django_db
 def test_cadastro_contato_post():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -486,16 +573,20 @@ def test_cadastro_contato_post():
         'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
         'dependente_parentesco': 'Parentesco', \
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
-    assert organizador.contatos.get(nome='Contato') is not None
+    assert gabinete.contatos.get(nome='Contato') is not None
     organizador.delete()
 
 @pytest.mark.django_db
 def test_cadastro_contato_post_data_invalida1():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -510,16 +601,20 @@ def test_cadastro_contato_post_data_invalida1():
         'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
         'dependente_parentesco': 'Parentesco', \
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
-    assert organizador.contatos.filter(nome='Contato').count() == 0
+    assert gabinete.contatos.filter(nome='Contato').count() == 0
     organizador.delete()
 
 @pytest.mark.django_db
 def test_cadastro_contato_post_data_invalida2():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -534,16 +629,20 @@ def test_cadastro_contato_post_data_invalida2():
         'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-012', \
         'dependente_parentesco': 'Parentesco', \
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
-    assert organizador.contatos.filter(nome='Contato').count() == 0
+    assert gabinete.contatos.filter(nome='Contato').count() == 0
     organizador.delete()
 
 @pytest.mark.django_db
 def test_cadastro_contato_post_data_invalida3():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -558,16 +657,20 @@ def test_cadastro_contato_post_data_invalida3():
         'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
         'dependente_parentesco': 'Parentesco', \
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-011'})
-    assert organizador.contatos.filter(nome='Contato').count() == 0
+    assert gabinete.contatos.filter(nome='Contato').count() == 0
     organizador.delete()
 
 @pytest.mark.django_db
 def test_cadastro_contato_post_campo_em_branco():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -582,16 +685,20 @@ def test_cadastro_contato_post_campo_em_branco():
         'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
         'dependente_parentesco': 'Parentesco', \
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
-    assert organizador.contatos.filter(nome='Contato').count() == 0
+    assert gabinete.contatos.filter(nome='Contato').count() == 0
     organizador.delete()
 
 @pytest.mark.django_db
 def test_excluir_contato_get():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -602,10 +709,14 @@ def test_excluir_contato_get():
 @pytest.mark.django_db
 def test_excluir_contato_post():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -621,16 +732,20 @@ def test_excluir_contato_post():
         'dependente_parentesco': 'Parentesco', \
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
     client.post('/exclui_contato/', {'busca_email': 'teste@teste.com'})
-    assert organizador.contatos.filter(nome='Contato').count() == 0
+    assert gabinete.contatos.filter(nome='Contato').count() == 0
     organizador.delete()
 
 @pytest.mark.django_db
 def test_excluir_contato_post_contato_inexistente():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -641,10 +756,14 @@ def test_excluir_contato_post_contato_inexistente():
 @pytest.mark.django_db
 def test_atualizar_contato_get():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -655,10 +774,14 @@ def test_atualizar_contato_get():
 @pytest.mark.django_db
 def test_atualizar_contato_post():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -685,16 +808,20 @@ def test_atualizar_contato_post():
         'dependente_parentesco': 'Parentesco', \
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01', \
         'busca_email': 'teste@teste.com'})
-    assert organizador.contatos.get(nome='Contato2') is not None
+    assert gabinete.contatos.get(nome='Contato2') is not None
     organizador.delete()
 
 @pytest.mark.django_db
 def test_atualizar_contato_post_campo_em_branco():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
@@ -721,20 +848,24 @@ def test_atualizar_contato_post_campo_em_branco():
         'dependente_parentesco': 'Parentesco', \
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01', \
         'busca_email': 'teste@teste.com'})
-    assert organizador.contatos.get(nome='Contato1') is not None
+    assert gabinete.contatos.get(nome='Contato1') is not None
     organizador.delete()
 
 @pytest.mark.django_db
 def test_contato_view_get():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    response = client.get('/contato/')
+    response = client.get('/gabinete/contatos/')
     assert response.status_code is 200
     organizador.delete()
 
@@ -762,15 +893,19 @@ def test_ticket_view_get_nao_autenticado():
 @pytest.mark.django_db
 def test_ticket_view_post_anonimo():
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
     organizador = OrganizadorContatos()
     organizador.username = 'organizador'
     organizador.set_password('123')
     organizador.data_de_nascimento = '1900-01-01'
     organizador.first_name = 'Organizador'
+    organizador.gabinete = gabinete
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    response = client.post('/ticket/', {'nome_organizador': 'Organizador', \
+    response = client.post('/ticket/', {'nome_gabinete': 'Gabinete', \
         'enviar_anonimamente': '', 'assunto': 'Assunto', \
         'descricao': 'Descrição', 'tipo_mensagem': 'Tipo mensagem'})
     assert response.status_code is 200
