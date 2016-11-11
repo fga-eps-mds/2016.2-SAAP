@@ -94,3 +94,56 @@ def test_model_gabinete_saap():
     assert gabinetes >= 1
     gabinete.delete()
     u.delete()
+
+
+@pytest.mark.django_db
+def test_model_adminGabinete():
+
+    adminGabinete = AdministradorGabinete()
+    gabinete = Gabinete_saap()
+    u = Usuario_saap()
+
+    u.first_name = 'test_name'
+    u.last_name = 'test_last'
+    u.username = 'test_name'
+    u.email = 'test@email.com'
+    u.set_password('123')
+    u.data_de_nascimento = '1990-10-10'
+    u.sexo = 'Masculino'
+    u.municipio = 'Brasilia'
+    u.uf = 'DF'
+    u.save()
+
+    gabinete.nome_gabinete = 'gabinete'
+    gabinete.municipio = 'Brasilia'
+    gabinete.uf = 'DF'
+    gabinete.enderecoCasa = 'enderecoCasa_teste'
+    gabinete.enderecoGabinete = 'enderecoGabinete_teste'
+    gabinete.emailCorporativo = 'emailCorporativo@teste.com'
+    gabinete.logoCasa = tempfile.NamedTemporaryFile(suffix=".jpg").name
+    gabinete.save()
+
+    adminGabinete.first_name = 'test_name'
+    adminGabinete.last_name = 'test_last'
+    adminGabinete.username = 'test_username'
+    adminGabinete.email = 'teste@email.com'
+    adminGabinete.set_password('123456')
+    adminGabinete.data_de_nascimento = '1990-10-10'
+    adminGabinete.sexo = 'Masculino'
+    adminGabinete.municipio = 'Gama'
+    adminGabinete.uf = 'DF'
+    adminGabinete.endereco = 'endereco_teste'
+    adminGabinete.cep = '1234567'
+    adminGabinete.cidade = 'Brasilia'
+    adminGabinete.telefone_pessoal = '1233456'
+    adminGabinete.telefone_gabinete = '123456'
+    adminGabinete.save()
+    gabinete.participantes.add(u)
+    adminGabinete.gabinetes.add(gabinete)
+
+    admins = AdministradorGabinete.objects.all().count()
+    assert admins >= 1
+
+    adminGabinete.delete()
+    u.delete()
+    gabinete.delete()
