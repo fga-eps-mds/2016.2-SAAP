@@ -61,3 +61,36 @@ def test_busca_username():
 
     assert verifica_user.count() > 0
     u.delete()
+
+@pytest.mark.django_db
+def test_model_gabinete_saap():
+
+    gabinete = Gabinete_saap()
+    u = Usuario_saap()
+
+    u.first_name = 'test_name'
+    u.last_name = 'test_last'
+    u.username = 'test_name'
+    u.email = 'test@email.com'
+    u.set_password('123')
+    u.data_de_nascimento = '1990-10-10'
+    u.sexo = 'Masculino'
+    u.municipio = 'Brasilia'
+    u.uf = 'DF'
+    u.save()
+
+    gabinete.nome_gabinete = 'gabinete'
+    gabinete.municipio = 'Brasilia'
+    gabinete.uf = 'DF'
+    gabinete.enderecoCasa = 'enderecoCasa_teste'
+    gabinete.enderecoGabinete = 'enderecoGabinete_teste'
+    gabinete.emailCorporativo = 'emailCorporativo@teste.com'
+    gabinete.logoCasa = tempfile.NamedTemporaryFile(suffix=".jpg").name
+    gabinete.save()
+
+    gabinete.participantes.add(u)
+
+    gabinetes = Gabinete_saap.objects.all().count()
+    assert gabinetes >= 1
+    gabinete.delete()
+    u.delete()
