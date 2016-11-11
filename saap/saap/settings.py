@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 LETTUCE_APPS = ('autenticacao',)
 INSTALLED_APPS = [
     'django.contrib.admin',
