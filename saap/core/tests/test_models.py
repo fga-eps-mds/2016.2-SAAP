@@ -4,7 +4,7 @@ from core.models import *
 from django.test import Client
 import pytest
 from django.test import Client
-import tempfile
+
 
 
 @pytest.mark.django_db
@@ -139,20 +139,3 @@ def test_model_carta():
 
     assert cartas >= 1
     carta.delete()
-
-@pytest.mark.django_db
-def test_model_adminGabinete():
-
-    adminGabinete = AdminGabinete()
-
-    adminGabinete.nome_admin = 'nome_teste'
-    adminGabinete.enderecoCasa = 'enderecoCasa_teste'
-    adminGabinete.enderecoGabinete = 'enderecoGabinete_teste'
-    adminGabinete.emailCorporativo = 'emailCorporativo@teste.com'
-    adminGabinete.logoCasa = tempfile.NamedTemporaryFile(suffix=".jpg").name
-    adminGabinete.save()
-
-    admins = AdminGabinete.objects.all().count()
-    assert admins >= 1
-
-    adminGabinete.delete()
