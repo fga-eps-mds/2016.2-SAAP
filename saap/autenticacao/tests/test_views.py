@@ -80,14 +80,17 @@ def test_tipo_usuario_cidadao():
 @pytest.mark.django_db
 def test_tipo_usuario_organizador_contatos():
 
+	gabinete = Gabinete()
+	gabinete.save()
 	organizador = OrganizadorContatos()
 	organizador.username = 'organizador'
 	organizador.set_password('123')
 	organizador.data_de_nascimento = '1900-01-01'
+	organizador.gabinete = gabinete
 	organizador.save()
 	client = Client()
 	response = client.post('/', {'username': 'organizador', 'password': '123'})
-	assert response.status_code is 200
+	assert 300 <= response.status_code and response.status_code < 400
 	organizador.delete()
 
 @pytest.mark.django_db
@@ -136,10 +139,20 @@ def test_usuario_senha_errada():
 	assert response.status_code is 200
 	cidadao.delete()
 
+@pytest.mark.django_db
 def test_criar_organizador_get():
 
+	gabinete = Gabinete()
+	gabinete.save()
+	admin = AdministradorGabinete()
+	admin.username = 'administrador'
+	admin.set_password('123')
+	admin.data_de_nascimento = '1900-01-01'
+	admin.gabinete = gabinete
+	admin.save()
 	client = Client()
-	response = client.get('/criar_organizador/')
+	client.post('/', {'username': 'administrador', 'password': '123'})
+	response = client.get('/gabinete/criar_organizador/')
 	assert response.status_code is 200
 
 @pytest.mark.django_db
@@ -172,8 +185,17 @@ def test_registro_view_post_cidadao_data_invalida():
 @pytest.mark.django_db
 def test_registro_view_post_organizador_contatos():
 
+	gabinete = Gabinete()
+	gabinete.save()
+	admin = AdministradorGabinete()
+	admin.username = 'administrador'
+	admin.set_password('123')
+	admin.data_de_nascimento = '1900-01-01'
+	admin.gabinete = gabinete
+	admin.save()
 	client = Client()
-	response = client.post('/criar_organizador/', {'first_name': 'Organizador',\
+	client.post('/', {'username': 'administrador', 'password': '123'})
+	response = client.post('/gabinete/criar_organizador/', {'first_name': 'Organizador',\
 		'last_name': 'Teste', 'username': 'organizador', \
 		'email': 'organizador@teste.com', 'confirmacao_email': \
 		'organizador@teste.com', 'password': '123', 'confirmacao_password': \
@@ -306,6 +328,7 @@ def test_logout_view_get():
 	assert response.status_code is 200
 	cidadao.delete()
 
+@pytest.mark.django_db
 def test_criar_administrador_get():
 
 	client = Client()
@@ -315,6 +338,9 @@ def test_criar_administrador_get():
 @pytest.mark.django_db
 def test_registro_view_post_administrador_gabinete():
 
+	gabinete = Gabinete()
+	gabinete.nome_gabinete = 'Gabinete'
+	gabinete.save()
 	client = Client()
 	response = client.post('/criar_administrador/', {'first_name': 'Administrador',\
 		'last_name': 'Teste', 'username': 'adminGabinete', \
@@ -323,7 +349,7 @@ def test_registro_view_post_administrador_gabinete():
 		'123', 'sexo': 'Masculino', 'municipio': 'Brasilia', 'uf': 'DF', \
 		'data_de_nascimento': '1900-01-01', 'cidade':'Brasilia', \
 		'endereco':'endereco', 'cep': '111111111','telefone_pessoal':'61988888888',\
-		'telefone_gabinete':'619222222' })
+		'telefone_gabinete':'619222222', 'nome_gabinete': 'Gabinete'})
 	admin = AdministradorGabinete.objects.get(username='adminGabinete')
 	assert admin is not None
 	admin.delete()
