@@ -3,7 +3,11 @@
 <main>
   <div class="container">
     <div class="row">
-
+      <div class="col s6 m6 l6">
+        <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/" style="color: rgb(35,142,35)">{{ gabinete.nome_gabinete }}</a> > <a href="/gabinete/cartas/" style="color: rgb(35,142,35)">Cartas</a></h5>
+      </div>
+    </div>
+    <div class="row">
       <div class="col s2 m2 l2"><br><br></div>
       <div class="col s8 m8 l8">
         {% if messages %}
@@ -14,7 +18,7 @@
         </ul>
         {% endif %}
         <br><center>
-          <a href="/gerar_carta"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Gerar nova carta</button></a>
+          <a href="/gabinete/cartas/gerar_carta"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Gerar nova carta</button></a>
         </center><br>
         <ul class="collection">
           <p>Cartas geradas</p>
