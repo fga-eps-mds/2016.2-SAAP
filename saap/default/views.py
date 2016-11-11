@@ -21,16 +21,15 @@ from django.core.mail import EmailMessage
 
 # Create your views here.
 
-data = {}
-data['campos_sexo'] = ['Masculino', 'Feminino']
-data['campos_uf'] = ['AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', \
-    'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', \
-    'RN', 'RS', 'RO', 'RR', 'SC', 'SE', 'SP', 'TO']
+
 campos_login = ["Nome de Usuário", "Senha"]
-campos_cadastro = ["Nome", "Sobrenome", "Nome de Usuário", "E-mail", \
+campos_cadastro = ["Gabinete", "Nome", "Sobrenome", "Nome de Usuário", "E-mail", \
     "Confirmar E-mail", "Senha", "Confirmar Senha", "Data de Nascimento", \
     "Sexo", "Município", "UF (Unidade Federativa)"]
-campos_ticket = ["Nome do Organizador", "Tipo de Ticket", "Assunto", \
+campos_cadastro_cidadao = ["Nome", "Sobrenome", "Nome de Usuário", "E-mail", \
+        "Confirmar E-mail", "Senha", "Confirmar Senha", "Data de Nascimento", \
+        "Sexo", "Município", "UF (Unidade Federativa)"]
+campos_ticket = ["Nome do Gabinete", "Tipo de Ticket", "Assunto", \
     "Mensagem"]
 campos_mudar_senha = ["Nova Senha", "Confirmação Nova Senha"]
 campos_excluir_conta = ["Senha"]
@@ -43,6 +42,42 @@ campos_cadastrar_contato = ["Nome", "Data de Nascimento", "Telefone \
 campos_enviar_carta = ["Nome do remetente", "Município do remetente", \
     "Nome do destinatário", "Forma de tratamento", "Mensagem"]
 campos_enviar_oficio = ["Nome do remetente", "Nome do destinatario", "Forma de tratamento", "Mensagem"]
+
+
+def checar_administrador_gabinete(request, template, data):
+
+    tipo_usuario = AdministradorGabinete.objects.filter(username=request.\
+        user.username)
+    if tipo_usuario.count():
+        response = render(request, template, data)
+    else:
+        response = redirect('/')
+
+    return response
+
+def data_sexo():
+
+    return {'campos_sexo': {'Masculino', 'Feminino'}}
+
+def data_uf():
+
+    return {'campos_uf': {'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', \
+        'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', \
+        'RN', 'RS', 'RO', 'RR', 'SC', 'SE', 'SP', 'TO'}}
+
+def pegar_objeto_usuario(username):
+
+    pegar_objeto = Cidadao.objects.filter(username=username)
+    if pegar_objeto.count():
+        return pegar_objeto[0]
+
+    pegar_objeto = OrganizadorContatos.objects.filter(username=username)
+    if pegar_objeto.count():
+        return pegar_objeto[0]
+
+    pegar_objeto = AdministradorGabinete.objects.filter(username=username)
+    if pegar_objeto.count():
+        return pegar_objeto[0]
 
 def checar_data(data):
     partes_data = data.split("-")
@@ -61,7 +96,14 @@ def checar_campos(campos):
 
 def render_mensagem_erro(request, mensagem, template, data):
     messages.error(request, mensagem)
-    response = render(request, template, data)
+
+    if template == "criar_administrador.html" or template == "criar_organizador.html":
+        gabinetes = Gabinete.objects.all()
+        lista_gabinetes = list(gabinetes)
+        data['lista_gabinetes'] = lista_gabinetes
+        response = render(request, template, data)
+    else:
+        response = render(request, template, data)
 
     return response
 
@@ -72,15 +114,21 @@ def checar_vazio(campos):
             nao_vazio = False
     return nao_vazio
 
-def render_contatos_tickets(request):
-    organizador = OrganizadorContatos.objects.get(username=request.user.username)
-    contatos = organizador.contatos.all()
+def render_contatos(request):
+    gabinete = pegar_objeto_usuario(request.user.username).gabinete
+    contatos = gabinete.contatos.all()
     lista_contatos = list(contatos)
-    tickets = organizador.tickets.all()
-    lista_tickets = list(tickets)
-    return render(request,'contato.html',locals())
+    return render(request, 'contatos.html', locals())
 
-def checar_campos_registro(request):
+def render_contatos_tickets(request):
+    gabinete = pegar_objeto_usuario(request.user.username).gabinete
+    contatos = gabinete.contatos.all()
+    lista_contatos = list(contatos)
+    tickets = gabinete.tickets.all()
+    lista_tickets = list(tickets)
+    return render(request, "gabinete.html", locals())
+
+def checar_campos_registro_cidadao(request):
 
     campos_validados = checar_campos([request.POST['first_name'], \
         request.POST['last_name'], request.POST['username'], \
@@ -88,6 +136,18 @@ def checar_campos_registro(request):
         request.POST['password'], request.POST['confirmacao_password'], \
         request.POST['data_de_nascimento'], request.POST['sexo'], \
         request.POST['municipio'], request.POST['uf']])
+
+    return campos_validados
+
+def checar_campos_registro_admin(request):
+
+    campos_validados = checar_campos([request.POST['nome_gabinete'],
+        request.POST['first_name'], request.POST['last_name'],
+        request.POST['username'], request.POST['email'],
+        request.POST['confirmacao_email'], request.POST['password'],
+        request.POST['confirmacao_password'], request.POST['data_de_nascimento'],
+        request.POST['sexo'], request.POST['municipio'],
+        request.POST['uf']])
 
     return campos_validados
 
@@ -158,9 +218,17 @@ def atualizar_contato(request, contato):
 
     return contato
 
-def checar_validacoes_usuario(request, template):
+def checar_validacoes_usuario(request, template, campos, data):
 
-    campos_validados = checar_campos_registro(request)
+    try:
+        gabinete = pegar_objeto_usuario(request.user.username).gabinete
+    except:
+        pass
+    
+    if campos[0] == "Gabinete":
+        campos_validados = checar_campos_registro_admin(request)
+    else:
+        campos_validados = checar_campos_registro_cidadao(request)
 
     if campos_validados is True:
         pass
@@ -171,14 +239,14 @@ def checar_validacoes_usuario(request, template):
             else:
                 response = render_mensagem_erro(request, 'Já existe um \
                     usuário com esse "Nome de Usuário"!', \
-                    template, {'data':data})
+                    template, locals())
         else:
             response = render_mensagem_erro(request, 'Formato de data \
-                inválido (AAAA-MM-DD)!', template, {'data':data})
+                inválido (AAAA-MM-DD)!', template, locals())
     else:
         response = render_mensagem_erro(request, 'O campo "%s" não foi \
-            preenchido!' % campos_cadastro[campos_validados], \
-            template, {'data':data})
+            preenchido!' % campos[campos_validados], \
+            template, locals())
 
     return response
 
