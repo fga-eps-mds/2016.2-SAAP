@@ -127,3 +127,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), )
+
+MEDIA_ROOT = '/full/path/to/media/folder'
+MEDIA_URL = '/media/'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'saapgppmds@gmail.com'
+EMAIL_HOST_PASSWORD = 'mdsgppsaap'
+EMAIL_PORT = 587

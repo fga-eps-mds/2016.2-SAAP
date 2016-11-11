@@ -7,6 +7,8 @@ from django.utils.translation import ugettext
 from core.models import Contato, Ticket
 from autenticacao.models import OrganizadorContatos
 from default.views import *
+from autenticacao.views import *
+from autenticacao.models import *
 
 class CadastroView(View):
     http_method_names = [u'get', u'post']
@@ -298,3 +300,91 @@ POST['nome_organizador'])
             resposta = render(request, 'vereadores.html', locals())
 
         return resposta
+
+class GerarCartaView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
+            user.username)
+        if tipo_usuario.count():
+            response = render(request, 'gerar_carta.html')
+        else:
+            response = redirect('/')
+
+        return response
+
+    def post(self, request):
+
+        data = {}
+        data['nome_remetente'] = request.POST['nome_remetente']
+        data['municipio_remetente'] = request.POST['municipio_remetente']
+        data['nome_destinatario'] = request.POST['nome_destinatario']
+        data['forma_tratamento'] = request.POST['forma_tratamento']
+        data['mensagem'] = request.POST['mensagem']
+        data['campos_forma_tratamento'] = ['Senhor(a)', 'Doutor(a)']
+
+        campos_validados = checar_campos([request.POST['nome_remetente'], \
+            request.POST['municipio_remetente'], request.POST\
+            ['nome_destinatario'], request.POST['forma_tratamento'], \
+            request.POST['mensagem']])
+
+        if campos_validados is True:
+
+            carta = Carta()
+            carta.nome_remetente = request.POST['nome_remetente']
+            carta.municipio_remetente = request.POST['municipio_remetente']
+            carta.nome_destinatario = request.POST['nome_destinatario']
+            carta.forma_tratamento = request.POST['forma_tratamento']
+            carta.texto = request.POST['mensagem']
+            carta.data = datetime.now()
+            carta.save()
+            organizador = OrganizadorContatos.objects.get(username=request.\
+                user.username)
+            organizador.cartas.add(carta)
+            response = redirect('/cartas/')
+
+        else:
+            messages.error(request, 'O campo "%s" não foi preenchido!' \
+                % campos_enviar_carta[campos_validados])
+            response = render(request, 'gerar_carta.html', locals())
+
+        return response
+
+class CartasView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
+            user.username)
+        if tipo_usuario.count():
+            organizador = OrganizadorContatos.objects.get(username=request.user.username)
+            cartas = organizador.cartas.all()
+            lista_cartas = list(cartas)
+            response = render(request, 'cartas.html', locals())
+        else:
+            response = redirect('/')
+
+        return response
+
+class DeletarCartaView(View):
+    http_method_names = [u'get']
+
+    def get(self,request,pk):
+        carta = Carta.objects.get(id=pk)
+        carta.delete()
+        return redirect('/cartas/')
+
+class GerarPDFCartaView(View):
+    http_method_names = [u'get']
+
+    def get(self, request, pk):
+        carta = Carta.objects.get(id=pk)
+        return gerar_pdf_carta(carta)
+
+class EnviarCartaView(View):
+    http_method_names = [u'post']
+
+    def post(self, request, pk):
+        carta = Carta.objects.get(id=pk)
+        return enviar_carta_email(request, carta)
