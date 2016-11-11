@@ -2,10 +2,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
-# from autenticacao.models import Gabinete_saap
+#from autenticacao.models import Gabinete_saap
 # from autenticacao.models import Usuario_saap
 from saap import *
-# from autenticacao.models import
+#from autenticacao.models import *
 
 class Grupo(models.Model):
 
@@ -104,19 +104,3 @@ class Template(models.Model):
     forma_tratamento = models.CharField(max_length=30)
     texto = models.CharField(max_length=1500)
     data = models.DateField('data', auto_now=True)
-
-class AdminGabinete(models.Model):
-    #gabinetes = models.ManyToManyField(Gabinete)
-    nome_admin = models.CharField(max_length=100)
-    enderecoCasa = models.CharField(max_length=300, default='')
-    enderecoGabinete = models.CharField(max_length=300, default='')
-    emailCorporativo = models.EmailField(max_length=30,default='')
-    logoCasa = models.ImageField()  # Para models.ImageField funcionar deve-se fazer o seguinte em url.py:
-    # urlpatterns = [ # ... the rest of your URLconf goes here ... ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)"""
-
-    class Meta:
-        permissions = (
-                ("organizar_contatos", "Organizador de contatos"),
-                ("enviar_documentos", ""),
-                ("responder_ticket", "Administrador de Gabinete"),
-                )

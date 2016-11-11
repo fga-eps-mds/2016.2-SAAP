@@ -236,6 +236,7 @@ class RegistroAdministradorView(View):
         data['telefone_pessoal'] = request.POST['telefone_pessoal']
         data['telefone_gabinete'] = request.POST['telefone_gabinete']
 
+
         validado = checar_validacoes_usuario(request, 'criar_administrador.html')
 
         if validado is True:
