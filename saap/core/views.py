@@ -10,6 +10,7 @@ from default.views import *
 from autenticacao.views import *
 from autenticacao.models import *
 
+
 class CadastroView(View):
     http_method_names = [u'get', u'post']
 
@@ -72,12 +73,11 @@ filiacao']
 
                     if checar_data(request.POST['dependente_data_filiacao']):
 
-                        organizador = OrganizadorContatos.objects.get(\
-                            username=request.user.username)
+                        gabinete = pegar_objeto_usuario(request.user.username).gabinete
 
                         contato = Contato()
                         contato = atualizar_contato(request, contato)
-                        organizador.contatos.add(contato)
+                        gabinete.contatos.add(contato)
 
                         response = render_contatos_tickets(request)
 
@@ -144,10 +144,10 @@ class AtualizaContato(View):
 
         if campos_validados is True:
 
-            organizador = OrganizadorContatos.objects.get(username=request.user.username)
+            gabinete = pegar_objeto_usuario(request.user.username).gabinete
 
             busca_email = request.POST['busca_email']
-            contato = organizador.contatos.get(email = busca_email)
+            contato = gabinete.contatos.get(email = busca_email)
             contato = atualizar_contato(request, contato)
 
             response = render_contatos_tickets(request)
@@ -158,21 +158,49 @@ class AtualizaContato(View):
 
         return response
 
-
 class ContatoView(View):
     http_method_names = [u'get', u'post']
 
     def get (self, request):
-        return render_contatos_tickets(request)
+        gabinete = pegar_objeto_usuario(request.user.username).gabinete
+        contatos = gabinete.contatos.all()
+        lista_contatos = list(contatos)
+        return render(request, 'contatos.html', locals())
 
+class TicketsView(View):
+    http_method_names = [u'get', u'post']
+
+    def get (self, request):
+        gabinete = pegar_objeto_usuario(request.user.username).gabinete
+        tickets = gabinete.tickets.all()
+        lista_tickets = list(tickets)
+
+        response = checar_administrador_gabinete(request, 'tickets.html', locals())
+
+        return response
+
+class GabineteView(View):
+    http_method_names = [u'get', u'post']
+
+    def get (self, request):
+
+        gabinete = pegar_objeto_usuario(request.user.username).gabinete
+        contatos = gabinete.contatos.all()
+        lista_contatos = list(contatos)
+        tickets = gabinete.tickets.all()
+        lista_tickets = list(tickets)
+
+        response = checar_administrador_gabinete(request, 'gabinete.html', locals())
+
+        return response
 
 class TicketView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
         if request.user.is_authenticated():
-            organizadores = OrganizadorContatos.objects.all()
-            lista_organizadores = list(organizadores)
+            gabinetes = Gabinete.objects.all()
+            lista_gabinetes = list(gabinetes)
             response = render(request, 'ticket.html',locals())
         else:
             response = render(request, 'login.html')
@@ -182,12 +210,12 @@ class TicketView(View):
 
         data = {}
         data['campos_tipo_mensagem'] = ['Incidente', 'Requisição', 'Melhorias']
-        data['nome_organizador'] = request.POST['nome_organizador']
+        data['nome_gabinete'] = request.POST['nome_gabinete']
         data['tipo_mensagem'] = request.POST['tipo_mensagem']
         data['assunto'] = request.POST['assunto']
         data['descricao'] = request.POST['descricao']
 
-        campos_validados = checar_campos([request.POST['nome_organizador'], \
+        campos_validados = checar_campos([request.POST['nome_gabinete'], \
             request.POST['tipo_mensagem'], request.POST['assunto'], \
             request.POST['descricao']])
 
@@ -225,10 +253,10 @@ class TicketView(View):
                 novo_ticket.tipo_ticket = tipo_ticket
                 novo_ticket.file = arquivo_upload
                 novo_ticket.save()
-                organizador = OrganizadorContatos.objects.get(first_name = \
-                    request.POST['nome_organizador'])
-                organizador.tickets.add(novo_ticket)
-                tickets = organizador.tickets.all()
+                gabinete = Gabinete.objects.get(nome_gabinete = \
+                    request.POST['nome_gabinete'])
+                gabinete.tickets.add(novo_ticket)
+                tickets = gabinete.tickets.all()
                 lista_tickets = list(tickets)
 
                 response = render(request, 'perfil.html')
@@ -236,8 +264,8 @@ class TicketView(View):
         else:
             messages.error(request, 'O campo %s não foi preenchido!' \
                 % campos_ticket[campos_validados])
-            organizadores = OrganizadorContatos.objects.all()
-            lista_organizadores = list(organizadores)
+            gabinetes = Gabinete.objects.all()
+            lista_gabinetes = list(gabinetes)
             response = render(request, 'ticket.html', locals())
 
         return response
@@ -253,9 +281,9 @@ class PublicarTicketView(View):
         if ticket.aprovado == True:
             ticket.save()
             messages.success(request, 'Ticket enviado para pagina do Vereador')
-            organizadores = OrganizadorContatos.objects.all()
-            lista_organizadores = list(organizadores)
-            response = render (request, 'vereadores.html',locals()) #pagina do vereador
+            gabinetes = Gabinete.objects.all()
+            lista_gabinetes = list(gabinetes)
+            response = render (request, 'gabinetes.html',locals()) #pagina do vereador
             return response
 
         # else:
@@ -272,32 +300,32 @@ class DeletarTicketView(View):
         return redirect('/')
 
 
-class VereadoresView(View):
+class GabinetesView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        organizadores = OrganizadorContatos.objects.all()
-        lista_organizadores = list(organizadores)
-        response = render(request, 'vereadores.html', locals())
+        gabinetes = Gabinete.objects.all()
+        lista_gabinetes = list(gabinetes)
+        response = render(request, 'gabinetes.html', locals())
         return response
 
     def post(self, request):
 
-        campos_validados = checar_campos([request.POST['nome_organizador']])
+        campos_validados = checar_campos([request.POST['nome_gabinete']])
 
         if campos_validados is True:
 
-            organizador = OrganizadorContatos.objects.get(first_name=request.\
-POST['nome_organizador'])
-            tickets = organizador.tickets.filter(aprovado=True)
+            gabinete = Gabinete.objects.get(nome_gabinete = request.\
+POST['nome_gabinete'])
+            tickets = gabinete.tickets.filter(aprovado=True)
             lista_tickets = list(tickets)
-            resposta = render(request, 'vereador.html', locals())
+            resposta = render(request, 'visualizar_gabinete.html', locals())
 
         else:
-            organizadores = OrganizadorContatos.objects.all()
-            lista_organizadores = list(organizadores)
-            messages.error(request, 'É necessário selecionar algum vereador!')
-            resposta = render(request, 'vereadores.html', locals())
+            gabinetes = Gabinete.objects.all()
+            lista_gabinetes = list(gabinetes)
+            messages.error(request, 'É necessário selecionar algum gabinete!')
+            resposta = render(request, 'gabinetes.html', locals())
 
         return resposta
 
@@ -305,12 +333,9 @@ class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
-            user.username)
-        if tipo_usuario.count():
-            response = render(request, 'gerar_carta.html')
-        else:
-            response = redirect('/')
+
+        gabinete = pegar_objeto_usuario(request.user.username).gabinete
+        response = checar_administrador_gabinete(request, 'gerar_carta.html', locals())
 
         return response
 
@@ -339,10 +364,9 @@ class GerarCartaView(View):
             carta.texto = request.POST['mensagem']
             carta.data = datetime.now()
             carta.save()
-            organizador = OrganizadorContatos.objects.get(username=request.\
-                user.username)
-            organizador.cartas.add(carta)
-            response = redirect('/cartas/')
+            gabinete = pegar_objeto_usuario(request.user.username).gabinete
+            gabinete.cartas.add(carta)
+            response = redirect('/gabinete/cartas/')
 
         else:
             messages.error(request, 'O campo "%s" não foi preenchido!' \
@@ -355,15 +379,13 @@ class CartasView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
-            user.username)
-        if tipo_usuario.count():
-            organizador = OrganizadorContatos.objects.get(username=request.user.username)
-            cartas = organizador.cartas.all()
+        try:
+            gabinete = pegar_objeto_usuario(request.user.username).gabinete
+            cartas = gabinete.cartas.all()
             lista_cartas = list(cartas)
-            response = render(request, 'cartas.html', locals())
-        else:
-            response = redirect('/')
+        except:
+            pass
+        response = checar_administrador_gabinete(request, 'cartas.html', locals())
 
         return response
 
@@ -393,14 +415,9 @@ class GerarOficioView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
-            user.username)
 
-        if tipo_usuario.count():
-            response = render(request, 'gerar_oficio.html')
-
-        else:
-            response = redirect('/')
+        gabinete = pegar_objeto_usuario(request.user.username).gabinete
+        response = checar_administrador_gabinete(request, 'gerar_oficio.html', locals())
 
         return response
 
@@ -427,11 +444,9 @@ class GerarOficioView(View):
             oficio.data = datetime.now()
             oficio.save()
 
-            organizador = OrganizadorContatos.objects.get(username=request.\
-                user.username)
-            organizador = OrganizadorContatos.objects.get(username=request.user.username)
-            organizador.oficio.add(oficio)
-            response = render(request, 'oficio.html')
+            gabinete = pegar_objeto_usuario(request.user.username).gabinete
+            gabinete.oficios.add(oficio)
+            response = redirect("/gabinete/oficios/")
 
         else:
             messages.error(request, 'O campo "%s" não foi preenchido!'\
@@ -446,15 +461,13 @@ class OficioView(View):
      http_method_names = [u'get', u'post']
 
      def get(self, request):
-        tipo_usuario = OrganizadorContatos.objects.filter(username=request.\
-            user.username)
-        if tipo_usuario.count():
-            organizador = OrganizadorContatos.objects.get(username=request.user.username)
-            oficio = organizador.oficio.all()
-            lista_oficio = list(oficio)
-            response = render(request, 'oficio.html', locals())
-        else:
-            response = redirect('/')
+        try:
+            gabinete = pegar_objeto_usuario(request.user.username).gabinete
+            oficios = gabinete.oficios.all()
+            lista_oficios = list(oficios)
+        except:
+            pass
+        response = checar_administrador_gabinete(request, 'oficios.html', locals())
 
         return response
 
