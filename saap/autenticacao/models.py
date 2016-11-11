@@ -37,6 +37,11 @@ class Gabinete_saap(models.Model):
     nome_gabinete = models.CharField(max_length=100)
     municipio = models.CharField(max_length=250)
     uf = models.CharField(max_length=2)
+    enderecoGabinete = models.CharField(max_length=300, default='')
+    emailCorporativo = models.EmailField(max_length=30,default='')
+    logoCasa = models.ImageField()  # Para models.ImageField funcionar deve-se fazer o seguinte em url.py:
+    # urlpatterns = [ # ... the rest of your URLconf goes here ... ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)"""
+    enderecoCasa = models.CharField(max_length=300, default='')
 
 class Cidadao(Usuario_saap):
 
@@ -59,9 +64,17 @@ class OrganizadorGabinete(Usuario_saap):
     boletim = models.ManyToManyField(Boletim)
 
 class AdministradorGabinete(Usuario_saap):
-    
-    endereco = models.CharField(max_length=60,default='')
+
+    gabinetes = models.ManyToManyField(Gabinete_saap)
     cidade = models.CharField(max_length=20,default='')
     cep = models.CharField(max_length=8,default='')
     telefone_pessoal = models.CharField(max_length=7,default='',blank=True,null=True)
     telefone_gabinete = models.CharField(max_length=7,default='',blank=True,null=True)
+
+
+    class Meta:
+        permissions = (
+                ("organizar_contatos", "Organizador de contatos"),
+                ("enviar_documentos", "Organizador de Gabinete"),
+                ("responder_ticket", "Administrador de Gabinete"),
+                )
