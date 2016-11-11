@@ -1,8 +1,23 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from autenticacao.models import OrganizadorContatos
 from django.contrib import messages
 from autenticacao.models import *
+from core.models import Carta
+
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
+import time
+from reportlab.lib.enums import TA_JUSTIFY
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from io import StringIO
+from django.core.files.storage import FileSystemStorage
+from datetime import datetime
+
+from django.core.mail import EmailMessage
 
 # Create your views here.
 
@@ -25,6 +40,8 @@ campos_cadastrar_contato = ["Nome", "Data de Nascimento", "Telefone \
     "Profissão", "Zona Eleitoral", "Cargo", "Seção Eleitoral", "Empresa", \
     "Nome do Dependente", "Aniversário do Dependente", "Parentesco do Dependente", \
     "Partido do Dependente", "Data de Filiação do Dependente", "E-mail do contato"]
+campos_enviar_carta = ["Nome do remetente", "Município do remetente", \
+    "Nome do destinatário", "Forma de tratamento", "Mensagem"]
 
 def checar_data(data):
     partes_data = data.split("-")
@@ -163,3 +180,70 @@ def checar_validacoes_usuario(request, template):
             template, {'data':data})
 
     return response
+
+def gerar_pdf_carta(carta):
+
+    doc = SimpleDocTemplate("/tmp/carta.pdf")
+    styles = getSampleStyleSheet()
+
+    mensagem = carta.texto
+    mensagem = mensagem.replace('\n', '<br/>')
+
+    Story=[]
+
+    now = datetime.now()
+
+    styles=getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+
+    ptext = '<font size=12>%s, %s/%s/%s</font>' % (carta.municipio_remetente, now.day, now.month, now.year)
+    Story.append(Paragraph(ptext, styles["Normal"]))
+
+    Story.append(Spacer(1, 24))
+
+    ptext = '<font size=12>%s %s,</font>' % (carta.forma_tratamento, carta.nome_destinatario)
+    Story.append(Paragraph(ptext, styles["Normal"]))
+    #.split()[0].strip()
+
+    Story.append(Spacer(1, 36))
+
+    ptext = '<font size=12>Prezado %s:</font>' % carta.forma_tratamento
+    Story.append(Paragraph(ptext, styles["Normal"]))
+
+    Story.append(Spacer(1, 12))
+
+    ptext = '<font size=12>%s</font>' % mensagem
+    Story.append(Paragraph(ptext, styles["Justify"]))
+
+    Story.append(Spacer(1, 36))
+
+    ptext = '<font size=12>Atenciosamente,</font>'
+    Story.append(Paragraph(ptext, styles["Normal"]))
+
+    Story.append(Spacer(1, 12))
+
+    ptext = '<font size=12>%s</font>' % carta.nome_remetente
+    Story.append(Paragraph(ptext, styles["Normal"]))
+
+    Story.append(Spacer(1, 12))
+
+    doc.build(Story)
+
+    fs = FileSystemStorage("/tmp")
+    with fs.open("carta.pdf") as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="carta.pdf"'
+        return response
+
+def enviar_carta_email(request, carta):
+
+    email = EmailMessage('Carta de ' + carta.nome_remetente,
+        '%s, %s/%s/%s\n\n%s %s,\n\n\nPrezado %s:\n\n%s\n\n\nAtenciosamente,\
+            \n\n%s' % (carta.municipio_remetente, carta.data.day, \
+            carta.data.month, carta.data.year, carta.forma_tratamento, \
+            carta.nome_destinatario, carta.forma_tratamento, carta.texto, \
+            carta.nome_remetente),
+        to=[request.POST['email_carta']])
+    email.send()
+
+    return redirect('/cartas/', messages.success(request, 'Carta enviada por e-mail com sucesso!'))
