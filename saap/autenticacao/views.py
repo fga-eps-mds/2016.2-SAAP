@@ -8,8 +8,13 @@ from django.template import RequestContext
 from autenticacao.models import Cidadao, OrganizadorContatos
 from django.utils.translation import ugettext
 from default.views import *
-from core.views import (ContatoView)
+#from core.views import (ContatoView)
 from django.contrib.auth.decorators import login_required
+
+
+data = {}
+data.update(data_sexo())
+data.update(data_uf())
 
 def checar_autenticacao(request, resposta_autenticado, resposta_nao_autenticado):
     if request.user.is_authenticated():
@@ -37,14 +42,14 @@ def checar_tipo_usuario(request, username):
     except:
         tipo_usuario = None
     if tipo_usuario.__class__ is OrganizadorContatos:
-        return render_contatos_tickets(request)
+        return redirect('/gabinete/contatos/')
 
     try:
         tipo_usuario = AdministradorGabinete.objects.get(username=username)
     except:
         tipo_usuario = None
     if tipo_usuario.__class__ is AdministradorGabinete:
-        return redirect('teste/')
+        return redirect('/gabinete/')
 
 class LoginView(View):
     http_method_names = [u'get', u'post']
@@ -100,7 +105,7 @@ class RegistroCidadaoView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        validado = checar_validacoes_usuario(request, 'criar_organizador.html')
+        validado = checar_validacoes_usuario(request, 'cadastro.html', campos_cadastro_cidadao, data)
 
         if validado is True:
 
@@ -151,8 +156,14 @@ class RegistroOrganizadorView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        resposta = render(request, 'criar_organizador.html')
-        return resposta
+        gabinete = pegar_objeto_usuario(request.user.username).gabinete
+        data.clear()
+        data.update(data_sexo())
+        data.update(data_uf())
+
+        response = checar_administrador_gabinete(request, 'criar_organizador.html', locals())
+
+        return response
 
     def post(self, request):
 
@@ -166,10 +177,12 @@ class RegistroOrganizadorView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        validado = checar_validacoes_usuario(request, 'criar_organizador.html')
+        validado = checar_validacoes_usuario(request, 'criar_organizador.html', campos_cadastro_cidadao, data)
 
         if validado is True:
 
+            gabinete = pegar_objeto_usuario(request.user.username).gabinete
+            nome_gabinete = gabinete.nome_gabinete
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
             username = request.POST['username']
@@ -195,6 +208,7 @@ class RegistroOrganizadorView(View):
             uf = request.POST['uf']
 
             user = OrganizadorContatos()
+            user.gabinete = Gabinete.objects.get(nome_gabinete=nome_gabinete)
             user.first_name = first_name
             user.last_name = last_name
             user.username = username
@@ -205,7 +219,7 @@ class RegistroOrganizadorView(View):
             user.municipio = municipio
             user.uf = uf
             user.save()
-            response = render(request, 'login.html')
+            response = redirect('/gabinete/')
 
         else:
             response = validado
@@ -216,11 +230,18 @@ class RegistroAdministradorView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        resposta = render(request, 'criar_administrador.html')
+        gabinetes = Gabinete.objects.all()
+        lista_gabinetes = list(gabinetes)
+        data.clear()
+        data.update(data_sexo())
+        data.update(data_uf())
+        data['lista_gabinetes'] = lista_gabinetes
+        resposta = render(request, 'criar_administrador.html', {'data':data})
         return resposta
 
     def post(self, request):
 
+        data['nome_gabinete'] = request.POST['nome_gabinete']
         data['first_name'] = request.POST['first_name']
         data['last_name'] = request.POST['last_name']
         data['username'] = request.POST['username']
@@ -230,16 +251,12 @@ class RegistroAdministradorView(View):
         data['sexo'] = request.POST['sexo']
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
-        data['cidade'] = request.POST['cidade']
-        data['endereco'] = request.POST['endereco']
-        data['cep'] = request.POST['cep']
-        data['telefone_pessoal'] = request.POST['telefone_pessoal']
-        data['telefone_gabinete'] = request.POST['telefone_gabinete']
 
-        validado = checar_validacoes_usuario(request, 'criar_administrador.html')
+        validado = checar_validacoes_usuario(request, 'criar_administrador.html', campos_cadastro, data)
 
         if validado is True:
 
+            nome_gabinete = request.POST['nome_gabinete']
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
             username = request.POST['username']
@@ -263,13 +280,9 @@ class RegistroAdministradorView(View):
             sexo = request.POST['sexo']
             municipio = request.POST['municipio']
             uf = request.POST['uf']
-            cidade = request.POST['cidade']
-            endereco = request.POST['endereco']
-            cep = request.POST['cep']
-            telefone_pessoal = request.POST['telefone_pessoal']
-            telefone_gabinete = request.POST['telefone_gabinete']
 
             user = AdministradorGabinete()
+            user.gabinete = Gabinete.objects.get(nome_gabinete=nome_gabinete)
             user.first_name = first_name
             user.last_name = last_name
             user.username = username
@@ -279,11 +292,6 @@ class RegistroAdministradorView(View):
             user.sexo = sexo
             user.municipio = municipio
             user.uf = uf
-            user.cidade = cidade
-            user.endereco = endereco
-            user.cep = cep
-            user.telefone_pessoal = telefone_pessoal
-            user.telefone_gabinete = telefone_gabinete
             user.save()
             response = render(request, 'login.html')
 
