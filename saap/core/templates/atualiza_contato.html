@@ -77,6 +77,7 @@
                 <div class="input-field col s5">
                   <i class="material-icons prefix" style="color:green">contact_phone</i>
                   <input placeholder="xx-xxxx-xxxx" id="telefone" name="telefone" type="text" class="validate" value='{{contato.telefone}}'>
+                  <input placeholder="xx-xxxx-xxxx" id="telefone" name="telefone" type="text" class="validate">
                   <label for="telefone">Residencial</label>
                 </div>
                 <div class="input-field col s5">
@@ -85,6 +86,9 @@
                       <option value="{{ contato.sexo }}" selected>{{ contato.sexo }}</option>
                       <option value="Masculino" >Masculino</option>
                       <option value="Feminino" >Feminino</option>
+                    <option value="" selected>Selecionar</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
                   </select>
                   <label>Sexo</label>
                 </div>
@@ -305,6 +309,14 @@
                 <button class="btn waves-effect waves-light saap-dark-green " type="reset">Cancelar</button>
                 <button class="btn waves-effect waves-light saap-dark-green " type="submit">Confirmar</button>
               </div>
+                  <input placeholder="yyyy-mm-dd" id="dependente_data_filiacao" name="dependente_data_filiacao" type="text" class="validate">
+                  <label for="dependente_data_filiacao">Data da Filiação</label>
+                </div>
+              </div>
+              <div class="card-action right-align">
+                <button class="btn waves-effect waves-light saap-dark-green " type="submit">Confirmar</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
