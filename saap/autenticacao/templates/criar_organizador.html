@@ -1,16 +1,19 @@
 {%  extends "base.html" %}
 {% block main_content %}
-<main>
+  <main>
   <br><br><br>
   <div class="container">
     <div class="row">
+      <div>
+        <h4 class="center">Cadastro de Organizador</h4>
+      </div>
       <div class="col s12 offset-m2 m8 offset-l1 l10">
         {% if messages %}
-        <ul class="messages">
+          <ul class="messages">
             {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
             {% endfor %}
-        </ul>
+          </ul>
         {% endif %}
         <form action="{% url 'criar_organizador' %}" method="POST">
           {% csrf_token %}
@@ -151,5 +154,5 @@
       </div>
     </div>
   </div>
-</main>
+  </main>
 {% endblock main_content %}
