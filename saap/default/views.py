@@ -18,6 +18,7 @@ from django.core.files.storage import FileSystemStorage
 from datetime import datetime
 
 from django.core.mail import EmailMessage
+from core.models import Grupo
 
 # Create your views here.
 
@@ -126,6 +127,7 @@ def render_contatos_tickets(request):
     lista_contatos = list(contatos)
     tickets = gabinete.tickets.all()
     lista_tickets = list(tickets)
+    lista_grupo = Grupo.objects.all()
     return render(request, "gabinete.html", locals())
 
 def checar_campos_registro_cidadao(request):

@@ -910,3 +910,421 @@ def test_ticket_view_post_anonimo():
         'descricao': 'Descrição', 'tipo_mensagem': 'Tipo mensagem'})
     assert response.status_code is 200
     organizador.delete()
+
+
+@pytest.mark.django_db
+def test_busca_contatos_cidade():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Taguatinga'
+    contato.cep = '72000000'
+    contato.estado = 'DF'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "cidade"
+    pesquisa = 'df'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+
+@pytest.mark.django_db
+def test_busca_contatos_estado():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "estado"
+    pesquisa = 'Sao Paulo'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+@pytest.mark.django_db
+def test_busca_contatos_genero():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "genero"
+    pesquisa = 'Masculino'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+@pytest.mark.django_db
+def test_busca_contatos_data_aniversario():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "data_de_nascimento"
+    pesquisa = '1'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+@pytest.mark.django_db
+def test_busca_contatos_data_aniversario():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "Data_aniversario"
+    pesquisa = '1'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+@pytest.mark.django_db
+def test_busca_contatos_nome():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "nome"
+    pesquisa = 'Maria'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()  
+
+@pytest.mark.django_db
+def test_busca_contatos_sem_filtro():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = ""
+    pesquisa = 'sabino'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete() 
+
+@pytest.mark.django_db
+def test_criar_grupo_de_contatos():
+
+    client=Client()
+
+    banco_antes = Grupo.objects.all().count()
+    teste_nome_grupo = 'brasileiros'
+
+    client.post('/criar_grupo/',{'nome_grupo':teste_nome_grupo})
+
+    banco_depois = Grupo.objects.all().count()
+
+    assert banco_depois > banco_antes
+    Grupo.objects.all().last().delete()
+
+
+@pytest.mark.django_db
+def test_adiciona_contato_ao_grupo():
+
+    client = Client()
+
+    teste_nome_grupo = 'teste_grupo_teste'
+    client.post('/criar_grupo/',{'nome_grupo':teste_nome_grupo})
+    
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+        
+    contato = Contato.objects.all().last()
+    grupo_novo = Grupo.objects.all().last()
+
+    client.post('/adicionar_contatos/',{'contatos': contato.id,'nome_grupo':teste_nome_grupo})
+    
+    assert grupo_novo.contatos.all().count() == 1
+
+@pytest.mark.django_db
+def test_busca_contatos_cidade():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Taguatinga'
+    contato.cep = '72000000'
+    contato.estado = 'DF'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "cidade"
+    pesquisa = 'df'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+
+@pytest.mark.django_db
+def test_busca_contatos_estado():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "estado"
+    pesquisa = 'Sao Paulo'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+@pytest.mark.django_db
+def test_busca_contatos_genero():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "genero"
+    pesquisa = 'Masculino'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+@pytest.mark.django_db
+def test_busca_contatos_data_aniversario():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "data_de_nascimento"
+    pesquisa = '1'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+@pytest.mark.django_db
+def test_busca_contatos_data_aniversario():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "Data_aniversario"
+    pesquisa = '1'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()
+
+@pytest.mark.django_db
+def test_busca_contatos_nome():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = "nome"
+    pesquisa = 'Maria'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete()  
+
+@pytest.mark.django_db
+def test_busca_contatos_sem_filtro():
+
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+
+
+    client = Client()
+    tipo_busca = ""
+    pesquisa = 'sabino'
+    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+
+    assert response.status_code == 200
+    contato.delete() 
+
+@pytest.mark.django_db
+def test_criar_grupo_de_contatos():
+
+    client=Client()
+
+    banco_antes = Grupo.objects.all().count()
+    teste_nome_grupo = 'brasileiros'
+
+    client.post('/criar_grupo/',{'nome_grupo':teste_nome_grupo})
+
+    banco_depois = Grupo.objects.all().count()
+
+    assert banco_depois > banco_antes
+    Grupo.objects.all().last().delete()
+
+
+@pytest.mark.django_db
+def test_adiciona_contato_ao_grupo():
+
+    client = Client()
+
+    teste_nome_grupo = 'teste_grupo_teste'
+    client.post('/criar_grupo/',{'nome_grupo':teste_nome_grupo})
+    
+    contato = Contato() 
+    contato.nome = 'teste'
+    contato.data_de_nascimento='1990-01-01'
+    contato.sexo = 'Masculino'
+    contato.endereco = 'Qnl 29 teste casa teste 20'
+    contato.cidade = 'Osasco'
+    contato.cep = '72000000'
+    contato.estado = 'Sao Paulo'
+    contato.email = "teste@teste.com"
+    contato.save()
+        
+    contato = Contato.objects.all().last()
+    grupo_novo = Grupo.objects.all().last()
+
+    client.post('/adicionar_contatos/',{'contatos': contato.id,'nome_grupo':teste_nome_grupo})
+    
+    assert grupo_novo.contatos.all().count() == 1
+
+
+def test_busca_contatos_cidade():
+
+    client = Client()
+    tipo_busca = "cidade"
+    pesquisa = 'df'
+    response = client.post('busca_contatos/?tipo_busca=%s&pesquisa=%s',tipo_busca,pesquisa)
+

@@ -9,6 +9,10 @@ from autenticacao.models import OrganizadorContatos
 from default.views import *
 from autenticacao.views import *
 from autenticacao.models import *
+from django.views.generic.list import ListView
+from django.db.models import Q
+from core.models import Grupo
+
 
 
 class CadastroView(View):
@@ -183,6 +187,7 @@ class GabineteView(View):
     http_method_names = [u'get', u'post']
 
     def get (self, request):
+
 
         gabinete = pegar_objeto_usuario(request.user.username).gabinete
         contatos = gabinete.contatos.all()
@@ -411,6 +416,162 @@ class EnviarCartaView(View):
         carta = Carta.objects.get(id=pk)
         return enviar_carta_email(request, carta)
 
+
+class BuscaContatosView(ListView):
+    http_method_names = [u'post']
+
+    model = Contato 
+
+    template_name = 'contato.html'
+
+    def post(self, request):
+        busca = str(request.POST['tipo_busca']).lower()
+        query = request.POST['pesquisa']
+
+        if busca == 'cidade':
+            resposta = Contato.objects.filter(cidade__startswith=query)
+        elif busca == 'genero':
+            resposta = Contato.objects.filter(sexo__contains=query)
+        elif busca == 'estado':
+            resposta = Contato.objects.filter(estado__startswith=query)
+        elif busca == 'data_aniversario':
+            resposta = Contato.objects.filter(data_de_nascimento__month=query)
+        elif busca == 'nome':
+            resposta = Contato.objects.filter(nome__contains=query)
+        else:
+            resposta = Contato.objects.filter(
+            Q(nome__contains=query) |
+            Q(sexo = query) |
+            Q(estado__contains=query) |
+            Q(cidade__contains=query) |
+            Q(data_de_nascimento__contains=query)
+            )
+
+        # resposta = list(resposta)
+
+        return render(request, 'contato.html', locals())
+
+class CriarGrupoDeContatosView(View):
+
+    http_method_names = [u'get', u'post']
+
+    def post(self,request):
+
+        nome_grupo = request.POST['nome_grupo']
+        novo_grupo = Grupo()
+        novo_grupo.nome = nome_grupo
+        novo_grupo.save()
+
+        return redirect("/")
+
+class AdicionarContatoAoGrupo(View):
+
+    http_method_names = [u'post']
+
+    def post(self,request):
+
+        contatos = request.POST.getlist('contatos')
+
+        nome_grupo = request.POST['nome_grupo']
+
+        s_grupo = Grupo.objects.filter(nome__contains=nome_grupo)
+
+        grupo = s_grupo[0]
+
+        for contato in contatos:
+            grupo.contatos.add(contato)
+
+        return redirect('/')
+
+class GrupoDeContatos(ListView):
+    http_method_names = [u'get', u'post']
+
+
+class GrupoDeContatosView(ListView):
+
+    http_method_names = [u'get', u'post']
+
+    model = Contato #grupo
+    template_name = 'contato.html'
+
+    def getGrupo (self, **kwargs):
+        return Contato.objects(grupo)
+
+    def getData (self, **kwargs):
+        return Contato.objects.filter(data_de_nascimento)
+
+    def getBairro (self, **kwargs):
+        return Contato.objects.filter(bairro)
+
+    def getCidade(self, **kwargs):
+        return Contato.objects.filter(cidade)
+
+    def getCEP(self, **kwargs):
+        return Contato.objects.filter(CEP)
+
+    def getUF (self, **kwargs):
+        return Contato.objects.filter(UF)
+
+    def post(self, request):
+        busca = str(request.POST['tipo_busca']).lower()
+        query = request.POST['pesquisa']
+
+        if busca == 'cidade':
+            resposta = Contato.objects.filter(cidade__startswith=query)
+        elif busca == 'genero':
+            resposta = Contato.objects.filter(sexo__contains=query)
+        elif busca == 'estado':
+            resposta = Contato.objects.filter(estado__startswith=query)
+        elif busca == 'data_aniversario':
+            resposta = Contato.objects.filter(data_de_nascimento__month=query)
+        elif busca == 'nome':
+            resposta = Contato.objects.filter(nome__contains=query)
+        else:
+            resposta = Contato.objects.filter(
+            Q(nome__contains=query) |
+            Q(sexo = query) |
+            Q(estado__contains=query) |
+            Q(cidade__contains=query) |
+            Q(data_de_nascimento__contains=query)
+            )
+
+        # resposta = list(resposta)
+
+        return render(request, 'contato.html', locals())
+
+class CriarGrupoDeContatosView(View):
+
+    http_method_names = [u'get', u'post']
+
+    def post(self,request):
+
+        nome_grupo = request.POST['nome_grupo']
+        novo_grupo = Grupo()
+        novo_grupo.nome = nome_grupo
+        novo_grupo.save()
+
+        return redirect("/")
+
+class AdicionarContatoAoGrupo(View):
+
+    http_method_names = [u'post']
+
+    def post(self,request):
+
+        contatos = request.POST.getlist('contatos')
+
+        nome_grupo = request.POST['nome_grupo']
+
+        s_grupo = Grupo.objects.filter(nome__contains=nome_grupo)
+
+        grupo = s_grupo[0]
+
+        for contato in contatos:
+            grupo.contatos.add(contato)
+
+        return redirect('/')
+
+
 class GerarOficioView(View):
     http_method_names = [u'get', u'post']
 
@@ -493,3 +654,182 @@ class EnviarOficioView(View):
     def post(self, request, pk):
         oficio = Oficio.objects.get(id=pk)
         return enviar_oficio_email(request, oficio)
+
+
+
+class GrupoDeContatos(ListView):
+    http_method_names = [u'get', u'post']
+
+
+class BuscaContatosView(ListView):
+    http_method_names = [u'post']
+
+    model = Contato 
+
+    template_name = 'contato.html'
+
+
+    def getGrupo (self, **kwargs):
+        return Contato.objects(grupo)
+
+    def getData (self, **kwargs):
+        return Contato.objects.filter(data_de_nascimento)
+
+    def getBairro (self, **kwargs):
+        return Contato.objects.filter(bairro)
+
+    def getCidade(self, **kwargs):
+        return Contato.objects.filter(cidade)
+
+    def getCEP(self, **kwargs):
+        return Contato.objects.filter(CEP)
+
+    def getUF (self, **kwargs):
+        return Contato.objects.filter(UF)
+
+    def post(self, request):
+        busca = str(request.POST['tipo_busca']).lower()
+        query = request.POST['pesquisa']
+
+        if busca == 'cidade':
+            resposta = Contato.objects.filter(cidade__startswith=query)
+        elif busca == 'genero':
+            resposta = Contato.objects.filter(sexo__contains=query)
+        elif busca == 'estado':
+            resposta = Contato.objects.filter(estado__startswith=query)
+        elif busca == 'data_aniversario':
+            resposta = Contato.objects.filter(data_de_nascimento__month=query)
+        elif busca == 'nome':
+            resposta = Contato.objects.filter(nome__contains=query)
+        else:
+            resposta = Contato.objects.filter(
+            Q(nome__contains=query) |
+            Q(sexo = query) |
+            Q(estado__contains=query) |
+            Q(cidade__contains=query) |
+            Q(data_de_nascimento__contains=query)
+            )
+
+        # resposta = list(resposta)
+
+        return render(request, 'contato.html', locals())
+
+class CriarGrupoDeContatosView(View):
+
+    http_method_names = [u'get', u'post']
+
+    def post(self,request):
+
+        nome_grupo = request.POST['nome_grupo']
+        novo_grupo = Grupo()
+        novo_grupo.nome = nome_grupo
+        novo_grupo.save()
+
+        return render(request,'contato.html')
+
+
+class AdicionarContatoAoGrupo(View):
+
+    http_method_names = [u'post']
+
+    def post(self,request):
+
+        contatos = request.POST.getlist('contatos')
+
+        nome_grupo = request.POST['nome_grupo']
+
+        s_grupo = Grupo.objects.filter(nome__contains=nome_grupo)
+
+        grupo = s_grupo[0]
+
+        for contato in contatos:
+            grupo.contatos.add(contato)
+
+        return redirect('/')
+
+class GrupoDeContatos(ListView):
+    http_method_names = [u'get', u'post']
+
+
+class GrupoDeContatosView(ListView):
+    http_method_names = [u'get', u'post']
+
+    model = Contato #grupo
+    template_name = 'contato.html'
+
+    def getGrupo (self, **kwargs):
+        return Contato.objects(grupo)
+
+    def getData (self, **kwargs):
+        return Contato.objects.filter(data_de_nascimento)
+
+    def getBairro (self, **kwargs):
+        return Contato.objects.filter(bairro)
+
+    def getCidade(self, **kwargs):
+        return Contato.objects.filter(cidade)
+
+    def getCEP(self, **kwargs):
+        return Contato.objects.filter(CEP)
+
+    def getUF (self, **kwargs):
+        return Contato.objects.filter(UF)
+
+
+    def post(self, request):
+        busca = str(request.POST['contato']).lower()
+        query = request.POST['pesquisa']
+
+        if busca == 'cidade':
+            resposta = Grupo.filtro_cidade(query)
+        elif busca == 'genero':
+            resposta = Grupo.filtro_genero(query)
+        elif busca == 'estado':
+            resposta = Grupo.filtro_estado(query)
+        elif busca == 'data_aniversario':
+            resposta = Grupo.filtro_data_aniversario(query)
+        elif busca == 'nome':
+            resposta = Grupo.filtro_nome(query)
+        else:
+            resposta = Grupo.objects.filter(
+            Q(contatos__nome__contains=query) |
+            Q(contatos__sexo = query) |
+            Q(contatos__estado__contains=query) |
+            Q(contatos__cidade__contains=query) |
+            Q(contatos__data_de_nascimento__contains=query)
+            )
+
+        return render(request, 'contato.html', resposta)
+
+class CriarGrupoDeContatosView(View):
+
+    http_method_names = [u'get', u'post']
+
+    def post(self,request):
+
+        nome_grupo = request.POST['nome_grupo']
+        novo_grupo = Grupo()
+        novo_grupo.nome = nome_grupo
+        novo_grupo.save()
+
+        return render(request,'contato.html')
+
+
+class AdicionarContatoAoGrupo(View):
+
+    http_method_names = [u'post']
+
+    def post(self,request):
+
+        contatos = request.POST.getlist('contatos')
+
+        nome_grupo = request.POST['nome_grupo']
+
+        s_grupo = Grupo.objects.filter(nome__contains=nome_grupo)
+
+        grupo = s_grupo[0]
+
+        for contato in contatos:
+            grupo.contatos.add(contato)
+
+        return redirect('/')
