@@ -1,30 +1,31 @@
 {%  extends "base.html" %}
 {% block main_content %}
-{% load i18n %}
-<main>
+  {% load i18n %}
+  <main>
   <div class="container">
-    <div class="row">
+    <div class="row">]
       <div class="col s6 m6 l6">
         <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a></h5>
       </div>
     </div>
-      <div class="row">
-        <div class="col s12 offset-m2 m8 offset-l3 l6">
-          <div class="login-card hoverable center-align">
-            <div class="card-content">
+    <div class="row">
+      <div class="col s12 offset-m2 m8 offset-l3 l6">
+        <h4 class="center">Página Principal</h4>
+        <div class="login-card hoverable center-align">
+          <div class="card-content">
+            <br><br>
+            <table>
+              <p class="text">{% trans 'Olá ' %} <b>{{user.first_name}}</b>, seja bem vindo ao Sistema de Apoio à Atividade Parlamentar!</p>
+              <br>
+              <p class="text">Informações:</p>
+              <p class="text">{% trans 'Nome completo: ' %} <b>{{request.user.get_full_name}}</b></p>
+              <p class="text">{% trans 'E-mail: ' %} <b>{{request.user.email}}</b></p>
               <br><br>
-              <table>
-                    <p class="text">{% trans 'Olá ' %} <b>{{user.first_name}}</b>, seja bem vindo ao Sistema de Apoio à Atividade Parlamentar!</p>
-                    <br>
-                      <p class="text">Informações:</p>
-                      <p class="text">{% trans 'Nome completo: ' %} <b>{{request.user.get_full_name}}</b></p>
-                      <p class="text">{% trans 'E-mail: ' %} <b>{{request.user.email}}</b></p>
-                      <br><br>
-                </table>
-              </div>
-            </div>
+            </table>
           </div>
         </div>
       </div>
-</main>
+    </div>
+  </div>
+  </main>
 {% endblock main_content %}
