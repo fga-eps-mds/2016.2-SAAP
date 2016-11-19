@@ -1,43 +1,43 @@
 {%  extends "base.html" %}
 {% block main_content %}
-<main>
-<br><br><br>
-<div class="container">
-
-    <div class="row">
-        <div class="col s12 offset-m2 m8 offset-l3 l6">
-          {% if messages %}
-          <ul class="messages">
-              {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
-              {% endfor %}
-          </ul>
-          {% endif %}
-            <form action="{% url 'login' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="next_url" value="{{next_url}}">
-                <div class="login-card hoverable center-align">
-                    <div class="card-content">
-                        <br>
-                        <div class="input-field">
-                            <i class="material-icons prefix saap-dark-green-text">account_circle</i>
-                            <input  id="username" name="username" type="text" class="validate" value='{{data.username}}'>
-                            <label for="username">Nome de Usuário</label>
+    <main>
+    <br><br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 offset-m2 m8 offset-l3 l6">
+                <h4 class="center">Autenticação</h4>
+                {% if messages %}
+                    <ul class="messages center">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="next_url" value="{{next_url}}">
+                    <div class="login-card hoverable center-align">
+                        <div class="card-content">
+                            <br>
+                            <div class="input-field">
+                                <i class="material-icons prefix saap-dark-green-text">account_circle</i>
+                                <input  id="username" name="username" type="text" class="validate" value='{{data.username}}'>
+                                <label for="username">Nome de Usuário</label>
+                            </div>
+                            <div class="input-field">
+                                <i class="material-icons prefix saap-dark-green-text">lock</i>
+                                <input  id="password" name="password" type="password" class="validate">
+                                <label for="password">Senha</label>
+                                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
+                            </div>
                         </div>
-                        <div class="input-field">
-                            <i class="material-icons prefix saap-dark-green-text">lock</i>
-                            <input  id="password" name="password" type="password" class="validate">
-                            <label for="password">Senha</label>
-                            <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Enviar</button>
+                        <div class="card-action right-align">
+                            <a href="{% url 'cadastro' %}">Deseja se cadastrar? Clique aqui!</a>
                         </div>
                     </div>
-                    <div class="card-action right-align">
-                        <a href="{% url 'cadastro' %}">Deseja se cadastrar?</a>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-</main>
+    </main>
 {% endblock main_content %}
