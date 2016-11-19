@@ -3,7 +3,11 @@
 <main>
   <div class="container">
     <div class="row">
-
+      <div class="col s6 m6 l6">
+        <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/" style="color: rgb(35,142,35)">{{ gabinete.nome_gabinete }}</a> > <a href="/gabinete/oficios/" style="color: rgb(35,142,35)">Ofícios</a></h5>
+      </div>
+    </div>
+    <div class="row">
       <div class="col s2 m2 l2"><br><br></div>
       <div class="col s8 m8 l8">
         {% if messages %}
@@ -14,12 +18,12 @@
         </ul>
         {% endif %}
         <br><center>
-          <a href="/gerar_oficio"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Gerar novo oficio</button></a>
+          <a href="/gabinete/oficios/gerar_oficio/"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Gerar novo oficio</button></a>
         </center><br>
         <ul class="collection">
-          <p>oficios gerados</p>
+          <p>Ofícios gerados</p>
           <ul class="collapsible popout" data-collapsible="accordion">
-            {% for oficio in lista_oficio %}
+            {% for oficio in lista_oficios %}
             <li>
               <br>
               <input type="hidden" name="oficio_id" value="{{oficio.id}}">
@@ -32,7 +36,7 @@
                   <p>Você tem certeza que deseja excluir a oficio selecionada?</p>
                 </div>
                 <div class="modal-footer">
-                  <a href="/oficio/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                  <a href="/oficios/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
                   <a href="/deletar_oficio/{{oficio.id}}/" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirmar</a>
                 </div>
               </div>

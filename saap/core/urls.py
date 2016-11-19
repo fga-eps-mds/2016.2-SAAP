@@ -2,18 +2,19 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView,
-                    AtualizaContato, VereadoresView, PublicarTicketView,
+                    AtualizaContato, GabinetesView, PublicarTicketView,
                     DeletarTicketView, GerarCartaView, CartasView,
                     DeletarCartaView, GerarPDFCartaView, EnviarCartaView, OficioView,
-                    DeletarOficioView, GerarOficioView, GerarPDFOficioView, EnviarOficioView)
+                    DeletarOficioView, GerarOficioView, GerarPDFOficioView, EnviarOficioView,
+                    GabineteView, TicketsView)
 
 urlpatterns = [
     url(r'^cadastro_contato/$', login_required(CadastroView.as_view()),
         name='cadastro_contato'),
     url(r'^exclui_contato/$', login_required(DeletarContatoView.as_view()),
         name='exclui_contato'),
-    url(r'^contato/$', login_required(ContatoView.as_view()),
-        name='contato'),
+    url(r'^gabinete/contatos/$', login_required(ContatoView.as_view()),
+        name='contatos'),
     url(r'^atualiza_contato/$', login_required(AtualizaContato.as_view()),
         name='atualiza_contato'),
     url(r'^ticket/$', TicketView.as_view(),
@@ -22,11 +23,11 @@ urlpatterns = [
         name='publicar_ticket'),
     url(r'^deletar_ticket/(?P<pk>[0-9]+)/$', DeletarTicketView.as_view(),
         name='deletar_ticket'),
-    url(r'^vereadores/$', VereadoresView.as_view(),
-        name='vereadores'),
-    url(r'^gerar_carta/$', login_required(GerarCartaView.as_view()),
+    url(r'^gabinetes/$', GabinetesView.as_view(),
+        name='gabinetes'),
+    url(r'^gabinete/cartas/gerar_carta/$', login_required(GerarCartaView.as_view()),
         name='gerar_carta'),
-    url(r'^cartas/$', login_required(CartasView.as_view()),
+    url(r'^gabinete/cartas/$', login_required(CartasView.as_view()),
         name='cartas'),
     url(r'^deletar_carta/(?P<pk>[0-9]+)/$', login_required(DeletarCartaView.as_view()),
         name='deletar_carta'),
@@ -34,7 +35,7 @@ urlpatterns = [
         name='gerar_pdf'),
     url(r'^enviar_carta/(?P<pk>[0-9]+)/$', login_required(EnviarCartaView.as_view()),
         name='enviar_carta'),
-    url(r'^gerar_oficio/$', GerarOficioView.as_view(),
+    url(r'^gabinete/oficios/gerar_oficio/$', GerarOficioView.as_view(),
         name = 'gerar_oficio'),
     url(r'^deletar_oficio/(?P<pk>[0-9]+)/$', DeletarOficioView.as_view(),
         name='deletar_oficio'),
@@ -42,6 +43,10 @@ urlpatterns = [
         name='gerar_oficio_pdf'),
     url(r'^enviar_oficio/(?P<pk>[0-9]+)/$', login_required(EnviarOficioView.as_view()),
         name='enviar_oficio'),
-    url(r'^oficio/$', OficioView.as_view(),
-    name='oficio')
+    url(r'^gabinete/oficios/$', login_required(OficioView.as_view()),
+        name='oficios'),
+    url(r'^gabinete/$', login_required(GabineteView.as_view()),
+        name='gabinete'),
+    url(r'^gabinete/tickets/$', login_required(TicketsView.as_view()),
+        name='tickets'),
 ]

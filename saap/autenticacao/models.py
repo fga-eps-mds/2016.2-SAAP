@@ -7,6 +7,19 @@ from core.models import *
 
 # Create your models here.
 
+
+class Gabinete(models.Model):
+
+    contatos = models.ManyToManyField(Contato)
+    tickets = models.ManyToManyField(Ticket)
+    cartas = models.ManyToManyField(Carta)
+    oficios = models.ManyToManyField(Oficio)
+    nome_gabinete = models.CharField(max_length=60,default='')
+    telefone_gabinete = models.CharField(max_length=7,default='',blank=True,null=True)
+    endereco_gabinete = models.CharField(max_length=60,default='')
+    cidade_gabinete = models.CharField(max_length=20,default='')
+    cep_gabinete = models.CharField(max_length=8,default='')
+
 class Usuario_saap(User):
 
     data_de_nascimento = models.DateField()
@@ -30,38 +43,14 @@ class Usuario_saap(User):
     def get_usuario_por_username(cls, username):
         return Usuario_saap.objects.filter(username=username)
 
-
-class Gabinete_saap(models.Model):
-
-    participantes = models.ManyToManyField(Usuario_saap)
-    nome_gabinete = models.CharField(max_length=100)
-    municipio = models.CharField(max_length=250)
-    uf = models.CharField(max_length=2)
-
 class Cidadao(Usuario_saap):
 
     pass
 
-
 class OrganizadorContatos(Usuario_saap):
 
-    contatos = models.ManyToManyField(Contato)
-    tickets = models.ManyToManyField(Ticket)
-    cartas = models.ManyToManyField(Carta)
-    oficio = models.ManyToManyField(Oficio)
-
-class OrganizadorGabinete(Usuario_saap):
-
-    partido = models.CharField(max_length=100,default='')
-    gabinete = Gabinete_saap()
-    tickets = models.ManyToManyField(Ticket)
-    template = models.ManyToManyField(Template)
-    boletim = models.ManyToManyField(Boletim)
+    gabinete = models.ForeignKey(Gabinete)
 
 class AdministradorGabinete(Usuario_saap):
-    
-    endereco = models.CharField(max_length=60,default='')
-    cidade = models.CharField(max_length=20,default='')
-    cep = models.CharField(max_length=8,default='')
-    telefone_pessoal = models.CharField(max_length=7,default='',blank=True,null=True)
-    telefone_gabinete = models.CharField(max_length=7,default='',blank=True,null=True)
+
+    gabinete = models.ForeignKey(Gabinete)
