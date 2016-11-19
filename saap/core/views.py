@@ -14,6 +14,7 @@ from django.db.models import Q
 from core.models import Grupo
 
 
+
 class CadastroView(View):
     http_method_names = [u'get', u'post']
 
@@ -186,6 +187,7 @@ class GabineteView(View):
     http_method_names = [u'get', u'post']
 
     def get (self, request):
+
 
         gabinete = pegar_objeto_usuario(request.user.username).gabinete
         contatos = gabinete.contatos.all()
@@ -569,6 +571,7 @@ class AdicionarContatoAoGrupo(View):
 
         return redirect('/')
 
+
 class GerarOficioView(View):
     http_method_names = [u'get', u'post']
 
@@ -651,6 +654,7 @@ class EnviarOficioView(View):
     def post(self, request, pk):
         oficio = Oficio.objects.get(id=pk)
         return enviar_oficio_email(request, oficio)
+
 
 
 class GrupoDeContatos(ListView):
@@ -829,4 +833,3 @@ class AdicionarContatoAoGrupo(View):
             grupo.contatos.add(contato)
 
         return redirect('/')
-
