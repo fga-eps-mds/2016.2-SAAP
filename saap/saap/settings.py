@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'autenticacao',
     'default',
     'core',
-    'aloe_django'
 ]
 
 MIDDLEWARE = [

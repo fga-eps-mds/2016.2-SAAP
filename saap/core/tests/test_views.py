@@ -287,17 +287,17 @@ def test_enviar_oficio_view_get_organizador_logado():
     gabinete = Gabinete()
     gabinete.nome_gabinete = "Gabinete"
     gabinete.save()
-    organizador = OrganizadorContatos()
-    organizador.username = 'org'
-    organizador.set_password('123456')
-    organizador.data_de_nascimento = '1900-01-01'
-    organizador.gabinete = gabinete
-    organizador.save()
+    administrador = AdministradorGabinete()
+    administrador.username = 'administrador'
+    administrador.set_password('123456')
+    administrador.data_de_nascimento = '1900-01-01'
+    administrador.gabinete = gabinete
+    administrador.save()
     client = Client()
-    client.post('/', {'username': 'org', 'password': '123456'})
-    response = client.get('/gabinete/oficio/')
-    assert response.status_code > 400
-    organizador.delete()
+    client.post('/', {'username': 'administrador', 'password': '123456'})
+    response = client.get('/gabinete/oficios/gerar_oficio/')
+    assert response.status_code is 200
+    administrador.delete()
 
 @pytest.mark.django_db
 def test_cartas_view_get_deslogado():
@@ -544,7 +544,7 @@ def test_cadastro_contato_get():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    response = client.get('/cadastro_contato/')
+    response = client.get('/gabinete/contatos/cadastrar_contato/')
     assert response.status_code is 200
     organizador.delete()
 
@@ -562,7 +562,7 @@ def test_cadastro_contato_post():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    client.post('/cadastro_contato/', {'nome': 'Contato', \
+    client.post('/gabinete/contatos/cadastrar_contato/', {'nome': 'Contato', \
         'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
         'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
         'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
@@ -590,7 +590,7 @@ def test_cadastro_contato_post_data_invalida1():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    client.post('/cadastro_contato/', {'nome': 'Contato', \
+    client.post('/gabinete/contatos/cadastrar_contato/', {'nome': 'Contato', \
         'data_de_nascimento': '1900-01-011', 'telefone': '61-9111-1111', \
         'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
         'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
@@ -618,7 +618,7 @@ def test_cadastro_contato_post_data_invalida2():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    client.post('/cadastro_contato/', {'nome': 'Contato', \
+    client.post('/gabinete/contatos/cadastrar_contato/', {'nome': 'Contato', \
         'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
         'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
         'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
@@ -646,7 +646,7 @@ def test_cadastro_contato_post_data_invalida3():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    client.post('/cadastro_contato/', {'nome': 'Contato', \
+    client.post('/gabinete/contatos/cadastrar_contato/', {'nome': 'Contato', \
         'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
         'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
         'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
@@ -674,7 +674,7 @@ def test_cadastro_contato_post_campo_em_branco():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    client.post('/cadastro_contato/', {'nome': 'Contato', \
+    client.post('/gabinete/contatos/cadastrar_contato/', {'nome': 'Contato', \
         'data_de_nascimento': '1900-01-011', 'telefone': '61-9111-1111', \
         'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '', \
         'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
@@ -702,25 +702,7 @@ def test_excluir_contato_get():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    response = client.get('/exclui_contato/')
-    assert response.status_code is 200
-    organizador.delete()
-
-@pytest.mark.django_db
-def test_excluir_contato_post():
-
-    gabinete = Gabinete()
-    gabinete.nome_gabinete = "Gabinete"
-    gabinete.save()
-    organizador = OrganizadorContatos()
-    organizador.username = 'organizador'
-    organizador.set_password('123')
-    organizador.data_de_nascimento = '1900-01-01'
-    organizador.gabinete = gabinete
-    organizador.save()
-    client = Client()
-    client.post('/', {'username': 'organizador', 'password': '123'})
-    client.post('/cadastro_contato/', {'nome': 'Contato', \
+    client.post('/gabinete/contatos/cadastrar_contato/', {'nome': 'Contato', \
         'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
         'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
         'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
@@ -731,26 +713,8 @@ def test_excluir_contato_post():
         'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
         'dependente_parentesco': 'Parentesco', \
         'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
-    client.post('/exclui_contato/', {'busca_email': 'teste@teste.com'})
+    client.get('/deletar_contato/1/')
     assert gabinete.contatos.filter(nome='Contato').count() == 0
-    organizador.delete()
-
-@pytest.mark.django_db
-def test_excluir_contato_post_contato_inexistente():
-
-    gabinete = Gabinete()
-    gabinete.nome_gabinete = "Gabinete"
-    gabinete.save()
-    organizador = OrganizadorContatos()
-    organizador.username = 'organizador'
-    organizador.set_password('123')
-    organizador.data_de_nascimento = '1900-01-01'
-    organizador.gabinete = gabinete
-    organizador.save()
-    client = Client()
-    client.post('/', {'username': 'organizador', 'password': '123'})
-    response = client.post('/exclui_contato/', {'busca_email': 'teste@teste.com'})
-    assert response.status_code is 200
     organizador.delete()
 
 @pytest.mark.django_db
@@ -767,88 +731,19 @@ def test_atualizar_contato_get():
     organizador.save()
     client = Client()
     client.post('/', {'username': 'organizador', 'password': '123'})
-    response = client.get('/atualiza_contato/')
+    client.post('/gabinete/contatos/cadastrar_contato/', {'nome': 'Contato', \
+        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
+        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
+        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
+        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
+        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
+        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
+        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
+        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
+        'dependente_parentesco': 'Parentesco', \
+        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
+    response = client.get('/gabinete/contatos/atualizar_contato/1/')
     assert response.status_code is 200
-    organizador.delete()
-
-@pytest.mark.django_db
-def test_atualizar_contato_post():
-
-    gabinete = Gabinete()
-    gabinete.nome_gabinete = "Gabinete"
-    gabinete.save()
-    organizador = OrganizadorContatos()
-    organizador.username = 'organizador'
-    organizador.set_password('123')
-    organizador.data_de_nascimento = '1900-01-01'
-    organizador.gabinete = gabinete
-    organizador.save()
-    client = Client()
-    client.post('/', {'username': 'organizador', 'password': '123'})
-    client.post('/cadastro_contato/', {'nome': 'Contato1', \
-        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
-        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
-        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
-        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
-        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
-        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
-        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
-        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
-        'dependente_parentesco': 'Parentesco', \
-        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
-    client.post('/atualiza_contato/', {'nome': 'Contato2', \
-        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
-        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
-        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
-        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
-        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
-        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
-        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
-        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
-        'dependente_parentesco': 'Parentesco', \
-        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01', \
-        'busca_email': 'teste@teste.com'})
-    assert gabinete.contatos.get(nome='Contato2') is not None
-    organizador.delete()
-
-@pytest.mark.django_db
-def test_atualizar_contato_post_campo_em_branco():
-
-    gabinete = Gabinete()
-    gabinete.nome_gabinete = "Gabinete"
-    gabinete.save()
-    organizador = OrganizadorContatos()
-    organizador.username = 'organizador'
-    organizador.set_password('123')
-    organizador.data_de_nascimento = '1900-01-01'
-    organizador.gabinete = gabinete
-    organizador.save()
-    client = Client()
-    client.post('/', {'username': 'organizador', 'password': '123'})
-    client.post('/cadastro_contato/', {'nome': 'Contato1', \
-        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
-        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '12345678912', \
-        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
-        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
-        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
-        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
-        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
-        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
-        'dependente_parentesco': 'Parentesco', \
-        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01'})
-    client.post('/atualiza_contato/', {'nome': 'Contato2', \
-        'data_de_nascimento': '1900-01-01', 'telefone': '61-9111-1111', \
-        'sexo': 'Masculino', 'celular': '61-9111-1111', 'cpf': '', \
-        'fax': '61-9111-1111', 'rg': '12345678', 'endereco': 'Endereço', \
-        'cidade': 'Cidade', 'estado': 'Estado', 'cep': '72000000', \
-        'email': 'teste@teste.com', 'grupo': 'Grupo 1', 'titulo': 'Senhor(a)', \
-        'titulo_de_eleitor': '123123', 'profissao': 'Profissão', \
-        'zona': '123', 'cargo': 'Cargo', 'secao': '123', 'empresa': 'Empresa', \
-        'dependente_nome': 'Dependente', 'dependente_aniversario': '1900-01-01', \
-        'dependente_parentesco': 'Parentesco', \
-        'dependente_partido': 'Partido', 'dependente_data_filiacao': '1900-01-01', \
-        'busca_email': 'teste@teste.com'})
-    assert gabinete.contatos.get(nome='Contato1') is not None
     organizador.delete()
 
 @pytest.mark.django_db
@@ -911,35 +806,29 @@ def test_ticket_view_post_anonimo():
     assert response.status_code is 200
     organizador.delete()
 
-
 @pytest.mark.django_db
-def test_busca_contatos_cidade():
-
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Taguatinga'
-    contato.cep = '72000000'
-    contato.estado = 'DF'
-    contato.email = "teste@teste.com"
-    contato.save()
-
-
+def test_view_gabinete():
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+    admin = AdministradorGabinete()
+    admin.username = 'administrador'
+    admin.set_password('123')
+    admin.data_de_nascimento = '1900-01-01'
+    admin.gabinete = gabinete
+    admin.save()
     client = Client()
-    tipo_busca = "cidade"
-    pesquisa = 'df'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+    client.post('/', {'username': 'administrador', 'password': '123'})
+    response = client.get('/gabinete/')
 
-    assert response.status_code == 200
-    contato.delete()
-
+    assert response.status_code is 200
+    admin.delete()
+    gabinete.delete()
 
 @pytest.mark.django_db
 def test_busca_contatos_estado():
 
-    contato = Contato() 
+    contato = Contato()
     contato.nome = 'teste'
     contato.data_de_nascimento='1990-01-01'
     contato.sexo = 'Masculino'
@@ -950,11 +839,23 @@ def test_busca_contatos_estado():
     contato.email = "teste@teste.com"
     contato.save()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+    admin = AdministradorGabinete()
+    admin.username = 'administrador'
+    admin.set_password('123')
+    admin.data_de_nascimento = '1900-01-01'
+    admin.gabinete = gabinete
+    admin.save()
+    gabinete.contatos.add(contato);
+
 
     client = Client()
+    client.post('/', {'username': 'administrador', 'password': '123'})
     tipo_busca = "estado"
     pesquisa = 'Sao Paulo'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+    response = client.post('/gabinete/contatos/buscar_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
 
     assert response.status_code == 200
     contato.delete()
@@ -962,7 +863,7 @@ def test_busca_contatos_estado():
 @pytest.mark.django_db
 def test_busca_contatos_genero():
 
-    contato = Contato() 
+    contato = Contato()
     contato.nome = 'teste'
     contato.data_de_nascimento='1990-01-01'
     contato.sexo = 'Masculino'
@@ -973,11 +874,22 @@ def test_busca_contatos_genero():
     contato.email = "teste@teste.com"
     contato.save()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+    admin = AdministradorGabinete()
+    admin.username = 'administrador'
+    admin.set_password('123')
+    admin.data_de_nascimento = '1900-01-01'
+    admin.gabinete = gabinete
+    admin.save()
+    gabinete.contatos.add(contato);
 
     client = Client()
+    client.post('/', {'username': 'administrador', 'password': '123'})
     tipo_busca = "genero"
     pesquisa = 'Masculino'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+    response = client.post('/gabinete/contatos/buscar_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
 
     assert response.status_code == 200
     contato.delete()
@@ -985,7 +897,7 @@ def test_busca_contatos_genero():
 @pytest.mark.django_db
 def test_busca_contatos_data_aniversario():
 
-    contato = Contato() 
+    contato = Contato()
     contato.nome = 'teste'
     contato.data_de_nascimento='1990-01-01'
     contato.sexo = 'Masculino'
@@ -996,34 +908,22 @@ def test_busca_contatos_data_aniversario():
     contato.email = "teste@teste.com"
     contato.save()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+    admin = AdministradorGabinete()
+    admin.username = 'administrador'
+    admin.set_password('123')
+    admin.data_de_nascimento = '1900-01-01'
+    admin.gabinete = gabinete
+    admin.save()
+    gabinete.contatos.add(contato);
 
     client = Client()
+    client.post('/', {'username': 'administrador', 'password': '123'})
     tipo_busca = "data_de_nascimento"
     pesquisa = '1'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
-
-    assert response.status_code == 200
-    contato.delete()
-
-@pytest.mark.django_db
-def test_busca_contatos_data_aniversario():
-
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Osasco'
-    contato.cep = '72000000'
-    contato.estado = 'Sao Paulo'
-    contato.email = "teste@teste.com"
-    contato.save()
-
-
-    client = Client()
-    tipo_busca = "Data_aniversario"
-    pesquisa = '1'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+    response = client.post('/gabinete/contatos/buscar_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
 
     assert response.status_code == 200
     contato.delete()
@@ -1031,7 +931,7 @@ def test_busca_contatos_data_aniversario():
 @pytest.mark.django_db
 def test_busca_contatos_nome():
 
-    contato = Contato() 
+    contato = Contato()
     contato.nome = 'teste'
     contato.data_de_nascimento='1990-01-01'
     contato.sexo = 'Masculino'
@@ -1042,19 +942,30 @@ def test_busca_contatos_nome():
     contato.email = "teste@teste.com"
     contato.save()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+    admin = AdministradorGabinete()
+    admin.username = 'administrador'
+    admin.set_password('123')
+    admin.data_de_nascimento = '1900-01-01'
+    admin.gabinete = gabinete
+    admin.save()
+    gabinete.contatos.add(contato);
 
     client = Client()
+    client.post('/', {'username': 'administrador', 'password': '123'})
     tipo_busca = "nome"
     pesquisa = 'Maria'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+    response = client.post('/gabinete/contatos/buscar_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
 
     assert response.status_code == 200
-    contato.delete()  
+    contato.delete()
 
 @pytest.mark.django_db
 def test_busca_contatos_sem_filtro():
 
-    contato = Contato() 
+    contato = Contato()
     contato.nome = 'teste'
     contato.data_de_nascimento='1990-01-01'
     contato.sexo = 'Masculino'
@@ -1065,14 +976,25 @@ def test_busca_contatos_sem_filtro():
     contato.email = "teste@teste.com"
     contato.save()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+    admin = AdministradorGabinete()
+    admin.username = 'administrador'
+    admin.set_password('123')
+    admin.data_de_nascimento = '1900-01-01'
+    admin.gabinete = gabinete
+    admin.save()
+    gabinete.contatos.add(contato);
 
     client = Client()
+    client.post('/', {'username': 'administrador', 'password': '123'})
     tipo_busca = ""
     pesquisa = 'sabino'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
+    response = client.post('/gabinete/contatos/buscar_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
 
     assert response.status_code == 200
-    contato.delete() 
+    contato.delete()
 
 @pytest.mark.django_db
 def test_criar_grupo_de_contatos():
@@ -1082,6 +1004,17 @@ def test_criar_grupo_de_contatos():
     banco_antes = Grupo.objects.all().count()
     teste_nome_grupo = 'brasileiros'
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+    admin = AdministradorGabinete()
+    admin.username = 'administrador'
+    admin.set_password('123')
+    admin.data_de_nascimento = '1900-01-01'
+    admin.gabinete = gabinete
+    admin.save()
+
+    client.post('/', {'username': 'administrador', 'password': '123'})
     client.post('/criar_grupo/',{'nome_grupo':teste_nome_grupo})
 
     banco_depois = Grupo.objects.all().count()
@@ -1095,10 +1028,21 @@ def test_adiciona_contato_ao_grupo():
 
     client = Client()
 
+    gabinete = Gabinete()
+    gabinete.nome_gabinete = "Gabinete"
+    gabinete.save()
+    admin = AdministradorGabinete()
+    admin.username = 'administrador'
+    admin.set_password('123')
+    admin.data_de_nascimento = '1900-01-01'
+    admin.gabinete = gabinete
+    admin.save()
+
+    client.post('/', {'username': 'administrador', 'password': '123'})
     teste_nome_grupo = 'teste_grupo_teste'
     client.post('/criar_grupo/',{'nome_grupo':teste_nome_grupo})
-    
-    contato = Contato() 
+
+    contato = Contato()
     contato.nome = 'teste'
     contato.data_de_nascimento='1990-01-01'
     contato.sexo = 'Masculino'
@@ -1108,216 +1052,14 @@ def test_adiciona_contato_ao_grupo():
     contato.estado = 'Sao Paulo'
     contato.email = "teste@teste.com"
     contato.save()
-        
+
+    gabinete.contatos.add(contato);
+
     contato = Contato.objects.all().last()
     grupo_novo = Grupo.objects.all().last()
 
     client.post('/adicionar_contatos/',{'contatos': contato.id,'nome_grupo':teste_nome_grupo})
-    
-    assert grupo_novo.contatos.all().count() == 1
 
-@pytest.mark.django_db
-def test_busca_contatos_cidade():
-
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Taguatinga'
-    contato.cep = '72000000'
-    contato.estado = 'DF'
-    contato.email = "teste@teste.com"
-    contato.save()
-
-
-    client = Client()
-    tipo_busca = "cidade"
-    pesquisa = 'df'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
-
-    assert response.status_code == 200
-    contato.delete()
-
-
-@pytest.mark.django_db
-def test_busca_contatos_estado():
-
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Osasco'
-    contato.cep = '72000000'
-    contato.estado = 'Sao Paulo'
-    contato.email = "teste@teste.com"
-    contato.save()
-
-
-    client = Client()
-    tipo_busca = "estado"
-    pesquisa = 'Sao Paulo'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
-
-    assert response.status_code == 200
-    contato.delete()
-
-@pytest.mark.django_db
-def test_busca_contatos_genero():
-
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Osasco'
-    contato.cep = '72000000'
-    contato.estado = 'Sao Paulo'
-    contato.email = "teste@teste.com"
-    contato.save()
-
-
-    client = Client()
-    tipo_busca = "genero"
-    pesquisa = 'Masculino'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
-
-    assert response.status_code == 200
-    contato.delete()
-
-@pytest.mark.django_db
-def test_busca_contatos_data_aniversario():
-
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Osasco'
-    contato.cep = '72000000'
-    contato.estado = 'Sao Paulo'
-    contato.email = "teste@teste.com"
-    contato.save()
-
-
-    client = Client()
-    tipo_busca = "data_de_nascimento"
-    pesquisa = '1'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
-
-    assert response.status_code == 200
-    contato.delete()
-
-@pytest.mark.django_db
-def test_busca_contatos_data_aniversario():
-
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Osasco'
-    contato.cep = '72000000'
-    contato.estado = 'Sao Paulo'
-    contato.email = "teste@teste.com"
-    contato.save()
-
-
-    client = Client()
-    tipo_busca = "Data_aniversario"
-    pesquisa = '1'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
-
-    assert response.status_code == 200
-    contato.delete()
-
-@pytest.mark.django_db
-def test_busca_contatos_nome():
-
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Osasco'
-    contato.cep = '72000000'
-    contato.estado = 'Sao Paulo'
-    contato.email = "teste@teste.com"
-    contato.save()
-
-
-    client = Client()
-    tipo_busca = "nome"
-    pesquisa = 'Maria'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
-
-    assert response.status_code == 200
-    contato.delete()  
-
-@pytest.mark.django_db
-def test_busca_contatos_sem_filtro():
-
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Osasco'
-    contato.cep = '72000000'
-    contato.estado = 'Sao Paulo'
-    contato.email = "teste@teste.com"
-    contato.save()
-
-
-    client = Client()
-    tipo_busca = ""
-    pesquisa = 'sabino'
-    response = client.post('/busca_contatos/',{'tipo_busca':tipo_busca,'pesquisa':pesquisa})
-
-    assert response.status_code == 200
-    contato.delete() 
-
-@pytest.mark.django_db
-def test_criar_grupo_de_contatos():
-
-    client=Client()
-
-    banco_antes = Grupo.objects.all().count()
-    teste_nome_grupo = 'brasileiros'
-
-    client.post('/criar_grupo/',{'nome_grupo':teste_nome_grupo})
-
-    banco_depois = Grupo.objects.all().count()
-
-    assert banco_depois > banco_antes
-    Grupo.objects.all().last().delete()
-
-
-@pytest.mark.django_db
-def test_adiciona_contato_ao_grupo():
-
-    client = Client()
-
-    teste_nome_grupo = 'teste_grupo_teste'
-    client.post('/criar_grupo/',{'nome_grupo':teste_nome_grupo})
-    
-    contato = Contato() 
-    contato.nome = 'teste'
-    contato.data_de_nascimento='1990-01-01'
-    contato.sexo = 'Masculino'
-    contato.endereco = 'Qnl 29 teste casa teste 20'
-    contato.cidade = 'Osasco'
-    contato.cep = '72000000'
-    contato.estado = 'Sao Paulo'
-    contato.email = "teste@teste.com"
-    contato.save()
-        
-    contato = Contato.objects.all().last()
-    grupo_novo = Grupo.objects.all().last()
-
-    client.post('/adicionar_contatos/',{'contatos': contato.id,'nome_grupo':teste_nome_grupo})
-    
     assert grupo_novo.contatos.all().count() == 1
 
 
@@ -1326,5 +1068,4 @@ def test_busca_contatos_cidade():
     client = Client()
     tipo_busca = "cidade"
     pesquisa = 'df'
-    response = client.post('busca_contatos/?tipo_busca=%s&pesquisa=%s',tipo_busca,pesquisa)
-
+    response = client.post('gabinete/contatos/buscar_contatos/?tipo_busca=%s&pesquisa=%s',tipo_busca,pesquisa)

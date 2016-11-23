@@ -30,27 +30,18 @@ def checar_confirmacao(atributo, confirmacao_atributo):
         return False
 
 def checar_tipo_usuario(request, username):
-    try:
-        tipo_usuario = Cidadao.objects.get(username=username)
-    except:
-        tipo_usuario = None
-    if tipo_usuario.__class__ is Cidadao:
+    tipo_usuario = Cidadao.objects.filter(username=username)
+    if tipo_usuario.count():
         return render(request, 'perfil.html')
 
-    try:
-        tipo_usuario = OrganizadorContatos.objects.get(username=username)
-    except:
-        tipo_usuario = None
-    if tipo_usuario.__class__ is OrganizadorContatos:
+    tipo_usuario = OrganizadorContatos.objects.filter(username=username)
+    if tipo_usuario.count():
         return redirect('/gabinete/contatos/')
 
-    try:
-        tipo_usuario = AdministradorGabinete.objects.get(username=username)
-    except:
-        tipo_usuario = None
-    if tipo_usuario.__class__ is AdministradorGabinete:
+    tipo_usuario = AdministradorGabinete.objects.filter(username=username)
+    if tipo_usuario.count():
         return redirect('/gabinete/')
-
+        
 class LoginView(View):
     http_method_names = [u'get', u'post']
 

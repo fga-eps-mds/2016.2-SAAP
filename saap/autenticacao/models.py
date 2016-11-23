@@ -14,6 +14,7 @@ class Gabinete(models.Model):
     tickets = models.ManyToManyField(Ticket)
     cartas = models.ManyToManyField(Carta)
     oficios = models.ManyToManyField(Oficio)
+    grupos = models.ManyToManyField(Grupo)
     nome_gabinete = models.CharField(max_length=60,default='')
     telefone_gabinete = models.CharField(max_length=7,default='',blank=True,null=True)
     endereco_gabinete = models.CharField(max_length=60,default='')
