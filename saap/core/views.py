@@ -176,10 +176,7 @@ class ContatoView(View):
     http_method_names = [u'get', u'post']
 
     def get (self, request):
-        gabinete = pegar_objeto_usuario(request.user.username).gabinete
-        contatos = gabinete.contatos.all()
-        lista_contatos = list(contatos)
-        return render(request, 'contatos.html', locals())
+        return render_contatos(request)
 
 class TicketsView(View):
     http_method_names = [u'get', u'post']
