@@ -380,8 +380,7 @@ class CartasView(View):
 
     def get(self, request):
 
-        response = carregar_pagina_carta_oficio(request, 'cartas.html')
-        return response
+        return carregar_pagina_carta_oficio(request, 'cartas.html')
 
 class DeletarCartaView(View):
     http_method_names = [u'get']
@@ -610,8 +609,7 @@ class OficioView(View):
 
      def get(self, request):
 
-        response = carregar_pagina_carta_oficio(request, 'oficios.html')
-        return response
+        return carregar_pagina_carta_oficio(request, 'oficios.html')
 
 class DeletarOficioView(View):
     http_method_names = [u'get']
