@@ -115,10 +115,12 @@ def checar_vazio(campos):
             nao_vazio = False
     return nao_vazio
 
-def render_contatos(request):
+def render_contatos(request, resposta):
     gabinete = pegar_objeto_usuario(request.user.username).gabinete
     contatos = gabinete.contatos.all()
     lista_contatos = list(contatos)
+    grupos = gabinete.grupos.all()
+    lista_grupos = list(grupos)
     return render(request, 'contatos.html', locals())
 
 def render_contatos_tickets(request):
