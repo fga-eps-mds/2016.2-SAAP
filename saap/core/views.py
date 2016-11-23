@@ -15,16 +15,6 @@ from core.models import Grupo
 
 
 
-def init_class_objects(request):
-    try:
-        gabinete = pegar_objeto_usuario(request.user.username).gabinete
-        cartas = gabinete.cartas.all()
-        lista_cartas = list(cartas)
-    except:
-        pass
-    response = checar_administrador_gabinete(request, 'cartas.html', locals())
-    return response
-
 class CadastroView(View):
     http_method_names = [u'get', u'post']
 
@@ -307,9 +297,7 @@ class DeletarTicketView(View):
     http_method_names = [u'get']
 
     def get(self,request,pk):
-        ticket = Ticket.objects.get(id=pk)
-        ticket.delete()
-        return redirect('/')
+        return deletar_objeto(Ticket, '/gabinete/tickets/', pk)
 
 
 class GabinetesView(View):
@@ -392,16 +380,14 @@ class CartasView(View):
 
     def get(self, request):
 
-        response = init_class_objects(request)
+        response = carregar_pagina_carta_oficio(request, 'cartas.html')
         return response
 
 class DeletarCartaView(View):
     http_method_names = [u'get']
 
     def get(self,request,pk):
-        carta = Carta.objects.get(id=pk)
-        carta.delete()
-        return redirect('/cartas/')
+        return deletar_objeto(Carta, '/gabinete/cartas/', pk)
 
 class GerarPDFCartaView(View):
     http_method_names = [u'get']
@@ -623,17 +609,15 @@ class OficioView(View):
      http_method_names = [u'get', u'post']
 
      def get(self, request):
-        response = init_class_objects(request)
 
+        response = carregar_pagina_carta_oficio(request, 'oficios.html')
         return response
 
 class DeletarOficioView(View):
     http_method_names = [u'get']
 
     def get(self,request,pk):
-        oficio = Oficio.objects.get(id=pk)
-        oficio.delete()
-        return redirect('/oficio/')
+        return deletar_objeto(Oficio, '/gabinete/oficios/', pk)
 
 class GerarPDFOficioView(View):
     http_method_names = [u'get']

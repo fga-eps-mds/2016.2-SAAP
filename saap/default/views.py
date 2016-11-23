@@ -226,7 +226,7 @@ def checar_validacoes_usuario(request, template, campos, data):
         gabinete = pegar_objeto_usuario(request.user.username).gabinete
     except:
         pass
-    
+
     if campos[0] == "Gabinete":
         campos_validados = checar_campos_registro_admin(request)
     else:
@@ -380,3 +380,20 @@ def enviar_oficio_email(request, oficio):
     email.send()
 
     return redirect('/oficio/', messages.success(request, 'Oficio enviado por e-mail com sucesso!'))
+
+def carregar_pagina_carta_oficio(request, endereco):
+    try:
+        gabinete = pegar_objeto_usuario(request.user.username).gabinete
+        cartas = gabinete.cartas.all()
+        lista_cartas = list(cartas)
+        oficios = gabinete.oficios.all()
+        lista_oficios = list(oficios)
+    except:
+        pass
+    response = checar_administrador_gabinete(request, endereco, locals())
+    return response
+
+def deletar_objeto(Objeto, endereco, pk):
+    objeto = Objeto.objects.get(id=pk)
+    objeto.delete()
+    return redirect(endereco)
