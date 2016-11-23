@@ -119,36 +119,36 @@ class AtualizarContato(View):
         response = render(request, 'atualiza_contato.html', locals())
         return response
 
-    def post(self, request):
-
-        campos_validados = checar_campos([request.POST['nome'], \
-            request.POST['data_de_nascimento'], request.POST['telefone'], \
-            request.POST['sexo'], request.POST['celular'], request.POST['cpf'],\
-            request.POST['fax'], request.POST['rg'], request.POST['endereco'], \
-            request.POST['cidade'], request.POST['estado'], \
-            request.POST['cep'], request.POST['email'], request.POST['grupo'], \
-            request.POST['titulo'], request.POST['titulo_de_eleitor'], \
-            request.POST['profissao'], request.POST['zona'], request.POST['cargo'], \
-            request.POST['secao'], request.POST['empresa'], \
-            request.POST['dependente_nome'], request.POST['dependente_aniversario'], \
-            request.POST['dependente_parentesco'], request.POST['dependente_partido'],\
-            request.POST['dependente_data_filiacao'], request.POST['busca_email']])
-
-        if campos_validados is True:
-
-            gabinete = pegar_objeto_usuario(request.user.username).gabinete
-
-            busca_email = request.POST['busca_email']
-            contato = gabinete.contatos.get(email = busca_email)
-            contato = atualizar_contato(request, contato)
-
-            response = render_contatos_tickets(request)
-        else:
-            response = render_mensagem_erro(request, 'O campo %s não foi \
-                preenchido!' % campos_cadastrar_contato[campos_validados], \
-                'atualiza_contato.html', {'data':data})
-
-        return response
+    # def post(self, request):
+    #
+    #     campos_validados = checar_campos([request.POST['nome'], \
+    #         request.POST['data_de_nascimento'], request.POST['telefone'], \
+    #         request.POST['sexo'], request.POST['celular'], request.POST['cpf'],\
+    #         request.POST['fax'], request.POST['rg'], request.POST['endereco'], \
+    #         request.POST['cidade'], request.POST['estado'], \
+    #         request.POST['cep'], request.POST['email'], request.POST['grupo'], \
+    #         request.POST['titulo'], request.POST['titulo_de_eleitor'], \
+    #         request.POST['profissao'], request.POST['zona'], request.POST['cargo'], \
+    #         request.POST['secao'], request.POST['empresa'], \
+    #         request.POST['dependente_nome'], request.POST['dependente_aniversario'], \
+    #         request.POST['dependente_parentesco'], request.POST['dependente_partido'],\
+    #         request.POST['dependente_data_filiacao'], request.POST['busca_email']])
+    #
+    #     if campos_validados is True:
+    #
+    #         gabinete = pegar_objeto_usuario(request.user.username).gabinete
+    #
+    #         busca_email = request.POST['busca_email']
+    #         contato = gabinete.contatos.get(email = busca_email)
+    #         contato = atualizar_contato(request, contato)
+    #
+    #         response = render_contatos_tickets(request)
+    #     else:
+    #         response = render_mensagem_erro(request, 'O campo %s não foi \
+    #             preenchido!' % campos_cadastrar_contato[campos_validados], \
+    #             'atualiza_contato.html', {'data':data})
+    #
+    #     return response
 
 class ContatoView(View):
     http_method_names = [u'get', u'post']
@@ -172,7 +172,6 @@ class GabineteView(View):
     http_method_names = [u'get', u'post']
 
     def get (self, request):
-
 
         gabinete = pegar_objeto_usuario(request.user.username).gabinete
         contatos = gabinete.contatos.all()
