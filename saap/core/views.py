@@ -19,9 +19,7 @@ class CadastroView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        gabinete = pegar_objeto_usuario(request.user.username).gabinete
-        response = render(request, 'cadastro_contato.html', locals())
-        return response
+        return get_padrao_cadastro_gerar(request, 'cadastro_contato.html')
 
     def post (self,request):
 
@@ -320,11 +318,7 @@ class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-
-        gabinete = pegar_objeto_usuario(request.user.username).gabinete
-        response = checar_administrador_gabinete(request, 'gerar_carta.html', locals())
-
-        return response
+        return get_padrao_cadastro_gerar(request, 'gerar_carta.html')
 
     def post(self, request):
 
@@ -379,46 +373,23 @@ class GerarPDFCartaView(View):
     http_method_names = [u'get']
 
     def get(self, request, pk):
-        carta = Carta.objects.get(id=pk)
-        return gerar_pdf_carta(carta)
+        return gerar_pdf_carta_oficio(Carta, pk)
 
 class EnviarCartaView(View):
     http_method_names = [u'post']
 
     def post(self, request, pk):
-        carta = Carta.objects.get(id=pk)
-        return enviar_carta_email(request, carta)
+        return enviar_carta_oficio_email(request, Carta, pk)
 
 
 class BuscaContatosView(ListView):
     http_method_names = [u'post']
 
-    model = Contato
-
-    template_name = 'contatos.html'
-
     def post(self, request):
         busca = str(request.POST['tipo_busca']).lower()
         query = request.POST['pesquisa']
 
-        if busca == 'cidade':
-            resposta = Contato.objects.filter(cidade__startswith=query)
-        elif busca == 'genero':
-            resposta = Contato.objects.filter(sexo__contains=query)
-        elif busca == 'estado':
-            resposta = Contato.objects.filter(estado__startswith=query)
-        elif busca == 'data_aniversario':
-            resposta = Contato.objects.filter(data_de_nascimento__month=query)
-        elif busca == 'nome':
-            resposta = Contato.objects.filter(nome__contains=query)
-        else:
-            resposta = Contato.objects.filter(
-            Q(nome__contains=query) |
-            Q(sexo = query) |
-            Q(estado__contains=query) |
-            Q(cidade__contains=query) |
-            Q(data_de_nascimento__contains=query)
-            )
+        resposta = checar_busca(busca, query, Q)
 
         # resposta = list(resposta)
 
@@ -448,11 +419,7 @@ class GerarOficioView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-
-        gabinete = pegar_objeto_usuario(request.user.username).gabinete
-        response = checar_administrador_gabinete(request, 'gerar_oficio.html', locals())
-
-        return response
+        return get_padrao_cadastro_gerar(request, 'gerar_oficio.html')
 
     def post(self, request):
 
@@ -507,15 +474,13 @@ class GerarPDFOficioView(View):
     http_method_names = [u'get']
 
     def get(self, request, pk):
-        oficio = Oficio.objects.get(id=pk)
-        return gerar_pdf_oficio(oficio)
+        return gerar_pdf_carta_oficio(Oficio, pk)
 
 class EnviarOficioView(View):
     http_method_names = [u'post']
 
     def post(self, request, pk):
-        oficio = Oficio.objects.get(id=pk)
-        return enviar_oficio_email(request, oficio)
+        return enviar_carta_oficio_email(request, Oficio, pk)
 
 class CriarGrupoDeContatosView(View):
 

@@ -370,7 +370,7 @@ def enviar_carta_email(request, carta):
         to=[request.POST['email_carta']])
     email.send()
 
-    return redirect('/cartas/', messages.success(request, 'Carta enviada por e-mail com sucesso!'))
+    return redirect('/gabinete/cartas/', messages.success(request, 'Carta enviada por e-mail com sucesso!'))
 
 def enviar_oficio_email(request, oficio):
     email = EmailMessage('Oficio de ' + oficio.remetente,
@@ -381,7 +381,7 @@ def enviar_oficio_email(request, oficio):
         to=[request.POST['email_oficio']])
     email.send()
 
-    return redirect('/oficio/', messages.success(request, 'Oficio enviado por e-mail com sucesso!'))
+    return redirect('/gabinete/oficios/', messages.success(request, 'Oficio enviado por e-mail com sucesso!'))
 
 def carregar_pagina_carta_oficio(request, endereco):
     try:
@@ -399,3 +399,50 @@ def deletar_objeto(Objeto, endereco, pk):
     objeto = Objeto.objects.get(id=pk)
     objeto.delete()
     return redirect(endereco)
+
+def get_padrao_cadastro_gerar(request, endereco):
+    gabinete = pegar_objeto_usuario(request.user.username).gabinete
+    response = render(request, endereco, locals())
+    return response
+
+def checar_busca(busca, query, Q):
+    if busca == 'cidade':
+        resposta = Contato.objects.filter(cidade__startswith=query)
+    elif busca == 'genero':
+        resposta = Contato.objects.filter(sexo__contains=query)
+    elif busca == 'estado':
+        resposta = Contato.objects.filter(estado__startswith=query)
+    else:
+        return checar_busca_continuacao(busca, query, Q)
+    return resposta
+
+def checar_busca_continuacao(busca, query, Q):
+    if busca == 'data_aniversario':
+        resposta = Contato.objects.filter(data_de_nascimento__month=query)
+    elif busca == 'nome':
+        resposta = Contato.objects.filter(nome__contains=query)
+    else:
+        resposta = Contato.objects.filter(
+        Q(nome__contains=query) |
+        Q(sexo = query) |
+        Q(estado__contains=query) |
+        Q(cidade__contains=query) |
+        Q(data_de_nascimento__contains=query)
+        )
+    return resposta
+
+def enviar_carta_oficio_email(request, Objeto, pk):
+
+    if Objeto.objects.get(id=pk).__class__.__name__ == 'Oficio':
+        return enviar_oficio_email(request, Objeto.objects.get(id=pk))
+    else:
+        return enviar_carta_email(request, Objeto.objects.get(id=pk))
+
+def gerar_pdf_carta_oficio(Objeto, pk):
+
+    if Objeto.objects.get(id=pk).__class__.__name__ == 'Carta':
+        carta = Carta.objects.get(id=pk)
+        return gerar_pdf_carta(carta)
+    elif Objeto.objects.get(id=pk).__class__.__name__ == 'Oficio':
+        oficio = Oficio.objects.get(id=pk)
+        return gerar_pdf_oficio(oficio)
