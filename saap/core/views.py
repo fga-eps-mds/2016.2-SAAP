@@ -508,3 +508,15 @@ class Adm_SistemaView(View):
            response = redirect('/')
 
        return response
+
+class CriarGabineteView(View):
+    http_method_names = [u'get']
+
+    def get(self, request):
+       adm_sistema = pegar_objeto_usuario(request.user.username)
+       if adm_sistema is not None:
+           response = checar_administrador_sistema(request, 'criar_gabinete.html', locals())
+       else:
+           response = redirect('/')
+
+       return response
