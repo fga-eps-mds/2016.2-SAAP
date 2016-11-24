@@ -225,14 +225,20 @@ class RegistroAdminGabView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        gabinetes = Gabinete.objects.all()
-        lista_gabinetes = list(gabinetes)
-        data.clear()
-        data.update(data_sexo())
-        data.update(data_uf())
-        data['lista_gabinetes'] = lista_gabinetes
-        resposta = render(request, 'criar_administrador.html', {'data':data})
-        return resposta
+        adm_sistema = pegar_objeto_usuario(request.user.username)
+
+        if adm_sistema is not None:
+            gabinetes = Gabinete.objects.all()
+            lista_gabinetes = list(gabinetes)
+            data.clear()
+            data.update(data_sexo())
+            data.update(data_uf())
+            data['lista_gabinetes'] = lista_gabinetes
+            response = render(request, 'criar_administrador.html', {'data':data})
+        else:
+            response = redirect('/')
+
+        return response
 
     def post(self, request):
 
