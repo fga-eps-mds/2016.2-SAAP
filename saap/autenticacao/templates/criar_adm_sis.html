@@ -12,7 +12,7 @@
             {% endfor %}
         </ul>
         {% endif %}
-        <form action="{% url 'cadastro' %}" method="POST">
+        <form action="{% url 'criar_administrador_sistema' %}" method="POST">
           {% csrf_token %}
           <input type="hidden" name="next_url" value="{{next_url}}">
           <div class="login-card hoverable center-align">

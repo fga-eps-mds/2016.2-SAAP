@@ -58,7 +58,7 @@ urlpatterns = [
         name='tickets'),
     url(r'^criar_grupo/$', CriarGrupoDeContatosView.as_view(),
         name='criar_grupo'),
-    url(r'^administracao/$', Adm_SistemaView.as_view(),
+    url(r'^administracao/$', login_required(Adm_SistemaView.as_view()),
         name='administracao'),
 
 ]
