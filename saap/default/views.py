@@ -56,6 +56,17 @@ def checar_administrador_gabinete(request, template, data):
 
     return response
 
+def checar_administrador_sistema(request, template, data):
+
+    tipo_usuario = AdministradorSistema.objects.filter(username=request.\
+        user.username)
+    if tipo_usuario.count():
+        response = render(request, template, data)
+    else:
+        response = redirect('/')
+
+    return response
+
 def data_sexo():
 
     return {'campos_sexo': {'Masculino', 'Feminino'}}
@@ -77,6 +88,10 @@ def pegar_objeto_usuario(username):
         return pegar_objeto[0]
 
     pegar_objeto = AdministradorGabinete.objects.filter(username=username)
+    if pegar_objeto.count():
+        return pegar_objeto[0]
+
+    pegar_objeto = AdministradorSistema.objects.filter(username=username)
     if pegar_objeto.count():
         return pegar_objeto[0]
 

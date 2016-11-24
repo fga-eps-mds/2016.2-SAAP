@@ -496,3 +496,12 @@ class CriarGrupoDeContatosView(View):
         gabinete.grupos.add(novo_grupo)
 
         return redirect('/gabinete/contatos/')
+
+class Adm_SistemaView(View):
+    http_method_names = [u'get']
+
+    def get(self, request):
+       adm_sistema = pegar_objeto_usuario(request.user.username).adm_sistema
+       response =  checar_administrador_sistema(request, 'admin_sistema.html', locals())
+
+       return response

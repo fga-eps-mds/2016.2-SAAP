@@ -390,10 +390,16 @@ class RegistroAdminSisView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        resposta = checar_autenticacao(request, 'perfil.html', 'cadastro.html')
-        return resposta
+        adm_sistema = pegar_objeto_usuario(request.user.username).adm_sistema
+        data.clear()
+        data.update(data_sexo())
+        data.update(data_uf())
+
+        response = checar_administrador_sistema(request, 'criar_adm_sis.html', locals())
 
     def post(self, request):
+
+        adm_sistema = pegar_objeto_usuario(request.user.username).adm_sistema
 
         data['first_name'] = request.POST['first_name']
         data['last_name'] = request.POST['last_name']
@@ -405,7 +411,7 @@ class RegistroAdminSisView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        validado = checar_validacoes_usuario(request, 'cadastro.html', campos_cadastro_cidadao, data)
+        validado = checar_validacoes_usuario(request, 'cadastrosis.html', campos_cadastro_cidadao, data)
 
         if validado is True:
 
@@ -433,7 +439,7 @@ class RegistroAdminSisView(View):
             municipio = request.POST['municipio']
             uf = request.POST['uf']
 
-            user = Cidadao()
+            user = AdministradorSistema()
             user.first_name = first_name
             user.last_name = last_name
             user.username = username
@@ -445,7 +451,7 @@ class RegistroAdminSisView(View):
             user.uf = uf
             user.save()
             login(request, user)
-            response = render(request, 'perfil.html')
+            response = render(request, 'criar_adm_sis.html')
 
         else:
             response = validado
