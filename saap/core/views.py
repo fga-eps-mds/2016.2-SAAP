@@ -387,10 +387,6 @@ class EnviarCartaView(View):
 class BuscaContatosView(ListView):
     http_method_names = [u'post']
 
-    model = Contato
-
-    template_name = 'contatos.html'
-
     def post(self, request):
         busca = str(request.POST['tipo_busca']).lower()
         query = request.POST['pesquisa']
