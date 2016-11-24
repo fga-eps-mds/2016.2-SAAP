@@ -2,7 +2,8 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (LoginView, MudarSenhaView, RegistroCidadaoView, PerfilView,
-                    LogoutView, ExcluirContaView, RegistroOrganizadorView, RegistroAdministradorView)
+                    LogoutView, ExcluirContaView, RegistroOrganizadorView,
+                    RegistroAdminSisView, RegistroAdministradorView)
 
 
 urlpatterns = [
@@ -24,4 +25,6 @@ urlpatterns = [
         name='criar_organizador'),
     url(r'^criar_administrador/$', RegistroAdministradorView.as_view(),
             name='criar_administrador'),
+    url(r'^criar_adm_sis/$', login_required(RegistroAdminSisView.as_view()),
+        name='criar_adm_sis'),
 ]
