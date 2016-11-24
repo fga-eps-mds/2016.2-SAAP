@@ -399,3 +399,8 @@ def deletar_objeto(Objeto, endereco, pk):
     objeto = Objeto.objects.get(id=pk)
     objeto.delete()
     return redirect(endereco)
+
+def get_padrao_cadastro_gerar(request, endereco):
+    gabinete = pegar_objeto_usuario(request.user.username).gabinete
+    response = render(request, endereco, locals())
+    return response
