@@ -380,7 +380,7 @@ class EnviarCartaView(View):
     http_method_names = [u'post']
 
     def post(self, request, pk):
-        return enviar_carta_email(request, Carta.objects.get(id=pk))
+        return enviar_carta_oficio_email(request, Carta, pk)
 
 
 class BuscaContatosView(ListView):
@@ -482,7 +482,7 @@ class EnviarOficioView(View):
     http_method_names = [u'post']
 
     def post(self, request, pk):
-        return enviar_oficio_email(request, Oficio.objects.get(id=pk))
+        return enviar_carta_oficio_email(request, Oficio, pk)
 
 class CriarGrupoDeContatosView(View):
 

@@ -370,7 +370,7 @@ def enviar_carta_email(request, carta):
         to=[request.POST['email_carta']])
     email.send()
 
-    return redirect('/cartas/', messages.success(request, 'Carta enviada por e-mail com sucesso!'))
+    return redirect('/gabinete/cartas/', messages.success(request, 'Carta enviada por e-mail com sucesso!'))
 
 def enviar_oficio_email(request, oficio):
     email = EmailMessage('Oficio de ' + oficio.remetente,
@@ -381,7 +381,7 @@ def enviar_oficio_email(request, oficio):
         to=[request.POST['email_oficio']])
     email.send()
 
-    return redirect('/oficio/', messages.success(request, 'Oficio enviado por e-mail com sucesso!'))
+    return redirect('/gabinete/oficios/', messages.success(request, 'Oficio enviado por e-mail com sucesso!'))
 
 def carregar_pagina_carta_oficio(request, endereco):
     try:
@@ -430,3 +430,10 @@ def checar_busca_continuacao(busca, query, Q):
         Q(data_de_nascimento__contains=query)
         )
     return resposta
+
+def enviar_carta_oficio_email(request, Objeto, pk):
+
+    if Objeto.objects.get(id=pk).__class__.__name__ == 'Oficio':
+        return enviar_oficio_email(request, Objeto.objects.get(id=pk))
+    else:
+        return enviar_carta_email(request, Objeto.objects.get(id=pk))
