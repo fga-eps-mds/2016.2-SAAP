@@ -437,3 +437,12 @@ def enviar_carta_oficio_email(request, Objeto, pk):
         return enviar_oficio_email(request, Objeto.objects.get(id=pk))
     else:
         return enviar_carta_email(request, Objeto.objects.get(id=pk))
+
+def gerar_pdf_carta_oficio(Objeto, pk):
+
+    if Objeto.objects.get(id=pk).__class__.__name__ == 'Carta':
+        carta = Carta.objects.get(id=pk)
+        return gerar_pdf_carta(carta)
+    elif Objeto.objects.get(id=pk).__class__.__name__ == 'Oficio':
+        oficio = Oficio.objects.get(id=pk)
+        return gerar_pdf_oficio(oficio)

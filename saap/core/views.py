@@ -373,8 +373,7 @@ class GerarPDFCartaView(View):
     http_method_names = [u'get']
 
     def get(self, request, pk):
-        carta = Carta.objects.get(id=pk)
-        return gerar_pdf_carta(carta)
+        return gerar_pdf_carta_oficio(Carta, pk)
 
 class EnviarCartaView(View):
     http_method_names = [u'post']
@@ -475,8 +474,7 @@ class GerarPDFOficioView(View):
     http_method_names = [u'get']
 
     def get(self, request, pk):
-        oficio = Oficio.objects.get(id=pk)
-        return gerar_pdf_oficio(oficio)
+        return gerar_pdf_carta_oficio(Oficio, pk)
 
 class EnviarOficioView(View):
     http_method_names = [u'post']
