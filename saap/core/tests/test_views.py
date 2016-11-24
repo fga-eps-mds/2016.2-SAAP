@@ -206,7 +206,7 @@ def test_enviar_carta_view_get_organizador_logado():
     client = Client()
     client.post('/', {'username': 'orgteste', 'password': '123'})
     response = client.get('/gabinete/cartas/gerar_carta/')
-    assert 300 <= response.status_code < 400
+    assert response.status_code is 200
     organizador.delete()
 
 @pytest.mark.django_db
