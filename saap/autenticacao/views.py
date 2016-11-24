@@ -44,7 +44,7 @@ def checar_tipo_usuario(request, username):
 
     tipo_usuario = AdministradorSistema.objects.filter(username=username)
     if tipo_usuario.count():
-        return redirect('/adm_sistema/')
+        return redirect('/administracao/')
 
 class LoginView(View):
     http_method_names = [u'get', u'post']
@@ -221,7 +221,7 @@ class RegistroOrganizadorView(View):
 
         return response
 
-class RegistroAdministradorView(View):
+class RegistroAdminGabView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
@@ -390,16 +390,16 @@ class RegistroAdminSisView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        adm_sistema = pegar_objeto_usuario(request.user.username).adm_sistema
-        data.clear()
-        data.update(data_sexo())
-        data.update(data_uf())
+        adm_sistema = pegar_objeto_usuario(request.user.username)
 
-        response = checar_administrador_sistema(request, 'criar_adm_sis.html', locals())
+        if adm_sistema is not None:
+            response = checar_administrador_sistema(request, 'criar_administrador_sistema.html', locals())
+        else:
+            response = redirect('/')
+
+        return response
 
     def post(self, request):
-
-        adm_sistema = pegar_objeto_usuario(request.user.username).adm_sistema
 
         data['first_name'] = request.POST['first_name']
         data['last_name'] = request.POST['last_name']
@@ -411,7 +411,7 @@ class RegistroAdminSisView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        validado = checar_validacoes_usuario(request, 'cadastrosis.html', campos_cadastro_cidadao, data)
+        validado = checar_validacoes_usuario(request, 'criar_adm_sis.html', campos_cadastro_cidadao, data)
 
         if validado is True:
 

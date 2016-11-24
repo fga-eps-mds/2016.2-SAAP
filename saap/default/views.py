@@ -94,6 +94,8 @@ def pegar_objeto_usuario(username):
     pegar_objeto = AdministradorSistema.objects.filter(username=username)
     if pegar_objeto.count():
         return pegar_objeto[0]
+    else:
+        return None
 
 def checar_data(data):
     partes_data = data.split("-")

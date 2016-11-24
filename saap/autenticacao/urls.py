@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (LoginView, MudarSenhaView, RegistroCidadaoView, PerfilView,
                     LogoutView, ExcluirContaView, RegistroOrganizadorView,
-                    RegistroAdminSisView, RegistroAdministradorView)
+                    RegistroAdminSisView, RegistroAdminGabView)
 
 
 urlpatterns = [
@@ -23,7 +23,7 @@ urlpatterns = [
         name='excluir_conta'),
     url(r'^gabinete/criar_organizador/$', login_required(RegistroOrganizadorView.as_view()),
         name='criar_organizador'),
-    url(r'^administracao/criar_administrador_gabinete/$', login_required(RegistroAdministradorView.as_view()),
+    url(r'^administracao/criar_administrador_gabinete/$', login_required(RegistroAdminGabView.as_view()),
             name='criar_administrador_gabinete'),
     url(r'^administracao/criar_administrador_sistema/$', login_required(RegistroAdminSisView.as_view()),
         name='criar_administrador_sistema'),
