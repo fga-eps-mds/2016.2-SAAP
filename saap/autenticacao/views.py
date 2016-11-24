@@ -41,7 +41,11 @@ def checar_tipo_usuario(request, username):
     tipo_usuario = AdministradorGabinete.objects.filter(username=username)
     if tipo_usuario.count():
         return redirect('/gabinete/')
-        
+
+    tipo_usuario = AdministradorSistema.objects.filter(username=username)
+    if tipo_usuario.count():
+        return redirect('/adm_sistema/')
+
 class LoginView(View):
     http_method_names = [u'get', u'post']
 
