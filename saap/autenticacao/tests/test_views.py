@@ -331,8 +331,14 @@ def test_logout_view_get():
 @pytest.mark.django_db
 def test_criar_administrador_get():
 
+	adms = AdministradorSistema()
+	adms.username = 'adms'
+	adms.set_password('123')
+	adms.data_de_nascimento = '1900-01-01'
+	adms.save()
 	client = Client()
-	response = client.get('/criar_administrador/')
+	client.post('/', {'username': 'adms', 'password': '123'})
+	response = client.get('/administracao/criar_administrador_gabinete/')
 	assert response.status_code is 200
 
 @pytest.mark.django_db
