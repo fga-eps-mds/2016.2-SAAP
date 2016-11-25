@@ -432,7 +432,8 @@ class GerarOficioView(View):
 
         campos_validados = checar_campos([request.POST['remetente'], \
             request.POST['forma_tratamento'], request.POST['destinatario'], \
-            request.POST['corpo_texto_doc']])
+            request.POST['corpo_texto_doc'], 'complexidade', 'complexidade', \
+            'complexidade', 'complexidade'])
 
         if campos_validados is True:
 
@@ -533,7 +534,8 @@ class CriarGabineteView(View):
 
         campos_validados = checar_campos([request.POST['nome_gabinete'], \
             request.POST['telefone_gabinete'], request.POST['endereco_gabinete'], \
-            request.POST['cidade_gabinete'], request.POST['cep_gabinete']])
+            request.POST['cidade_gabinete'], request.POST['cep_gabinete'], \
+            'complexidade'])
 
         if campos_validados is True:
 
@@ -588,7 +590,8 @@ class EditarGabineteView(View):
 
         campos_validados = checar_campos([request.POST['nome_gabinete'], \
             request.POST['telefone_gabinete'], request.POST['endereco_gabinete'], \
-            request.POST['cidade_gabinete'], request.POST['cep_gabinete']])
+            request.POST['cidade_gabinete'], request.POST['cep_gabinete'], \
+            'complexidade', 'complexidade'])
 
         if campos_validados is True:
 
