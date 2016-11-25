@@ -516,13 +516,7 @@ class CriarGabineteView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-       adm_sistema = pegar_objeto_usuario(request.user.username)
-       if adm_sistema is not None:
-           response = checar_administrador_sistema(request, 'criar_gabinete.html', locals())
-       else:
-           response = redirect('/')
-
-       return response
+       return checar_administrador_sistema(request, 'criar_gabinete.html', locals())
 
     def post(self, request):
 
