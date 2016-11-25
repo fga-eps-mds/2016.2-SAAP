@@ -341,8 +341,14 @@ def test_registro_view_post_administrador_gabinete():
 	gabinete = Gabinete()
 	gabinete.nome_gabinete = 'Gabinete'
 	gabinete.save()
+	adms = AdministradorSistema()
+	adms.username = 'adms'
+	adms.set_password('123')
+	adms.data_de_nascimento = '1900-01-01'
+	adms.save()
 	client = Client()
-	response = client.post('/criar_administrador/', {'first_name': 'Administrador',\
+	client.post('/', {'username': 'adms', 'password': '123'})
+	response = client.post('/administracao/criar_administrador_gabinete/', {'first_name': 'Administrador',\
 		'last_name': 'Teste', 'username': 'adminGabinete', \
 		'email': 'administrador@teste.com', 'confirmacao_email': \
 		'administrador@teste.com', 'password': '123', 'confirmacao_password': \
