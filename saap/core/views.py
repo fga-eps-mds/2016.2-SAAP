@@ -504,8 +504,7 @@ class Adm_SistemaView(View):
     def get(self, request):
        adm_sistema = pegar_objeto_usuario(request.user.username)
        if adm_sistema is not None:
-           gabinetes = Gabinete.objects.all()
-           lista_gabinetes = list(gabinetes)
+           lista_gabinetes = list(Gabinete.objects.all())
            response = checar_administrador_sistema(request, 'admin_sistema.html', locals())
        else:
            response = redirect('/')
