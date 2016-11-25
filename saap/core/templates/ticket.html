@@ -29,12 +29,12 @@
                 <select name="nome_gabinete" id="nome_gabinete">
                   {% if data.nome_gabinete is None %}
                     <option value="" selected>Nome do Gabinete</option>
-                    {% for gabinete in data_gabinetes.lista_gabinetes %}
+                    {% for gabinete in lista_gabinetes %}
                       <option value="{{ gabinete.nome_gabinete }}">{{ gabinete.nome_gabinete }}</option>
                     {% endfor %}
                   {% else %}
                     <option value="" >Nome do Gabinete</option>
-                    {% for gabinete in data_gabinetes.lista_gabinetes %}
+                    {% for gabinete in lista_gabinetes %}
                       {% if gabinete.nome_gabinete == data.nome_gabinete %}
                         <option value="{{ gabinete.nome_gabinete }}" selected>{{ gabinete.nome_gabinete }}</option>
                       {% else %}
