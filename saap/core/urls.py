@@ -9,7 +9,7 @@ from .views import (CadastroView, DeletarContatoView, ContatoView, TicketView,
                     GerarOficioView, GerarPDFOficioView, EnviarOficioView,
                     GabineteView, TicketsView, Adm_SistemaView,
                     DeletarCartaView, GerarPDFCartaView, EnviarCartaView,
-                    CriarGabineteView)
+                    CriarGabineteView, DeletarGabineteView)
 
 urlpatterns = [
     url(r'^gabinete/contatos/cadastrar_contato/$', login_required(CadastroView.as_view()),
@@ -63,4 +63,6 @@ urlpatterns = [
         name='administracao'),
     url(r'^administracao/criar_gabinete/$', login_required(CriarGabineteView.as_view()),
         name='criar_gabinete'),
+    url(r'^deletar_gabinete/(?P<pk>[0-9]+)/$', DeletarGabineteView.as_view(),
+        name='deletar_gabinete'),
 ]

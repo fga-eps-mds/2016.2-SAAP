@@ -558,3 +558,9 @@ class CriarGabineteView(View):
                 "criar_gabinete.html", {'data':data})
 
         return response
+
+class DeletarGabineteView(View):
+    http_method_names = [u'get']
+
+    def get(self,request,pk):
+        return deletar_objeto(Gabinete, '/administracao/', pk)
