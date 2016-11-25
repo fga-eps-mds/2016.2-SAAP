@@ -8,8 +8,13 @@ from django.template import RequestContext
 from autenticacao.models import Cidadao, OrganizadorContatos
 from django.utils.translation import ugettext
 from default.views import *
-from core.views import (ContatoView)
+#from core.views import (ContatoView)
 from django.contrib.auth.decorators import login_required
+
+
+data = {}
+data.update(data_sexo())
+data.update(data_uf())
 
 def checar_autenticacao(request, resposta_autenticado, resposta_nao_autenticado):
     if request.user.is_authenticated():
@@ -25,19 +30,21 @@ def checar_confirmacao(atributo, confirmacao_atributo):
         return False
 
 def checar_tipo_usuario(request, username):
-    try:
-        tipo_usuario = Cidadao.objects.get(username=username)
-    except:
-        tipo_usuario = None
-    if tipo_usuario.__class__ is Cidadao:
+    tipo_usuario = Cidadao.objects.filter(username=username)
+    if tipo_usuario.count():
         return render(request, 'perfil.html')
 
-    try:
-        tipo_usuario = OrganizadorContatos.objects.get(username=username)
-    except:
-        tipo_usuario = None
-    if tipo_usuario.__class__ is OrganizadorContatos:
-        return render_contatos_tickets(request)
+    tipo_usuario = OrganizadorContatos.objects.filter(username=username)
+    if tipo_usuario.count():
+        return redirect('/gabinete/contatos/')
+
+    tipo_usuario = AdministradorGabinete.objects.filter(username=username)
+    if tipo_usuario.count():
+        return redirect('/gabinete/')
+
+    tipo_usuario = AdministradorSistema.objects.filter(username=username)
+    if tipo_usuario.count():
+        return redirect('/administracao/')
 
 class LoginView(View):
     http_method_names = [u'get', u'post']
@@ -69,11 +76,10 @@ class LoginView(View):
             else:
                 messages.error(request, 'Nome de usuário e/ou senha inválido(s)!')
         else:
-            messages.error(request, 'O campo "%s" não foi preenchido!' % \
+            messages.error(request, 'O campo %s não foi preenchido!' % \
                 campos_login[campos_validados])
 
         return render(request, 'login.html', {'data':data})
-
 
 class RegistroCidadaoView(View):
     http_method_names = [u'get', u'post']
@@ -94,7 +100,7 @@ class RegistroCidadaoView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        validado = checar_validacoes_usuario(request, 'criar_organizador.html')
+        validado = checar_validacoes_usuario(request, 'cadastro.html', campos_cadastro_cidadao, data)
 
         if validado is True:
 
@@ -145,8 +151,14 @@ class RegistroOrganizadorView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        resposta = render(request, 'criar_organizador.html')
-        return resposta
+        gabinete = pegar_objeto_usuario(request.user.username).gabinete
+        data.clear()
+        data.update(data_sexo())
+        data.update(data_uf())
+
+        response = checar_administrador_gabinete(request, 'criar_organizador.html', locals())
+
+        return response
 
     def post(self, request):
 
@@ -160,10 +172,12 @@ class RegistroOrganizadorView(View):
         data['municipio'] = request.POST['municipio']
         data['uf'] = request.POST['uf']
 
-        validado = checar_validacoes_usuario(request, 'criar_organizador.html')
+        validado = checar_validacoes_usuario(request, 'criar_organizador.html', campos_cadastro_cidadao, data)
 
         if validado is True:
 
+            gabinete = pegar_objeto_usuario(request.user.username).gabinete
+            nome_gabinete = gabinete.nome_gabinete
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
             username = request.POST['username']
@@ -189,6 +203,7 @@ class RegistroOrganizadorView(View):
             uf = request.POST['uf']
 
             user = OrganizadorContatos()
+            user.gabinete = Gabinete.objects.get(nome_gabinete=nome_gabinete)
             user.first_name = first_name
             user.last_name = last_name
             user.username = username
@@ -199,7 +214,87 @@ class RegistroOrganizadorView(View):
             user.municipio = municipio
             user.uf = uf
             user.save()
-            response = render(request, 'login.html')
+            response = redirect('/gabinete/')
+
+        else:
+            response = validado
+
+        return response
+
+class RegistroAdminGabView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        adm_sistema = pegar_objeto_usuario(request.user.username)
+
+        if adm_sistema is not None:
+            gabinetes = Gabinete.objects.all()
+            lista_gabinetes = list(gabinetes)
+            data.clear()
+            data.update(data_sexo())
+            data.update(data_uf())
+            data['lista_gabinetes'] = lista_gabinetes
+            response = render(request, 'criar_administrador.html', {'data':data})
+        else:
+            response = redirect('/')
+
+        return response
+
+    def post(self, request):
+
+        data['nome_gabinete'] = request.POST['nome_gabinete']
+        data['first_name'] = request.POST['first_name']
+        data['last_name'] = request.POST['last_name']
+        data['username'] = request.POST['username']
+        data['email'] = request.POST['email']
+        data['confirmacao_email'] = request.POST['confirmacao_email']
+        data['data_de_nascimento'] = request.POST['data_de_nascimento']
+        data['sexo'] = request.POST['sexo']
+        data['municipio'] = request.POST['municipio']
+        data['uf'] = request.POST['uf']
+
+        validado = checar_validacoes_usuario(request, 'criar_administrador.html', campos_cadastro, data)
+
+        if validado is True:
+
+            nome_gabinete = request.POST['nome_gabinete']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            username = request.POST['username']
+            email = checar_confirmacao(request.POST['email'], request.POST['confirmacao_email'])
+            if email:
+                pass
+            else:
+                return render_mensagem_erro(request, 'O e-mail informado é \
+                    diferente da confirmação de e-mail! Digite novamente.', \
+                    'cadastro.html', {'data':data})
+            email = request.POST['email']
+            password = checar_confirmacao(request.POST['password'], request.POST['confirmacao_password'])
+            if password:
+                pass
+            else:
+                return render_mensagem_erro(request, 'A senha informada é \
+                    diferente da confirmação de senha! Digite novamente.', \
+                    'cadastro.html', {'data':data})
+            password = request.POST['password']
+            data_de_nascimento = request.POST['data_de_nascimento']
+            sexo = request.POST['sexo']
+            municipio = request.POST['municipio']
+            uf = request.POST['uf']
+
+            user = AdministradorGabinete()
+            user.gabinete = Gabinete.objects.get(nome_gabinete=nome_gabinete)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.username = username
+            user.email = email
+            user.set_password(password)
+            user.data_de_nascimento = data_de_nascimento
+            user.sexo = sexo
+            user.municipio = municipio
+            user.uf = uf
+            user.save()
+            response = redirect('/administracao/')
 
         else:
             response = validado
@@ -256,7 +351,7 @@ class MudarSenhaView(View):
                 response = render(request, 'mudar_senha.html')
 
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+            response = render_mensagem_erro(request, 'O campo %s não foi \
                 preenchido!' % campos_mudar_senha[campos_validados], \
                 'mudar_senha.html', {'data':data})
 
@@ -290,8 +385,74 @@ class ExcluirContaView(View):
                 response = render_mensagem_erro(request, 'Senha incorreta! \
                     Digite novamente.', 'excluir_conta.html', {'data':data})
         else:
-            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+            response = render_mensagem_erro(request, 'O campo %s não foi \
                 preenchido!' % campos_excluir_conta[campos_validados], \
                 'excluir_conta.html', {'data':data})
+
+        return response
+
+
+class RegistroAdminSisView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+        return checar_administrador_sistema(request, 'criar_adm_sis.html', locals())
+
+    def post(self, request):
+
+        data['first_name'] = request.POST['first_name']
+        data['last_name'] = request.POST['last_name']
+        data['username'] = request.POST['username']
+        data['email'] = request.POST['email']
+        data['confirmacao_email'] = request.POST['confirmacao_email']
+        data['data_de_nascimento'] = request.POST['data_de_nascimento']
+        data['sexo'] = request.POST['sexo']
+        data['municipio'] = request.POST['municipio']
+        data['uf'] = request.POST['uf']
+
+        validado = checar_validacoes_usuario(request, 'criar_adm_sis.html', campos_cadastro_cidadao, data)
+
+        if validado is True:
+
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            username = request.POST['username']
+            email = checar_confirmacao(request.POST['email'], request.POST['confirmacao_email'])
+            if email:
+                pass
+            else:
+                return render_mensagem_erro(request, 'O e-mail informado é \
+                    diferente da confirmação de e-mail! Digite novamente.', \
+                    'cadastro.html', {'data':data})
+            email = request.POST['email']
+            password = checar_confirmacao(request.POST['password'], request.POST['confirmacao_password'])
+            if password:
+                pass
+            else:
+                return render_mensagem_erro(request, 'A senha informada é \
+                    diferente da confirmação de senha! Digite novamente.', \
+                    'cadastro.html', {'data':data})
+            password = request.POST['password']
+            data_de_nascimento = request.POST['data_de_nascimento']
+            sexo = request.POST['sexo']
+            municipio = request.POST['municipio']
+            uf = request.POST['uf']
+
+            user = AdministradorSistema()
+            user.first_name = first_name
+            user.last_name = last_name
+            user.username = username
+            user.email = email
+            user.set_password(password)
+            user.data_de_nascimento = data_de_nascimento
+            user.sexo = sexo
+            user.municipio = municipio
+            user.uf = uf
+            user.save()
+            login(request, user)
+            response = redirect('/administracao/')
+
+        else:
+            response = validado
 
         return response

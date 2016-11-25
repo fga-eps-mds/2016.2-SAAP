@@ -1,0 +1,213 @@
+{%  extends "base.html" %}
+{% block main_content %}
+
+<div class="container">
+  <div class="row">
+    <div class="row">
+      <div class="col s12 m12 l12">
+        <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/" style="color: rgb(35,142,35)">{{ gabinete.nome_gabinete }}</a> > <a href="/gabinete/contatos/" style="color: rgb(35,142,35)">Contatos</a></h5>
+      </div>
+    </div>
+
+    <div class="row">
+      <br>
+      <div class="col s4 m4 l4"
+        {% csrf_token %}
+        <a href="/gabinete/contatos/cadastrar_contato/"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Cadastrar Contato</button></a>
+      </div>
+      <div class="col s4 m4 l4"
+        <!-- Modal Trigger -->
+        <a class="waves-effect waves-light btn modal-trigger saap-dark-green" href="#modal1">Criar grupo</a>
+
+
+        <!-- Modal Structure -->
+        <div id="modal1" class="modal">
+          <form action="{% url 'criar_grupo' %}" method="POST">
+          <div class="modal-content">
+            <h4>Criar grupo de contatos</h4>
+            <p>Digite aqui o nome do grupo de contatos:</p>
+            <input  id="nome_grupo" name="nome_grupo" type="text" class="validate">
+          </div>
+          <div class="modal-footer">
+              {% csrf_token %}
+            <button href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat" type="submit">Confirmar</button>
+          </div>
+        </form>
+        </div>
+      </div>
+      <div></div>
+    </div>
+    <div class="row">
+    <form action="/gabinete/contatos/buscar_contatos/" method="POST">
+      <div class="col s4 m4 l4">
+    {% csrf_token %}
+        <select name="tipo_busca" id="tipo_busca">
+          <option value="" selected>Pesquisar por</option>
+          <option value="Estado">Estado</option>
+          <option value="Cidade">Cidade</option>
+          <option value="CPF">CPF</option>
+          <option value="Data_aniversario">Data de Nascimento</option>
+          <option value="Genero">Gênero</option>
+        </select>
+      </div>
+      <div class="col s4 m4 l4">
+        <input  id="pesquisa" name="pesquisa" type="text" class="validate" placeholder="pesquisa">
+      </div>
+      <div class="col s3 m3 l3">
+        <button class="btn waves-effect waves-light saap-dark-green" type="submit"><i class="material-icons">search</i></button>
+      </div>
+      </form>
+    </div>
+
+    {% if resposta.count >= 1%}
+    <br>
+    <ul class="collection">
+       <p>Resultado da busca</p>
+       <ul class="collapsible popout" data-collapsible="accordion">
+        <div class="row">
+          <div class="col s12 m12 l12">
+            <form action="/adicionar_contatos/" method="POST">
+                <a><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Cadastrar no Grupo</button></a>
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">contacts</i>
+
+                  <input id="icon_prefix" type="text" class="validate" name="nome_grupo" id="nome_grupo">
+                  <label for="icon_prefix" >Nome do Grupo</label>
+                </div>
+
+                {% csrf_token %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12 m12 l12">
+              <ul class="collapsible" data-collapsible="accordion">
+                {% for contato in resposta %}
+                  <li>
+                  <div class="collapsible-header"><input type="checkbox" {% if enable %} checked="{{contato.id}}" {% endif %} name='contatos' id="{{contato.id}}" value="{{contato.id}}" />
+                    <label for="{{contato.id}}">{{contato.nome.capitalize}}</label></div>
+                  <div class="collapsible-body">
+                    <p flow-text>
+                   {{contato.cidade}}
+                   {{contato.data_de_nascimento}}
+                   {{contato.sexo}}
+                   {{contato.endereco}}
+                   </p>
+                  </div>
+
+
+                  </li>
+
+                {% endfor %}
+
+                </form>
+              </ul>
+            </div>
+          </div>
+        </ul>
+      </ul>
+
+      {%endif%}
+
+
+    <br><br>
+
+    <div class="col s6 m6 l6">
+     <ul class="collection">
+        <p>Lista de Contatos</p>
+        <ul class="collapsible popout" data-collapsible="accordion">
+          {% for contato in lista_contatos %}
+          <li>
+            <br>
+            <form action="/atualizar_contato/" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="contato_id" value="{{contato.id}}">
+
+              <!-- Modal Trigger -->
+              <a href="#modal_deletar{{contato.id}}" class="btn-floating waves-effect waves-light saap-dark-green right modal-trigger"><i class="material-icons">delete</i></a>
+              <!-- Modal Structure -->
+              <div id="modal_deletar{{contato.id}}" class="modal">
+                <div class="modal-content">
+                  <h4>Deletar contato</h4>
+                  <p>Você tem certeza que deseja excluir o contato selecionado?</p>
+                </div>
+                <div class="modal-footer">
+                  <a href="/gabinete/contatos/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                  <a href="/deletar_contato/{{contato.id}}/" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirmar</a>
+                </div>
+              </div>
+
+              <a href="/gabinete/contatos/atualizar_contato/{{contato.id}}/" class="btn-floating waves-effect waves-light saap-dark-green right modal-trigger"><i class="material-icons">mode_edit</i></a>
+              <!-- <button class="btn-floating waves-effect waves-light saap-dark-green right" type="submit"><i class="material-icons">mode_edit</i></button> -->
+            </form>
+            <div class="collapsible-header"><i class="material-icons">perm_identity</i>{{ contato.nome }}</div>
+            <div class="collapsible-body">
+              <p>
+                Email : {{ contato.email }}<br>
+                Telefone : {{ contato.telefone}}<br>
+                Celular : {{ contato.celular}}<br>
+                Fax : {{ contato.fax}}<br>
+                Data de Nascimento: {{ contato.data_de_nascimento}}<br>
+                Sexo: {{ contato.sexo}}<br>
+                CPF: {{ contato.cpf }}<br>
+                RG: {{ contato.rg}}<br>
+                Endereço: {{ contato.endereco}}<br>
+                Cidade : {{ contato.cidade}}<br>
+                Estado : {{ contato.estado}}<br>
+                CEP : {{ contato.cep}}<br>
+                Grupo : {{ contato.grupo}}<br>
+                Título : {{ contato.titlo}}<br>
+                Título de Eleitor : {{ contato.titulo_de_eleitor}}<br>
+                Zona : {{ contato.zona}}<br>
+                Seção : {{ contato.secao}}<br>
+                Profissão : {{ contato.profissao}}<br>
+                Cargo : {{ contato.cargo}}<br>
+                Empresa : {{ contato.empresa}}<br>
+                <br>
+                Dependente<br>
+                Nome : {{ contato.dependente_nome}}<br>
+                Aniversário : {{ contato.dependente_aniversario}}<br>
+                Partido : {{ contato.dependente_partido}}<br>
+                Parentesco : {{ contato.dependente_parentesco}}<br>
+                Data da filiação : {{ contato.dependente_data_filiacao}}<br>
+              </p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </ul>
+    </div>
+
+
+
+    <div class="col s6 m6 l6">
+      <ul class="collection">
+         <p>Lista de Grupos</p>
+
+     {% for grupo in lista_grupos %}
+      <ul class="collapsible" data-collapsible="accordion">
+
+      <li>
+      <div class="collapsible-header s6 m6 l6">{{grupo.nome.capitalize}}  - ({{grupo.contatos.all.count}})</div>
+      <div class="collapsible-body ">
+      {% for contato in grupo.contatos.all %}
+      <div class="card-panel teal">
+        <span class="white-text">
+       {{contato.nome }}
+       {{contato.email}}
+        </span>
+      </div>
+
+      {% endfor %}
+      </div>
+      </li>
+      </ul>
+     {% endfor %}
+     </ul>
+    </div>
+
+    <!-- Modal para adiconar contatos em um grupo -->
+
+  </div>
+</div>
+
+{% endblock main_content %}

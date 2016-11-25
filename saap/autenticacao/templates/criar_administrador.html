@@ -3,8 +3,8 @@
 <main>
   <div class="container">
     <div class="row">
-      <div class="col s6 m6 l6">
-        <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/" style="color: rgb(35,142,35)">{{ gabinete.nome_gabinete }}</a> > <a href="/gabinete/criar_organizador/" style="color: rgb(35,142,35)">Criar Organizador</a></h5>
+      <div class="col s12 m12 l12">
+        <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/administracao/" style="color: rgb(35,142,35)">Administração</a> > <a href="/administracao/criar_administrador_gabinete/" style="color: rgb(35,142,35)">Criar Admin de Gabinete</a></h5>
       </div>
     </div>
     <div class="row">
@@ -16,7 +16,7 @@
             {% endfor %}
         </ul>
         {% endif %}
-        <form action="{% url 'criar_organizador' %}" method="POST">
+        <form action="{% url 'criar_administrador_gabinete' %}" method="POST">
           {% csrf_token %}
           <input type="hidden" name="next_url" value="{{next_url}}">
           <div class="login-card hoverable center-align">
@@ -25,7 +25,23 @@
               <div class="row">
                 <div class="col s3 m3 l3"><br></div>
                 <div class="col s5 m5 l5">
-                  <h5>Gabinete: {{ gabinete.nome_gabinete }}</h5>
+                  <select name="nome_gabinete" id="nome_gabinete">
+                    {% if data.nome_gabinete is None %}
+                      <option value="" selected>Nome do Gabinete</option>
+                      {% for gabinete in data.lista_gabinetes %}
+                        <option value="{{ gabinete.nome_gabinete }}">{{ gabinete.nome_gabinete }}</option>
+                      {% endfor %}
+                    {% else %}
+                      <option value="" >Nome do Gabinete</option>
+                      {% for gabinete in data.lista_gabinetes %}
+                        {% if gabinete.nome_gabinete == data.nome_gabinete %}
+                          <option value="{{ gabinete.nome_gabinete }}" selected>{{ gabinete.nome_gabinete }}</option>
+                        {% else %}
+                          <option value="{{ gabinete.nome_gabinete }}" >{{ gabinete.nome_gabinete }}</option>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </select>
                 </div>
               </div>
               <br>
@@ -154,7 +170,7 @@
                 </div>
               </div>
               <div>
-                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Criar Organizador</button>
+                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Criar Administrador</button>
               </div>
             </div>
           </div>

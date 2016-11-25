@@ -2,10 +2,24 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import *
-from core.models import Contato, Ticket
+from core.models import *
 
 
 # Create your models here.
+
+
+class Gabinete(models.Model):
+
+    contatos = models.ManyToManyField(Contato)
+    tickets = models.ManyToManyField(Ticket)
+    cartas = models.ManyToManyField(Carta)
+    oficios = models.ManyToManyField(Oficio)
+    grupos = models.ManyToManyField(Grupo)
+    nome_gabinete = models.CharField(max_length=60,default='')
+    telefone_gabinete = models.CharField(max_length=7,default='',blank=True,null=True)
+    endereco_gabinete = models.CharField(max_length=60,default='')
+    cidade_gabinete = models.CharField(max_length=20,default='')
+    cep_gabinete = models.CharField(max_length=8,default='')
 
 class Usuario_saap(User):
 
@@ -30,21 +44,18 @@ class Usuario_saap(User):
     def get_usuario_por_username(cls, username):
         return Usuario_saap.objects.filter(username=username)
 
-
-class Gabinete_saap(models.Model):
-
-    participantes = models.ManyToManyField(Usuario_saap)
-    nome_gabinete = models.CharField(max_length=100)
-    municipio = models.CharField(max_length=250)
-    uf = models.CharField(max_length=2)
-
 class Cidadao(Usuario_saap):
 
     pass
 
-
 class OrganizadorContatos(Usuario_saap):
 
-    contatos = models.ManyToManyField(Contato)
-    tickets = models.ManyToManyField(Ticket)
+    gabinete = models.ForeignKey(Gabinete)
 
+class AdministradorGabinete(Usuario_saap):
+
+    gabinete = models.ForeignKey(Gabinete)
+
+class AdministradorSistema(Usuario_saap):
+
+    pass

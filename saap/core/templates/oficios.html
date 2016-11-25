@@ -1,0 +1,88 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<main>
+  <div class="container">
+    <div class="row">
+      <div class="col s6 m6 l6">
+        <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/" style="color: rgb(35,142,35)">{{ gabinete.nome_gabinete }}</a> > <a href="/gabinete/oficios/" style="color: rgb(35,142,35)">Ofícios</a></h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s2 m2 l2"><br><br></div>
+      <div class="col s8 m8 l8">
+        {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <br><center>
+          <a href="/gabinete/oficios/gerar_oficio/"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Gerar novo oficio</button></a>
+        </center><br>
+        <ul class="collection">
+          <p>Ofícios gerados</p>
+          <ul class="collapsible popout" data-collapsible="accordion">
+            {% for oficio in lista_oficios %}
+            <li>
+              <br>
+              <input type="hidden" name="oficio_id" value="{{oficio.id}}">
+              <!-- Modal Trigger -->
+              <a href="#modal_deletar{{oficio.id}}" class="btn-floating waves-effect waves-light saap-dark-green right modal-trigger"><i class="material-icons">delete</i></a>
+              <!-- Modal Structure -->
+              <div id="modal_deletar{{oficio.id}}" class="modal">
+                <div class="modal-content">
+                  <h4>Deletar oficio</h4>
+                  <p>Você tem certeza que deseja excluir a oficio selecionada?</p>
+                </div>
+                <div class="modal-footer">
+                  <a href="/oficios/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                  <a href="/deletar_oficio/{{oficio.id}}/" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirmar</a>
+                </div>
+              </div>
+              <!--<input type="hidden" name="oficio_id" value="{{oficio.id}}"> -->
+              <!--<a href="/deletar_oficio/{{oficio.id}}"class="btn-floating waves-effect waves-light saap-dark-green right"><i class="material-icons">delete</i></a> -->
+
+              <a href="/gerar_oficio_pdf/{{oficio.id}}/"class="btn-floating waves-effect waves-light saap-dark-green right"><i class="material-icons">input</i></a>
+
+              <form action="/enviar_oficio/{{oficio.id}}/" method="POST">
+                <!-- Modal Trigger -->
+                <a href="#modal_enviar{{oficio.id}}" class="btn-floating waves-effect waves-light saap-dark-green right modal-trigger"><i class="material-icons">email</i></a>
+                <!-- Modal Structure -->
+                <div id="modal_enviar{{oficio.id}}" class="modal">
+                  <div class="modal-content">
+                    <h4>Enviar oficio por e-mail</h4>
+                    <p>Digite um e-mail para encaminhar a oficio:</p>
+                    {% csrf_token %}
+                    <input  id="email_oficio" name="email_oficio" type="text" class="validate" placeholder="exemplo@email.com">
+                  </div>
+                  <div class="modal-footer">
+                    <a href="/oficio/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                    <button class=" modal-action modal-close waves-effect waves-green btn-flat" type="submit">Confirmar</button>
+                  </div>
+                </div>
+              </form>
+
+              <div class="collapsible-header"><i class="material-icons">perm_identity</i>Data: {{ oficio.data }}</div>
+              <div class="collapsible-body">
+                <p>
+                  Remetente: {{ oficio.remetente }}<br>
+                  Destinatário: {{ oficio.forma_tratamento }} {{ oficio.destinatario }}<br>
+                  <br>
+                  {{ oficio.corpo_texto_doc }}
+                </p>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+         </ul>
+        </div>
+        <div class="col s2 m2 l2"><br><br></div>
+      </div>
+    </div>
+
+    <main>
+
+
+
+      {% endblock main_content %}

@@ -13,7 +13,7 @@ from autenticacao.models import Cidadao
 @around.each_example
 @contextmanager
 def with_browser(scenario,outline,steps):
-    world.browser = webdriver.Chrome("")
+    world.browser = webdriver.Chrome()
     yield
     world.browser.quit()
     delattr(world,'browser')
