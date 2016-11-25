@@ -10,7 +10,7 @@
       <h4 class="center">Cadastro</h4>
       <div class="col s12 offset-m2 m8 offset-l1 l10">
         {% if messages %}
-          <ul class="messages">
+          <ul class="messages center">
             {% for message in messages %}
               <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
             {% endfor %}
