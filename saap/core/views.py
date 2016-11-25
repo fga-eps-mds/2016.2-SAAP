@@ -503,6 +503,8 @@ class Adm_SistemaView(View):
     def get(self, request):
        adm_sistema = pegar_objeto_usuario(request.user.username)
        if adm_sistema is not None:
+           gabinetes = Gabinete.objects.all()
+           lista_gabinetes = list(gabinetes)
            response = checar_administrador_sistema(request, 'admin_sistema.html', locals())
        else:
            response = redirect('/')
@@ -548,7 +550,7 @@ class CriarGabineteView(View):
             gabinete.cidade_gabinete = cidade_gabinete
             gabinete.cep_gabinete = cep_gabinete
             gabinete.save()
-            response = render(request, 'admin_sistema.html')
+            response = redirect('/administracao/')
 
         else:
             response = render_mensagem_erro(request, 'O campo "%s" não foi \

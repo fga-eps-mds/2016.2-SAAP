@@ -294,7 +294,7 @@ class RegistroAdminGabView(View):
             user.municipio = municipio
             user.uf = uf
             user.save()
-            response = render(request, 'adm_sistema.html')
+            response = redirect('/administracao/')
 
         else:
             response = validado
@@ -457,7 +457,7 @@ class RegistroAdminSisView(View):
             user.uf = uf
             user.save()
             login(request, user)
-            response = render(request, 'criar_adm_sis.html')
+            response = redirect('/administracao/')
 
         else:
             response = validado

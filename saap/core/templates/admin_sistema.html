@@ -16,6 +16,46 @@
           <br><br><a href="/administracao/criar_gabinete/"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Criar Gabinete</button></a>
         </div>
         <div class="row">
+          <div class="col s3 m3 l3"><br></div>
+          <div class="col s6 m6 l6">
+           <ul class="collection">
+              <p>Lista de Gabinetes</p>
+              <ul class="collapsible popout" data-collapsible="accordion">
+                {% for gabinete in lista_gabinetes %}
+                <li>
+                  <br>
+                    <input type="hidden" name="contato_id" value="{{contato.id}}">
+
+                    <!-- Modal Trigger -->
+                    <a href="#modal_deletar{{gabinete.id}}" class="btn-floating waves-effect waves-light saap-dark-green right modal-trigger"><i class="material-icons">delete</i></a>
+                    <!-- Modal Structure -->
+                    <div id="modal_deletar{{gabinete.id}}" class="modal">
+                      <div class="modal-content">
+                        <h4>Deletar gabinete</h4>
+                        <p>Você tem certeza que deseja excluir o gabinete selecionado?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="/administracao/" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
+                        <a href="/deletar_gabinete/{{gabinete.id}}/" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirmar</a>
+                      </div>
+                    </div>
+
+                    <!-- <button class="btn-floating waves-effect waves-light saap-dark-green right" type="submit"><i class="material-icons">mode_edit</i></button> -->
+                  <div class="collapsible-header"><i class="material-icons">perm_identity</i>{{ gabinete.nome_gabinete }}</div>
+                  <div class="collapsible-body">
+                    <p>
+                      Nome do Gabinete: {{ gabinete.nome_gabinete }}<br>
+                      Telefone do Gabinete: {{ gabinete.telefone_gabinete }}<br>
+                      Endereço do Gabinete: {{ gabinete.endereco_gabinete}}<br>
+                      Cidade do Gabinete: {{ gabinete.cidade_gabinete}}<br>
+                      CEP do Gabinete: {{ gabinete.cep_gabinete}}<br>
+                    </p>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </ul>
+          </div>
 
         </div>
       </div>
