@@ -19,7 +19,7 @@ class CadastroView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        return get_padrao_cadastro_gerar(request, 'cadastro_contato.html')
+        return get_com_gabinete(request, 'cadastro_contato.html')
 
     def post (self,request):
 
@@ -318,7 +318,7 @@ class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        return get_padrao_cadastro_gerar(request, 'gerar_carta.html')
+        return get_com_gabinete(request, 'gerar_carta.html')
 
     def post(self, request):
 
@@ -419,7 +419,7 @@ class GerarOficioView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        return get_padrao_cadastro_gerar(request, 'gerar_oficio.html')
+        return get_com_gabinete(request, 'gerar_oficio.html')
 
     def post(self, request):
 
