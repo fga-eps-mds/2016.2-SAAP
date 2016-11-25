@@ -1,7 +1,4 @@
 {%  extends "base.html" %}
-{% block title %}
-  SAAP | Atualizar Contato
-{% endblock %}
 {% block main_content %}
 <main>
   <div class="container">
@@ -20,19 +17,6 @@
         </ul>
         {% endif %}
 
-  <main>
-  <br><br><br>
-  <div class="container">
-    <div class="row">
-      <div class="col s12 offset-m2 m8 offset-l1 l10">
-        {% if messages %}
-          <ul class="messages">
-            {% for message in messages %}
-              <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-        <form action="{% url 'atualiza_contato' %}" method='POST'>
           {% csrf_token %}
           <input type="hidden" name="next_url" value="{{next_url}}">
           <div class="login-card hoverable center-align">
@@ -52,32 +36,12 @@
                 </div>
               </div>
 
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;Digite o email do contato que deseja atualizar:</p>
-                <br>
-                <div class="input-field col s7">
-                  <i class="material-icons prefix" style="color:green">email</i>
-                  <input placeholder="name@email.com" id="busca_email" name="busca_email" type="email" class="validate">
-                  <label for="email">E-mail</label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s7">
-                  <i class="material-icons prefix" style="color:green">account_circle</i>
-                  <input placeholder="Carla Rocha" id="nome" name="nome" type="text" class="validate">
-                  <label for="nome">Nome</label>
-                </div>
-                <div class="input-field col s5">
-                  <input placeholder="yyyy-mm-dd" id="data_de_nascimento" name="data_de_nascimento" type="text" class="validate">
-                  <label for="data_de_nascimento">Data de Nascimento</label>
-                </div>
-              </div>
               <div class="row">
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;Telefone</p>
                 <br>
                 <div class="input-field col s5">
                   <i class="material-icons prefix" style="color:green">contact_phone</i>
                   <input placeholder="xx-xxxx-xxxx" id="telefone" name="telefone" type="text" class="validate" value='{{contato.telefone}}'>
-                  <input placeholder="xx-xxxx-xxxx" id="telefone" name="telefone" type="text" class="validate">
                   <label for="telefone">Residencial</label>
                 </div>
                 <div class="input-field col s5">
@@ -86,9 +50,6 @@
                       <option value="{{ contato.sexo }}" selected>{{ contato.sexo }}</option>
                       <option value="Masculino" >Masculino</option>
                       <option value="Feminino" >Feminino</option>
-                    <option value="" selected>Selecionar</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Feminino">Feminino</option>
                   </select>
                   <label>Sexo</label>
                 </div>
@@ -96,38 +57,22 @@
               <div class="row">
                 <div class="input-field col s5">
                   <i class="material-icons prefix" style="color:green">contact_phone</i>
-
                   <input placeholder="xx-xxxxx-xxxx" id="celular" name="celular" type="text" class="validate" value='{{contato.celular}}'>
                   <label for="celular">Celular</label>
                 </div>
                 <div class="input-field col s5">
                   <input placeholder="0000000" id="cpf" name="cpf" pattern="[0-9]+$" type="text" class="validate" value='{{contato.cpf}}'>
-
-                  <input placeholder="xx-xxxxx-xxxx" id="celular" name="celular" type="text" class="validate">
-                  <label for="celular">Celular</label>
-                </div>
-                <div class="input-field col s5">
-                  <input placeholder="0000000" id="cpf" name="cpf" pattern="[0-9]+$" type="text" class="validate">
-
                   <label for="cpf">CPF (Somente números)</label>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s5">
                   <i class="material-icons prefix" style="color:green">contact_phone</i>
-
                   <input placeholder="xx-xxxxx-xxxx" id="fax" name="fax" type="text" class="validate" value='{{contato.fax}}'>
                   <label for="fax">Fax</label>
                 </div>
                 <div class="input-field col s5">
                   <input placeholder="0000000" id="rg" name="rg" pattern="[0-9]+$" type="text" class="validate" value='{{contato.rg}}'>
-
-                  <input placeholder="xx-xxxxx-xxxx" id="fax" name="fax" type="text" class="validate">
-                  <label for="fax">Fax</label>
-                </div>
-                <div class="input-field col s5">
-                  <input placeholder="0000000" id="rg" name="rg" pattern="[0-9]+$" type="text" class="validate">
-
                   <label for="rg">RG (Somente números)</label>
                 </div>
               </div>
@@ -156,26 +101,6 @@
                 <div class="input-field col s7">
                   <i class="material-icons prefix" style="color:green">email</i>
                   <input placeholder="name@email.com" id="email" name="email" type="email" class="validate" value='{{contato.email}}'>
-                  <input placeholder="" id="endereco" name="endereco" type="text" class="validate">
-                  <label for="endereco">Endereço</label>
-                </div>
-                <div class="input-field col s3">
-                  <input placeholder="" id="cidade" name="cidade" type="text" class="validate">
-                  <label for="endereco">Cidade</label>
-                </div>
-                <div class="input-field col s3">
-                  <input placeholder="" id="estado" name="estado" type="text" class="validate">
-                  <label for="estado">Estado</label>
-                </div>
-                <div class="input-field col s3">
-                  <input placeholder="0000000" id="cep" name="cep" pattern="[0-9]+$" type="text" class="validate">
-                  <label for="cep">CEP (Somente números)</label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s7">
-                  <i class="material-icons prefix" style="color:green">email</i>
-                  <input placeholder="name@email.com" id="email" name="email" type="email" class="validate">
                   <label for="email">E-mail</label>
                 </div>
               </div>
@@ -187,8 +112,6 @@
                       <option value="Grupo 1">Grupo 1</option>
                       <option value="Grupo 2">Grupo 2</option>
                       <option value="Grupo 3">Grupo 3</option>
-                    <option value="" selected>Selecionar</option>
-                    <option value="grupo1">Grupo 1</option>
                   </select>
                   <label>Grupo</label>
                 </div>
@@ -198,8 +121,6 @@
                       <option value="{{ contato.titulo }}" selected>{{ contato.titulo }}</option>
                       <option value="Senhor">Senhor(a)</option>
                       <option value="Doutor">Doutor(a)</option>
-                    <option value="" selected>Selecionar</option>
-                    <option value="titulo1">Título 1</option>
                   </select>
                   <label>Título</label>
                 </div>
@@ -212,11 +133,6 @@
                 </div>
                 <div class="input-field col s5">
                   <input placeholder="" id="profissao" name="profissao" type="text" class="validate" value='{{contato.profissao}}'>
-                  <input placeholder="" id="titulo_de_eleitor" name="titulo_de_eleitor" type="text" class="validate">
-                  <label for="titulo_de_eleitor">Título de Eleitor</label>
-                </div>
-                <div class="input-field col s5">
-                  <input placeholder="" id="profissao" name="profissao" type="text" class="validate">
                   <label for="profissao">Profissão</label>
                 </div>
               </div>
@@ -228,11 +144,6 @@
                 </div>
                 <div class="input-field col s5">
                   <input placeholder="" id="cargo" name="cargo" type="text" class="validate" value='{{contato.cargo}}'>
-                  <input placeholder="" id="zona" name="zona" type="text" class="validate">
-                  <label for="zona">Zona</label>
-                </div>
-                <div class="input-field col s5">
-                  <input placeholder="" id="cargo" name="cargo" type="text" class="validate">
                   <label for="cargo">Cargo</label>
                 </div>
               </div>
@@ -248,14 +159,6 @@
                 </div>
               </div>
 
-                  <input placeholder="" id="secao" name="secao" type="text" class="validate">
-                  <label for="secao">Seção</label>
-                </div>
-                <div class="input-field col s5">
-                  <input placeholder="" id="empresa" name="empresa" type="text" class="validate">
-                  <label for="empresa">Empresa</label>
-                </div>
-              </div>
               <div class="row">
                 <p> &nbsp;&nbsp;&nbsp;&nbsp;Dependente</p>
                 <br>
@@ -278,22 +181,6 @@
                 <div class="input-field col s5">
                   <i class="material-icons prefix" style="color:green">stars</i>
                   <input placeholder="" id="dependente_partido" name="dependente_partido" type="text" class="validate" value='{{contato.dependente_partido}}'>
-                  <input placeholder="Carla Rocha" id="dependente_nome" name="dependente_nome" type="text" class="validate">
-                  <label for="dependente_nome">Nome</label>
-                </div>
-                <div class="input-field col s3">
-                  <input placeholder="yyyy-mm-dd" id="dependente_aniversario" name="dependente_aniversario" type="text" class="validate">
-                  <label for="dependente_aniversario">Aniversário</label>
-                </div>
-                <div class="input-field col s3">
-                  <input placeholder="" id="dependente_parentesco" name="dependente_parentesco" type="text" class="validate">
-                  <label for="dependente_parentesco">Parentesco</label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s5">
-                  <i class="material-icons prefix" style="color:green">stars</i>
-                  <input placeholder="" id="dependente_partido" name="dependente_partido" type="text" class="validate">
                   <label for="dependente_partido">Partido</label>
                 </div>
               </div>
@@ -309,14 +196,7 @@
                 <button class="btn waves-effect waves-light saap-dark-green " type="reset">Cancelar</button>
                 <button class="btn waves-effect waves-light saap-dark-green " type="submit">Confirmar</button>
               </div>
-                  <input placeholder="yyyy-mm-dd" id="dependente_data_filiacao" name="dependente_data_filiacao" type="text" class="validate">
-                  <label for="dependente_data_filiacao">Data da Filiação</label>
-                </div>
-              </div>
-              <div class="card-action right-align">
-                <button class="btn waves-effect waves-light saap-dark-green " type="submit">Confirmar</button>
-              </div>
-            </form>
+
           </div>
         </div>
       </div>
