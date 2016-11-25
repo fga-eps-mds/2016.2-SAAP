@@ -1,0 +1,64 @@
+{%  extends "base.html" %}
+{% block main_content %}
+<main>
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m12 l12">
+        <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/gabinete/" style="color: rgb(35,142,35)"> {{gabinete.nome_gabinete}} </a> > <a href="/gabinete/editar_gabinete/" style="color: rgb(35,142,35)">Editar Gabinete</a></h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 offset-m2 m8 offset-l1 l10">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form action="{% url 'editar_gabinete' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="next_url" value="{{next_url}}">
+          <div class="login-card hoverable center-align">
+            <div class="card-content">
+              <br>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">account_circle</i>
+                  <input placeholder='Gabinete 1' id="nome_gabinete" name="nome_gabinete" type="text" class="validate" value='{{gabinete.nome_gabinete}}'>
+                  <label for="nome_gabinete">Nome do Gabinete</label>
+                </div>
+                <div class="input-field col s5">
+                  <input placeholder="xx-xxxxx-xxxx" id="telefone_gabinete" name="telefone_gabinete" type="text" class="validate" value='{{gabinete.telefone_gabinete}}'>
+                  <label for="telefone_gabinete">Telefone do Gabinete</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s11 m11 l11">
+                  <i class="material-icons prefix" style="color:green">account_circle</i>
+                  <input placeholder="Rua Pinheiro, lote 11, escritório 210" id="endereco_gabinete" name="endereco_gabinete" type="text" class="validate" value='{{gabinete.endereco_gabinete}}'>
+                  <label for="endereco_gabinete">Endereço do Gabinete</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s7">
+                  <i class="material-icons prefix" style="color:green">account_circle</i>
+                  <input placeholder="São José dos Campos" id="cidade_gabinete" name="cidade_gabinete" type="text" class="validate" value='{{gabinete.cidade_gabinete}}'>
+                  <label for="cidade_gabinete">Cidade do Gabinete</label>
+                </div>
+                <div class="input-field col s3">
+                  <input placeholder="72000000" id="cep_gabinete" name="cep_gabinete" type="text" class="validate" value='{{gabinete.cep_gabinete}}'>
+                  <label for="cep_gabinete">CEP do Gabinete</label>
+                </div>
+              </div>
+              <div>
+                <button class="btn waves-effect waves-light saap-dark-green" type="submit'">Editar Gabinete</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock main_content %}

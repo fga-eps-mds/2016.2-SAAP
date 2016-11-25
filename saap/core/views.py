@@ -19,7 +19,7 @@ class CadastroView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        return get_padrao_cadastro_gerar(request, 'cadastro_contato.html')
+        return get_com_gabinete(request, 'cadastro_contato.html')
 
     def post (self,request):
 
@@ -318,7 +318,7 @@ class GerarCartaView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        return get_padrao_cadastro_gerar(request, 'gerar_carta.html')
+        return get_com_gabinete(request, 'gerar_carta.html')
 
     def post(self, request):
 
@@ -419,7 +419,7 @@ class GerarOficioView(View):
     http_method_names = [u'get', u'post']
 
     def get(self, request):
-        return get_padrao_cadastro_gerar(request, 'gerar_oficio.html')
+        return get_com_gabinete(request, 'gerar_oficio.html')
 
     def post(self, request):
 
@@ -432,7 +432,8 @@ class GerarOficioView(View):
 
         campos_validados = checar_campos([request.POST['remetente'], \
             request.POST['forma_tratamento'], request.POST['destinatario'], \
-            request.POST['corpo_texto_doc']])
+            request.POST['corpo_texto_doc'], 'complexidade', 'complexidade', \
+            'complexidade', 'complexidade'])
 
         if campos_validados is True:
 
@@ -496,3 +497,115 @@ class CriarGrupoDeContatosView(View):
         gabinete.grupos.add(novo_grupo)
 
         return redirect('/gabinete/contatos/')
+
+class Adm_SistemaView(View):
+    http_method_names = [u'get']
+
+    def get(self, request):
+       adm_sistema = pegar_objeto_usuario(request.user.username)
+       if adm_sistema is not None:
+           lista_gabinetes = list(Gabinete.objects.all())
+           response = checar_administrador_sistema(request, 'admin_sistema.html', locals())
+       else:
+           response = redirect('/')
+
+       return response
+
+class CriarGabineteView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+       return checar_administrador_sistema(request, 'criar_gabinete.html', locals())
+
+    def post(self, request):
+
+        data['nome_gabinete'] = request.POST['nome_gabinete']
+        data['telefone_gabinete'] = request.POST['telefone_gabinete']
+        data['endereco_gabinete'] = request.POST['endereco_gabinete']
+        data['cidade_gabinete'] = request.POST['cidade_gabinete']
+        data['cep_gabinete'] = request.POST['cep_gabinete']
+
+        campos_validados = checar_campos([request.POST['nome_gabinete'], \
+            request.POST['telefone_gabinete'], request.POST['endereco_gabinete'], \
+            request.POST['cidade_gabinete'], request.POST['cep_gabinete'], \
+            'complexidade'])
+
+        if campos_validados is True:
+
+            nome_gabinete = request.POST['nome_gabinete']
+            telefone_gabinete = request.POST['telefone_gabinete']
+            endereco_gabinete = request.POST['endereco_gabinete']
+            cidade_gabinete = request.POST['cidade_gabinete']
+            cep_gabinete = request.POST['cep_gabinete']
+
+            gabinete = Gabinete()
+            gabinete.nome_gabinete = nome_gabinete
+            gabinete.telefone_gabinete = telefone_gabinete
+            gabinete.endereco_gabinete = endereco_gabinete
+            gabinete.cidade_gabinete = cidade_gabinete
+            gabinete.cep_gabinete = cep_gabinete
+            gabinete.save()
+            response = redirect('/administracao/')
+
+        else:
+            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+                preenchido!' % campos_gabinete[campos_validados], \
+                "criar_gabinete.html", {'data':data})
+
+        return response
+
+class DeletarGabineteView(View):
+    http_method_names = [u'get']
+
+    def get(self,request,pk):
+        return deletar_objeto(Gabinete, '/administracao/', pk)
+
+class EditarGabineteView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+       adm_gabinete = pegar_objeto_usuario(request.user.username)
+       if adm_gabinete is not None:
+           gabinete = pegar_objeto_usuario(request.user.username).gabinete
+           response = checar_administrador_gabinete(request, 'editar_gabinete.html', locals())
+       else:
+           response = redirect('/')
+
+       return response
+
+    def post(self, request):
+
+        data['nome_gabinete'] = request.POST['nome_gabinete']
+        data['telefone_gabinete'] = request.POST['telefone_gabinete']
+        data['endereco_gabinete'] = request.POST['endereco_gabinete']
+        data['cidade_gabinete'] = request.POST['cidade_gabinete']
+        data['cep_gabinete'] = request.POST['cep_gabinete']
+
+        campos_validados = checar_campos([request.POST['nome_gabinete'], \
+            request.POST['telefone_gabinete'], request.POST['endereco_gabinete'], \
+            request.POST['cidade_gabinete'], request.POST['cep_gabinete'], \
+            'complexidade', 'complexidade'])
+
+        if campos_validados is True:
+
+            nome_gabinete = request.POST['nome_gabinete']
+            telefone_gabinete = request.POST['telefone_gabinete']
+            endereco_gabinete = request.POST['endereco_gabinete']
+            cidade_gabinete = request.POST['cidade_gabinete']
+            cep_gabinete = request.POST['cep_gabinete']
+
+            gabinete = pegar_objeto_usuario(request.user.username).gabinete
+            gabinete.nome_gabinete = nome_gabinete
+            gabinete.telefone_gabinete = telefone_gabinete
+            gabinete.endereco_gabinete = endereco_gabinete
+            gabinete.cidade_gabinete = cidade_gabinete
+            gabinete.cep_gabinete = cep_gabinete
+            gabinete.save()
+            response = redirect('/gabinete/')
+
+        else:
+            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+                preenchido!' % campos_gabinete[campos_validados], \
+                "editar_gabinete.html", {'data':data})
+
+        return response

@@ -55,3 +55,7 @@ class OrganizadorContatos(Usuario_saap):
 class AdministradorGabinete(Usuario_saap):
 
     gabinete = models.ForeignKey(Gabinete)
+
+class AdministradorSistema(Usuario_saap):
+
+    pass

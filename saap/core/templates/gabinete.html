@@ -7,6 +7,19 @@
         <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/" style="color: rgb(35,142,35)">{{ gabinete.nome_gabinete }}</a></h5>
       </div>
     </div>
+    <div class="center">
+      <ul class="collection">
+        <p><h5>Informações do Gabinete</h5></p>
+        <div class="row">
+          Nome do Gabinete: {{ gabinete.nome_gabinete }}<br>
+          Telefone do Gabinete: {{ gabinete.telefone_gabinete }}<br>
+          Endereço do Gabinete: {{ gabinete.endereco_gabinete}}<br>
+          Cidade do Gabinete: {{ gabinete.cidade_gabinete}}<br>
+          CEP do Gabinete: {{ gabinete.cep_gabinete}}<br>
+          <a href="/gabinete/editar_gabinete"><button class="btn waves-effect waves-light saap-dark-green" type="submit'">Editar Gabinete</button></a>
+        </div>
+      <ul>
+    </div>
     <div class="row">
      <div class="col s6 m6 l6">
        <br><h4>Menu</h4>

@@ -43,11 +43,24 @@ campos_cadastrar_contato = ["Nome", "Data de Nascimento", "Telefone \
 campos_enviar_carta = ["Nome do remetente", "Município do remetente", \
     "Nome do destinatário", "Forma de tratamento", "Mensagem"]
 campos_enviar_oficio = ["Nome do remetente", "Nome do destinatario", "Forma de tratamento", "Mensagem"]
+campos_gabinete = ["Nome do Gabinete", "Telefone do Gabinete", \
+    "Endereço do Gabinete", "Cidade do Gabinete", "CEP do Gabinete"]
 
 
 def checar_administrador_gabinete(request, template, data):
 
     tipo_usuario = AdministradorGabinete.objects.filter(username=request.\
+        user.username)
+    if tipo_usuario.count():
+        response = render(request, template, data)
+    else:
+        response = redirect('/')
+
+    return response
+
+def checar_administrador_sistema(request, template, data):
+
+    tipo_usuario = AdministradorSistema.objects.filter(username=request.\
         user.username)
     if tipo_usuario.count():
         response = render(request, template, data)
@@ -79,6 +92,12 @@ def pegar_objeto_usuario(username):
     pegar_objeto = AdministradorGabinete.objects.filter(username=username)
     if pegar_objeto.count():
         return pegar_objeto[0]
+
+    pegar_objeto = AdministradorSistema.objects.filter(username=username)
+    if pegar_objeto.count():
+        return pegar_objeto[0]
+    else:
+        return None
 
 def checar_data(data):
     partes_data = data.split("-")
@@ -400,9 +419,12 @@ def deletar_objeto(Objeto, endereco, pk):
     objeto.delete()
     return redirect(endereco)
 
-def get_padrao_cadastro_gerar(request, endereco):
+def get_com_gabinete(request, template):
     gabinete = pegar_objeto_usuario(request.user.username).gabinete
-    response = render(request, endereco, locals())
+    if pegar_objeto_usuario(request.user.username).__class__.__name__ == "OrganizadorContatos":
+        response = render(request, template, locals())
+    else:
+        response = checar_administrador_gabinete(request, template, locals())
     return response
 
 def checar_busca(busca, query, Q):
