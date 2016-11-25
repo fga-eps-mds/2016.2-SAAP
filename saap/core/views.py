@@ -564,3 +564,52 @@ class DeletarGabineteView(View):
 
     def get(self,request,pk):
         return deletar_objeto(Gabinete, '/administracao/', pk)
+
+class EditarGabineteView(View):
+    http_method_names = [u'get', u'post']
+
+    def get(self, request):
+       adm_gabinete = pegar_objeto_usuario(request.user.username)
+       if adm_gabinete is not None:
+           gabinete = pegar_objeto_usuario(request.user.username).gabinete
+           response = checar_administrador_gabinete(request, 'editar_gabinete.html', locals())
+       else:
+           response = redirect('/')
+
+       return response
+
+    def post(self, request):
+
+        data['nome_gabinete'] = request.POST['nome_gabinete']
+        data['telefone_gabinete'] = request.POST['telefone_gabinete']
+        data['endereco_gabinete'] = request.POST['endereco_gabinete']
+        data['cidade_gabinete'] = request.POST['cidade_gabinete']
+        data['cep_gabinete'] = request.POST['cep_gabinete']
+
+        campos_validados = checar_campos([request.POST['nome_gabinete'], \
+            request.POST['telefone_gabinete'], request.POST['endereco_gabinete'], \
+            request.POST['cidade_gabinete'], request.POST['cep_gabinete']])
+
+        if campos_validados is True:
+
+            nome_gabinete = request.POST['nome_gabinete']
+            telefone_gabinete = request.POST['telefone_gabinete']
+            endereco_gabinete = request.POST['endereco_gabinete']
+            cidade_gabinete = request.POST['cidade_gabinete']
+            cep_gabinete = request.POST['cep_gabinete']
+
+            gabinete = pegar_objeto_usuario(request.user.username).gabinete
+            gabinete.nome_gabinete = nome_gabinete
+            gabinete.telefone_gabinete = telefone_gabinete
+            gabinete.endereco_gabinete = endereco_gabinete
+            gabinete.cidade_gabinete = cidade_gabinete
+            gabinete.cep_gabinete = cep_gabinete
+            gabinete.save()
+            response = redirect('/gabinete/')
+
+        else:
+            response = render_mensagem_erro(request, 'O campo "%s" não foi \
+                preenchido!' % campos_gabinete[campos_validados], \
+                "editar_gabinete.html", {'data':data})
+
+        return response
