@@ -294,7 +294,7 @@ class RegistroAdminGabView(View):
             user.municipio = municipio
             user.uf = uf
             user.save()
-            response = render(request, 'login.html')
+            response = render(request, 'adm_sistema.html')
 
         else:
             response = validado

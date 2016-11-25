@@ -43,6 +43,8 @@ campos_cadastrar_contato = ["Nome", "Data de Nascimento", "Telefone \
 campos_enviar_carta = ["Nome do remetente", "Município do remetente", \
     "Nome do destinatário", "Forma de tratamento", "Mensagem"]
 campos_enviar_oficio = ["Nome do remetente", "Nome do destinatario", "Forma de tratamento", "Mensagem"]
+campos_gabinete = ["Nome do Gabinete", "Telefone do Gabinete", \
+    "Endereço do Gabinete", "Cidade do Gabinete", "CEP do Gabinete"]
 
 
 def checar_administrador_gabinete(request, template, data):
