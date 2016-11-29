@@ -1,21 +1,25 @@
 {%  extends "base.html" %}
+{% block title %}
+  SAAP | Enviar Ticket
+{% endblock %}
 {% block main_content %}
-{% load i18n %}
-<main>
+  {% load i18n %}
+  <main>
   <div class="container">
     <div class="row">
       <div class="col s6 m6 l6">
-        <h5><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/ticket/" style="color: rgb(35,142,35)">Enviar Ticket</a></h5>
+        <h6><a href="/" style="color: rgb(35,142,35)">SAAP</a> > <a href="/ticket/" style="color: rgb(35,142,35)">Enviar Ticket</a></h6>
       </div>
     </div>
     <div class="row">
       <div class="col s12 offset-m2 m8 offset-l3 l6">
+        <h4 class="center">Enviar Ticket</h4>
         {% if messages %}
-        <ul class="messages">
+          <ul class="messages">
             {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
             {% endfor %}
-        </ul>
+          </ul>
         {% endif %}
         <form action="{% url 'ticket' %}" method='POST'>
           {% csrf_token %}
@@ -24,8 +28,6 @@
             <div class="card-content">
               <div class="input-field col s12">
                 <!--<i class="material-icons prefix">label</i>-->
-
-
                 <select name="nome_gabinete" id="nome_gabinete">
                   {% if data.nome_gabinete is None %}
                     <option value="" selected>Nome do Gabinete</option>
@@ -43,7 +45,6 @@
                     {% endfor %}
                   {% endif %}
                 </select>
-
                 <select name="tipo_mensagem" id="tipo_mensagem">
                   {% if data.tipo_mensagem is None %}
                     <option value="" selected>Tipo de Ticket</option>
@@ -61,7 +62,6 @@
                     {% endfor %}
                   {% endif %}
                 </select>
-
                 <!--Assunto do Ticket-->
                 <div class="col s12">
                   <div class="row">
@@ -74,7 +74,6 @@
                   </div>
                 </div>
               </div>
-
               <!--Mensagem do Ticket-->
               <div class="col s12">
                 <div class="input-field col s12">
@@ -101,5 +100,5 @@
       </div>
     </div>
   </div>
-</main>
+  </main>
 {% endblock main_content %}

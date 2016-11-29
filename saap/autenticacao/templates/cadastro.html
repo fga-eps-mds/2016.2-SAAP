@@ -1,16 +1,20 @@
 {%  extends "base.html" %}
+{% block title %}
+  SAAP | Cadastro
+{% endblock %}
 {% block main_content %}
-<main>
+  <main>
   <br><br><br>
   <div class="container">
     <div class="row">
+      <h4 class="center">Cadastro</h4>
       <div class="col s12 offset-m2 m8 offset-l1 l10">
         {% if messages %}
-        <ul class="messages">
+          <ul class="messages center">
             {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red">{{ message }}</li>
             {% endfor %}
-        </ul>
+          </ul>
         {% endif %}
         <form action="{% url 'cadastro' %}" method="POST">
           {% csrf_token %}
@@ -147,12 +151,12 @@
               </div>
             </div>
             <div class="card-action right-align">
-              <a href="{% url 'login' %}">Já possui conta?</a>
+              <a href="{% url 'login' %}">Já possui um cadastro? Clique aqui!</a>
             </div>
           </div>
         </form>
       </div>
     </div>
   </div>
-</main>
+  </main>
 {% endblock main_content %}
